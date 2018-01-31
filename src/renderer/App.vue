@@ -10,6 +10,6 @@
   }
 </script>
 
-<style>
-  /* CSS */
+<style scoped>
+  
 </style>

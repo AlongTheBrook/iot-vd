@@ -6,13 +6,28 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'landing-page',
-      component: require('@/components/LandingPage').default
+      path: '/main-frame',
+      name: 'main-frame',
+      component: require('@/components/MainFrame').default,
+      children: [
+        {
+          path: 'device-frame',
+          name: 'device-frame',
+          component: require('@/components/MainFrame/DeviceFrame').default,
+          children: [
+            {
+              path: 'device',
+              name: 'device',
+              component: require('@/components/MainFrame/DeviceFrame/Device').default
+            }
+          ]
+        }
+      ]
     },
     {
       path: '*',
-      redirect: '/'
+      redirect: '/main-frame/device-frame/device'
+      // component: require('@/components/LandingPage').default
     }
   ]
 })
