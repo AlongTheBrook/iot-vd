@@ -1,3 +1,19 @@
 html {
     overflow-y: hidden !important; /* hack: 解决bulma中 html{overflow-y: scroll}导致的滚动条 */
 }
+
+
+/* s-icon 类定义 */
+
+.s-icon {
+    color:  hsl(0, 0%, 48%) ;  /* has-text-grey */
+    -webkit-app-region: no-drag;  /* electron 在无边框时，设置窗口拖拽区域，其中的按钮或可点击对象，必须使用这个特性才可以正常工作 */
+}
+
+.s-icon:hover {
+    color: 	hsl(0, 0%, 71%);  /* has-text-grey-light */
+}
+
+.s-icon:active, .s-icon.s-active {
+    color: 	hsl(171, 100%, 41%);  /* has-text-primary */
+}
