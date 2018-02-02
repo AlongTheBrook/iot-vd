@@ -11,7 +11,9 @@
 </template>
 
 <script>
-    export default {}
+    export default {
+      name: 'device-frame'
+    }
 </script>
 
 <style lang="scss" scoped>

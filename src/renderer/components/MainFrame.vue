@@ -22,43 +22,18 @@
         <div class="main-frame-content">
             <router-view></router-view>
         </div>
-        <div class="main-frame-system-menu">
-            <a class="button is-small is-light">
-                &nbsp;
-                <span class="icon">
-                    <i class="fas fa-thumbtack"></i>
-                </span>
-                &nbsp;
-            </a>
-            <a class="button is-small is-light">
-                &nbsp;
-                <span class="icon">
-                    <i class="fas fa-minus"></i>
-                </span>
-                &nbsp;
-            </a>
-            <a class="button is-small is-light">
-                &nbsp;
-                <span class="icon">
-                    <i class="far fa-window-maximize"></i>
-                    <!--<i class="far fa-square"></i>-->
-                </span>
-                &nbsp;
-            </a>
-            <a class="button is-small is-close">
-                &nbsp;
-                <span class="icon">
-                    <i class="fas fa-times"></i>
-                </span>
-                &nbsp;
-            </a>
-        </div>
+        <electron-frame-controller></electron-frame-controller>
     </div>
 </template>
 
 <script>
+    import ElectronFrameController from './electron/ElectronFrameController'
+
     export default {
-      name: 'main-frame'
+      name: 'main-frame',
+      components: {
+        ElectronFrameController
+      }
     }
 </script>
 
@@ -114,41 +89,4 @@
     .main-frame-content {
         flex: 1;
     }
-
-    .main-frame-system-menu {
-        position: absolute;
-        top: 0;
-        right: 0;
-        z-index: 1024;
-        display: flex;
-        justify-content: flex-end;
-    }
-
-    .main-frame-system-menu .icon {
-        color: hsl(0, 0%, 48%);
-    }
-
-    .button {
-        border-radius: 0;
-    }
-
-    $bc-normal: transparent;
-    $bc-hover:  hsl(348, 100%, 61%);
-    $bc-active: hsl(348, 100%, 51%);
-
-    .button.is-close {
-        background-color: $bc-normal;
-        border-color: $bc-normal;
-    }
-
-    .button.is-close:hover {
-        background-color: $bc-hover;
-        border-color: $bc-hover;
-    }
-
-    .button.is-close:active {
-        background-color: $bc-active;
-        border-color: $bc-active;
-    }
-
 </style>

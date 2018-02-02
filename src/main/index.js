@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -46,6 +46,41 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
+})
+
+app.on('maximize', () => {
+  if (mainWindow === null) {
+    createWindow()
+  }
+})
+
+ipcMain.on('electron-frame-controller', (e, msg) => {
+  if (msg === 'mounted') {
+    mainWindow.webContents.send('maximize', mainWindow.isMaximized())
+    mainWindow.webContents.send('isAlwaysOnTop', mainWindow.isAlwaysOnTop())
+    mainWindow.on('maximize', () => {
+      mainWindow.webContents.send('maximize', true)
+    })
+    mainWindow.on('unmaximize', () => {
+      mainWindow.webContents.send('maximize', false)
+    })
+  }
+})
+
+ipcMain.on('setAlwaysOnTop', (e, flag) => {
+  mainWindow.setAlwaysOnTop(flag)
+})
+
+ipcMain.on('minimize', () => {
+  mainWindow.minimize()
+})
+
+ipcMain.on('maximize', (e, flag) => {
+  flag ? mainWindow.maximize() : mainWindow.unmaximize()
+})
+
+ipcMain.on('close', () => {
+  mainWindow.close()
 })
 
 /**
