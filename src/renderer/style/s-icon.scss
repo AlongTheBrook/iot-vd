@@ -1,0 +1,14 @@
+@import "_variables";
+
+.s-icon {
+  color: hsl(0, 0%, 48%) ;  /* has-text-grey */
+  @include electron-no-drag;
+}
+
+.s-icon:hover {
+  color: hsl(0, 0%, 71%);  /* has-text-grey-light */
+}
+
+.s-icon:active, .s-icon.s-active {
+  color: hsl(171, 100%, 41%);  /* has-text-primary */
+}

@@ -1,0 +1,11 @@
+@mixin electron-drag {
+  -webkit-app-region: drag;
+}
+
+@mixin electron-no-drag {
+  -webkit-app-region: no-drag;  /* electron 在无边框时，设置窗口拖拽区域，其中的按钮或可点击对象，必须使用这个特性才可以正常工作 */
+}
+
+.button {
+  @include electron-no-drag;
+}
