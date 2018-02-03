@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow } from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -24,10 +24,20 @@ function createWindow () {
     height: 640,
     minWidth: 768,
     minHeight: 512,
-    frame: false
+    frame: false,
+    show: false
   })
 
   mainWindow.loadURL(winURL)
+
+  /* 窗体内容渲染完毕再显示窗口 */
+  mainWindow.on('ready-to-show', () => {
+    mainWindow.show()
+  })
+
+  // mainWindow.webContents.on('update-target-url', (e) => {
+  //   e.preventDefault()
+  // })
 
   mainWindow.on('closed', () => {
     mainWindow = null
@@ -52,35 +62,6 @@ app.on('maximize', () => {
   if (mainWindow === null) {
     createWindow()
   }
-})
-
-ipcMain.on('electron-frame-controller', (e, msg) => {
-  if (msg === 'mounted') {
-    mainWindow.webContents.send('maximize', mainWindow.isMaximized())
-    mainWindow.webContents.send('isAlwaysOnTop', mainWindow.isAlwaysOnTop())
-    mainWindow.on('maximize', () => {
-      mainWindow.webContents.send('maximize', true)
-    })
-    mainWindow.on('unmaximize', () => {
-      mainWindow.webContents.send('maximize', false)
-    })
-  }
-})
-
-ipcMain.on('setAlwaysOnTop', (e, flag) => {
-  mainWindow.setAlwaysOnTop(flag)
-})
-
-ipcMain.on('minimize', () => {
-  mainWindow.minimize()
-})
-
-ipcMain.on('maximize', (e, flag) => {
-  flag ? mainWindow.maximize() : mainWindow.unmaximize()
-})
-
-ipcMain.on('close', () => {
-  mainWindow.close()
 })
 
 /**

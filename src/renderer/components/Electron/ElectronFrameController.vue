@@ -14,13 +14,18 @@
             </span>
             &nbsp;
         </a>
-        <a class="button is-small is-normal" @click="maximize">
+        <!-- 通过v-if和v-else解决内部v-show方式导致的背景区域异常 -->
+        <a class="button is-small is-normal" @click="maximize"  v-if="isMaximize">
             &nbsp;
-            <span class="icon" v-show="!isMaximize">
-                <i class="far fa-window-maximize"></i>
-            </span>
-            <span class="icon" v-show="isMaximize">
+            <span class="icon">
                 <i class="far fa-window-restore"></i>
+            </span>
+            &nbsp;
+        </a>
+        <a class="button is-small is-normal" @click="maximize"  v-else>
+            &nbsp;
+            <span class="icon">
+                <i class="far fa-window-maximize"></i>
             </span>
             &nbsp;
         </a>
@@ -44,27 +49,33 @@
       }
     },
     mounted () {
-      this.$electron.ipcRenderer.on('maximize', (e, flag) => {
-        this.isMaximize = flag
+      let win = this.$electron.remote.getCurrentWindow()
+      this.isAlwaysOnTop = win.isAlwaysOnTop()
+      win.on('maximize', () => {
+        this.isMaximize = true
       })
-      this.$electron.ipcRenderer.on('isAlwaysOnTop', (e, flag) => {
-        this.isAlwaysOnTop = flag
+      win.on('unmaximize', () => {
+        this.isMaximize = false
       })
-      this.$electron.ipcRenderer.send('electron-frame-controller', 'mounted')
     },
     methods: {
       setAlwaysOnTop () {
         this.isAlwaysOnTop = !this.isAlwaysOnTop
-        this.$electron.ipcRenderer.send('setAlwaysOnTop', this.isAlwaysOnTop)
+        this.$electron.remote.getCurrentWindow().setAlwaysOnTop(this.isAlwaysOnTop)
       },
       minimize () {
-        this.$electron.ipcRenderer.send('minimize')
+        this.$electron.remote.getCurrentWindow().minimize()
       },
       maximize () {
-        this.$electron.ipcRenderer.send('maximize', !this.isMaximize)
+        let win = this.$electron.remote.getCurrentWindow()
+        if (this.isMaximize) {
+          win.unmaximize()
+        } else {
+          win.maximize()
+        }
       },
       close () {
-        this.$electron.ipcRenderer.send('close')
+        this.$electron.remote.getCurrentWindow().close()
       }
     }
   }
