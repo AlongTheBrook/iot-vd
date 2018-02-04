@@ -35,13 +35,25 @@ function createWindow () {
     mainWindow.show()
   })
 
-  // mainWindow.webContents.on('update-target-url', (e) => {
-  //   e.preventDefault()
-  // })
-
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+}
+
+const isDuplicateInstance = app.makeSingleInstance((args, workingDirectory) => {
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) {
+      mainWindow.restore()
+    }
+    if (!mainWindow.isVisible()) {
+      mainWindow.show()
+    }
+    mainWindow.focus()
+  }
+})
+
+if (isDuplicateInstance) {
+  app.quit()
 }
 
 app.on('ready', createWindow)

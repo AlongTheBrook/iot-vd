@@ -1,40 +1,30 @@
 <template>
     <div class="electron-frame-controller">
-        <a class="button is-small is-normal" :class="{'is-active': isAlwaysOnTop}" @click="setAlwaysOnTop">
-            &nbsp;
+        <a class="button is-small is-normal" :class="{'is-active': isAlwaysOnTop}" @click="setAlwaysOnTop">            &nbsp;
             <span class="icon">
                 <i class="fas fa-thumbtack"></i>
-            </span>
-            &nbsp;
+            </span>            &nbsp;
         </a>
-        <a class="button is-small is-normal" @click="minimize">
-            &nbsp;
+        <a class="button is-small is-normal" @click="minimize">            &nbsp;
             <span class="icon">
                 <i class="fas fa-minus"></i>
-            </span>
-            &nbsp;
+            </span>            &nbsp;
         </a>
         <!-- 通过v-if和v-else解决内部v-show方式导致的背景区域异常 -->
-        <a class="button is-small is-normal" @click="maximize"  v-if="isMaximize">
-            &nbsp;
+        <a class="button is-small is-normal" @click="maximize"  v-if="isMaximize">            &nbsp;
             <span class="icon">
                 <i class="far fa-window-restore"></i>
-            </span>
-            &nbsp;
+            </span>            &nbsp;
         </a>
-        <a class="button is-small is-normal" @click="maximize"  v-else>
-            &nbsp;
+        <a class="button is-small is-normal" @click="maximize"  v-else>            &nbsp;
             <span class="icon">
                 <i class="far fa-window-maximize"></i>
-            </span>
-            &nbsp;
+            </span>            &nbsp;
         </a>
-        <a class="button is-small is-close" @click="close">
-            &nbsp;
+        <a class="button is-small is-close" @click="close">            &nbsp;
             <span class="icon">
                 <i class="fas fa-times"></i>
-            </span>
-            &nbsp;
+            </span>            &nbsp;
         </a>
     </div>
 </template>
