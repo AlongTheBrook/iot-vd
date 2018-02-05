@@ -1,19 +1,60 @@
 'use strict'
 
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, Menu, Tray } from 'electron'
+
+const path = require('path')
 
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
  */
 if (process.env.NODE_ENV !== 'development') {
-  global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
+  global.__static = path.join(__dirname, '/static').replace(/\\/g, '\\\\')
 }
 
 let mainWindow
+let tray
 const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
+
+function activateWindow () {
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) {
+      mainWindow.restore()
+    }
+    if (!mainWindow.isVisible()) {
+      mainWindow.show()
+    }
+    mainWindow.focus()
+  } else {
+    createWindow()
+  }
+}
+
+function initTray () {
+  if (!tray) {
+    tray = new Tray(path.join(__static, '/tray.ico'))
+    const trayMenu = Menu.buildFromTemplate([
+      {
+        label: '显示窗口',
+        click () {
+          activateWindow()
+        }
+      },
+      {
+        label: '退出',
+        click () {
+          app.quit()
+        }
+      }
+    ])
+    tray.setContextMenu(trayMenu)
+    tray.on('click', () => {
+      activateWindow()
+    })
+  }
+}
 
 function createWindow () {
   /**
@@ -33,6 +74,8 @@ function createWindow () {
   /* 窗体内容渲染完毕再显示窗口 */
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
+    // 初始化托盘
+    initTray()
   })
 
   mainWindow.on('closed', () => {
@@ -41,15 +84,7 @@ function createWindow () {
 }
 
 const isDuplicateInstance = app.makeSingleInstance((args, workingDirectory) => {
-  if (mainWindow) {
-    if (mainWindow.isMinimized()) {
-      mainWindow.restore()
-    }
-    if (!mainWindow.isVisible()) {
-      mainWindow.show()
-    }
-    mainWindow.focus()
-  }
+  activateWindow()
 })
 
 if (isDuplicateInstance) {
@@ -58,23 +93,25 @@ if (isDuplicateInstance) {
 
 app.on('ready', createWindow)
 
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+app.on('window-all-closed', (e) => {
+  // if (process.platform !== 'darwin') {
+  //   app.quit()
+  // }
+  // 任务栏直接右键关闭时会触发次消息，所以必须阻止
+  e.preventDefault()
 })
 
-app.on('activate', () => {
-  if (mainWindow === null) {
-    createWindow()
-  }
-})
-
-app.on('maximize', () => {
-  if (mainWindow === null) {
-    createWindow()
-  }
-})
+// app.on('activate', () => {
+//   if (mainWindow === null) {
+//     createWindow()
+//   }
+// })
+//
+// app.on('maximize', () => {
+//   if (mainWindow === null) {
+//     createWindow()
+//   }
+// })
 
 /**
  * Auto Updater

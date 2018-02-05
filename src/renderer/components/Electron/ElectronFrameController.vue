@@ -1,30 +1,40 @@
 <template>
-    <div class="electron-frame-controller">
-        <a class="button is-small is-normal" :class="{'is-active': isAlwaysOnTop}" @click="setAlwaysOnTop">            &nbsp;
+    <div class="electron-frame-controller" :class="{'is-clicked': isClicked}" @mouseenter="mouseenter" >
+        <a class="button is-small is-normal" :class="{'is-active': isAlwaysOnTop}" @click="setAlwaysOnTop">
+            &nbsp;
             <span class="icon">
                 <i class="fas fa-thumbtack"></i>
-            </span>            &nbsp;
+            </span>
+            &nbsp;
         </a>
-        <a class="button is-small is-normal" @click="minimize">            &nbsp;
+        <a class="button is-small is-normal" @click="minimize">
+            &nbsp;
             <span class="icon">
                 <i class="fas fa-minus"></i>
-            </span>            &nbsp;
+            </span>
+            &nbsp;
         </a>
         <!-- 通过v-if和v-else解决内部v-show方式导致的背景区域异常 -->
-        <a class="button is-small is-normal" @click="maximize"  v-if="isMaximize">            &nbsp;
+        <a class="button is-small is-normal" @click="maximize"  v-if="isMaximize">
+            &nbsp;
             <span class="icon">
                 <i class="far fa-window-restore"></i>
-            </span>            &nbsp;
+            </span>
+            &nbsp;
         </a>
-        <a class="button is-small is-normal" @click="maximize"  v-else>            &nbsp;
+        <a class="button is-small is-normal" @click="maximize"  v-else>
+            &nbsp;
             <span class="icon">
                 <i class="far fa-window-maximize"></i>
-            </span>            &nbsp;
+            </span>
+            &nbsp;
         </a>
-        <a class="button is-small is-close" @click="close">            &nbsp;
+        <a class="button is-small is-close" @click="close">
+            &nbsp;
             <span class="icon">
                 <i class="fas fa-times"></i>
-            </span>            &nbsp;
+            </span>
+            &nbsp;
         </a>
     </div>
 </template>
@@ -35,10 +45,12 @@
     data () {
       return {
         isAlwaysOnTop: false,
-        isMaximize: false
+        isMaximize: false,
+        isClicked: false,
+        isShow: false
       }
     },
-    mounted () {
+    mounted: function () {
       let win = this.$electron.remote.getCurrentWindow()
       this.isAlwaysOnTop = win.isAlwaysOnTop()
       win.on('maximize', () => {
@@ -47,13 +59,24 @@
       win.on('unmaximize', () => {
         this.isMaximize = false
       })
+      win.on('show', () => {
+        this.isShow = true // hack: window-hide
+      })
     },
     methods: {
+      mouseenter () {
+        if (this.isShow) { // hack: window-hide
+          this.isShow = !this.isShow
+        } else {
+          this.isClicked = false
+        }
+      },
       setAlwaysOnTop () {
         this.isAlwaysOnTop = !this.isAlwaysOnTop
         this.$electron.remote.getCurrentWindow().setAlwaysOnTop(this.isAlwaysOnTop)
       },
       minimize () {
+        this.isClicked = true
         this.$electron.remote.getCurrentWindow().minimize()
       },
       maximize () {
@@ -65,7 +88,9 @@
         }
       },
       close () {
-        this.$electron.remote.getCurrentWindow().close()
+        this.isClicked = true
+        // 调用下面的代码后，下次显示窗口时，会导致奇怪的发生mouseenter事件，故 hack: window-hide
+        this.$electron.remote.getCurrentWindow().hide()
       }
     }
   }
@@ -85,57 +110,55 @@
         border-radius: 0;
     }
 
-    .button.is-normal {
-        $_: transparent;
-        $hover: hsl(0, 0%, 86%);
-        $active: hsl(0, 0%, 71%);
-        $_text: hsl(0, 0%, 48%);
-        $hover_text: $_text;
-        $active_text: $_text;
+    @mixin button-mixin($_, $_text, $hover, $hover_text, $active, $active_text) {
+        &, .is-clicked &:hover {
+            background-color: $_;
+            border-color: $_;
+            & .icon {
+                color: $_text;
+            }
+        }
 
-        background-color: $_;
-        border-color: $_;
-        color: $_text;
         &:hover, &.is-hovered {
             background-color: $hover;
             border-color: $hover;
-            .icon {
+            & .icon {
                 color: $hover_text;
             }
         }
+
         &:active, &.is-active {
             background-color: $active;
             border-color: $active;
-            .icon {
+            & .icon {
                 color: $active_text;
             }
         }
     }
 
+    .button.is-normal {
+        $_: transparent;
+        $_text: hsl(0, 0%, 48%);
+
+        $hover: hsl(0, 0%, 86%);
+        $hover_text: $_text;
+
+        $active: hsl(0, 0%, 71%);
+        $active_text: $_text;
+
+        @include button-mixin($_, $_text, $hover, $hover_text, $active, $active_text);
+    }
+
     .button.is-close {
         $_: transparent;
-        $hover: hsl(348, 100%, 61%);
-        $active: hsl(348, 100%, 51%);
         $_text: hsl(0, 0%, 48%);
-        $hover_text: white;
-        $active_text: white;
 
-        background-color: $_;
-        border-color: $_;
-        color: $_text;
-        &:hover, &.is-hovered {
-            background-color: $hover;
-            border-color: $hover;
-            .icon {
-                color: $hover_text;
-            }
-        }
-        &:active, &.is-active {
-            background-color: $active;
-            border-color: $active;
-            .icon {
-                color: $active_text;
-            }
-        }
+        $hover: hsl(348, 100%, 61%);
+        $hover_text: white;
+
+        // $active: hsl(348, 100%, 51%);
+        // $active_text: white;
+
+        @include button-mixin($_, $_text, $hover, $hover_text, $_, $_text);
     }
 </style>
