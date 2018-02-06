@@ -66,7 +66,9 @@ function createWindow () {
     minWidth: 768,
     minHeight: 512,
     frame: false,
-    show: false
+    show: false,
+    // thickFrame: false, // 为false时，窗口最小化和恢复的动画消失，窗口阴影消失，最大化和还原被禁用
+    backgroundThrottling: false
   })
 
   mainWindow.loadURL(winURL)
@@ -93,14 +95,12 @@ if (isDuplicateInstance) {
 
 app.on('ready', createWindow)
 
-app.on('window-all-closed', (e) => {
-  // if (process.platform !== 'darwin') {
-  //   app.quit()
-  // }
-  // 任务栏直接右键关闭时会触发次消息，所以必须阻止
-  e.preventDefault()
-})
-
+// app.on('window-all-closed', () => {
+//   if (process.platform !== 'darwin') {
+//     app.quit()
+//   }
+// })
+//
 // app.on('activate', () => {
 //   if (mainWindow === null) {
 //     createWindow()

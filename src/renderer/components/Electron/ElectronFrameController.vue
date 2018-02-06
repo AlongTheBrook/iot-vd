@@ -47,11 +47,11 @@
         isAlwaysOnTop: false,
         isMaximize: false,
         isClicked: false,
-        isShow: false
+        isShowing: false
       }
     },
     mounted: function () {
-      let win = this.$electron.remote.getCurrentWindow()
+      const win = this.$electron.remote.getCurrentWindow()
       this.isAlwaysOnTop = win.isAlwaysOnTop()
       win.on('maximize', () => {
         this.isMaximize = true
@@ -60,15 +60,22 @@
         this.isMaximize = false
       })
       win.on('show', () => {
-        this.isShow = true // hack: window-hide
+        this.isShowing = true
       })
+      window.onbeforeunload = (e) => {
+        e.preventDefault()
+        e.returnValue = false
+        win.hide()
+      }
     },
     methods: {
       mouseenter () {
-        if (this.isShow) { // hack: window-hide
-          this.isShow = !this.isShow
+        if (this.isShowing) {
+          this.isShowing = false
         } else {
-          this.isClicked = false
+          if (this.isClicked) {
+            this.isClicked = false
+          }
         }
       },
       setAlwaysOnTop () {
@@ -89,7 +96,6 @@
       },
       close () {
         this.isClicked = true
-        // 调用下面的代码后，下次显示窗口时，会导致奇怪的发生mouseenter事件，故 hack: window-hide
         this.$electron.remote.getCurrentWindow().hide()
       }
     }
@@ -156,9 +162,10 @@
         $hover: hsl(348, 100%, 61%);
         $hover_text: white;
 
-        // $active: hsl(348, 100%, 51%);
-        // $active_text: white;
+        // 此处采用默认情况下的颜色是为了解决窗口显示时关闭按钮背景色的跳变
+        $active: $_;// hsl(348, 96%, 45%);
+        $active_text: $_text;// white;
 
-        @include button-mixin($_, $_text, $hover, $hover_text, $_, $_text);
+        @include button-mixin($_, $_text, $hover, $hover_text, $active, $active_text);
     }
 </style>
