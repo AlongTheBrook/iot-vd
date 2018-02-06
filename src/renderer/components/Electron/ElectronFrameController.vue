@@ -47,7 +47,8 @@
         isAlwaysOnTop: false,
         isMaximize: false,
         isClicked: false,
-        isShowing: false
+        isShowing: false,
+        quit: false
       }
     },
     mounted: function () {
@@ -62,10 +63,16 @@
       win.on('show', () => {
         this.isShowing = true
       })
+      this.$electron.ipcRenderer.on('@quit', () => {
+        this.quit = true
+        win.close()
+      })
       window.onbeforeunload = (e) => {
-        e.preventDefault()
-        e.returnValue = false
-        win.hide()
+        if (!this.quit) {
+          e.preventDefault()
+          e.returnValue = false
+          win.hide()
+        }
       }
     },
     methods: {

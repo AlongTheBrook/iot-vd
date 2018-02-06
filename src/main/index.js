@@ -45,7 +45,7 @@ function initTray () {
       {
         label: '退出',
         click () {
-          app.quit()
+          mainWindow.webContents.send('@quit')
         }
       }
     ])
@@ -95,12 +95,12 @@ if (isDuplicateInstance) {
 
 app.on('ready', createWindow)
 
-// app.on('window-all-closed', () => {
-//   if (process.platform !== 'darwin') {
-//     app.quit()
-//   }
-// })
-//
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
+})
+
 // app.on('activate', () => {
 //   if (mainWindow === null) {
 //     createWindow()
