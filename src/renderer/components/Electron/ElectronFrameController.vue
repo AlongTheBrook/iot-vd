@@ -1,5 +1,5 @@
 <template>
-    <div class="electron-frame-controller" :class="{'is-clicked': isClicked}" @mouseenter="mouseenter" >
+    <div class="electron-frame-controller" :class="{'is-clicked': isClicked}" @mouseenter="mouseenter">
         <a class="button is-small is-normal" :class="{'is-active': isAlwaysOnTop}" @click="setAlwaysOnTop">
             &nbsp;
             <span class="icon">
@@ -51,7 +51,7 @@
         quit: false
       }
     },
-    mounted: function () {
+    mounted () {
       const win = this.$electron.remote.getCurrentWindow()
       this.isAlwaysOnTop = win.isAlwaysOnTop()
       win.on('maximize', () => {
@@ -63,6 +63,14 @@
       win.on('show', () => {
         this.isShowing = true
       })
+      if (process.env.NODE_ENV === 'development') {
+        document.onkeydown = (e) => {
+          if (e.altKey && e.keyCode === 82) { // ALT + R 键按下
+            this.quit = true
+            win.reload()
+          }
+        }
+      }
       this.$electron.ipcRenderer.on('@quit', () => {
         this.quit = true
         win.close()
