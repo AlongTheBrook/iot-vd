@@ -63,7 +63,7 @@
       win.on('show', () => {
         this.isShowing = true
       })
-      if (process.env.NODE_ENV === 'development') {
+      if (process.env.NODE_ENV === 'development') { // 这是一个开发时特性
         document.onkeydown = (e) => {
           if (e.altKey && e.keyCode === 82) { // ALT + R 键按下
             this.quit = true
@@ -111,7 +111,9 @@
       },
       close () {
         this.isClicked = true
-        this.$electron.remote.getCurrentWindow().hide()
+        setTimeout(() => { // 解决窗口重新显示时，关闭按钮背景的问题
+          this.$electron.remote.getCurrentWindow().hide()
+        }, 5)
       }
     }
   }
@@ -178,8 +180,8 @@
         $hover_text: white;
 
         // 此处采用默认情况下的颜色是为了解决窗口显示时关闭按钮背景色的跳变
-        $active: $_;// hsl(348, 96%, 45%);
-        $active_text: $_text;// white;
+        $active: hsl(348, 96%, 45%);
+        $active_text: white;
 
         @include button-mixin($_, $_text, $hover, $hover_text, $active, $active_text);
     }
