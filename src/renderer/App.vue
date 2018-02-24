@@ -36,4 +36,8 @@
     @include electron-drag;
     overflow-y: hidden !important; /* hack: 解决bulma中 html{overflow-y: scroll}导致的滚动条 */
   }
+
+  .text-sle, .text-sle p {
+    @include text-sle;
+  }
 </style>

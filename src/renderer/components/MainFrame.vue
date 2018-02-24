@@ -46,7 +46,8 @@
     }
 
     .main-frame-menu {
-        width: 60px;
+        width: 3.75rem;
+        flex: none;
         background-color: #24292e;
         display: flex;
         flex-direction: column;
@@ -76,7 +77,7 @@
     }
 
     .main-frame-menu-item-end {
-        flex: 1;
+        flex: auto;
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
@@ -87,6 +88,6 @@
     }
 
     .main-frame-content {
-        flex: 1;
+        flex: auto;
     }
 </style>
