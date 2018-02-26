@@ -35,6 +35,14 @@
   html {
     @include electron-drag;
     overflow-y: hidden !important; /* hack: 解决bulma中 html{overflow-y: scroll}导致的滚动条 */
+
+    /* 禁用文本选择，适配所有浏览器 */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
   }
 
   .text-sle, .text-sle p {

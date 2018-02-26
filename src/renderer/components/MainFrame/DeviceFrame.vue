@@ -1,8 +1,24 @@
 <template>
     <div class="device-frame">
         <div class="device-frame-menu">
-            <div class="device-li-base">
-
+            <div class="device-li-control">
+                <div class="device-li-control-search field">
+                    <p class="control has-icons-right">
+                        <input class="input is-small" type="text" placeholder="搜索"/>
+                        <span class="icon is-small is-right">
+                            <i class="fas fa-search"></i>
+                        </span>
+                    </p>
+                </div>
+                <div class="device-li-control-create field">
+                    <p class="control">
+                        <a class="button is-small is-primary">
+                            <span class="icon">
+                                <i class="fas fa-plus"></i>
+                            </span>
+                        </a>
+                    </p>
+                </div>
             </div>
             <ul>
                 <li class="device-li">
@@ -121,9 +137,40 @@
         padding: 0.75rem;
     }
 
+    .device-li-control {
+        $border-color: $grey-light;
+        $background-color: $grey-lighter;
+        @extend .device-li-base;
+        align-items: flex-end;
+        & > .device-li-control-search {
+            flex: auto;
+            margin-bottom: 0 !important;
+            padding-right: 0.5rem;
+            & .input {
+                border-radius: 0;
+                border-color: $border-color;
+                box-shadow: none;
+                background-color: $background-color;
+                &:focus {
+                    background-color:  $white-ter;
+                }
+            }
+            & .icon {
+                color: #7a7a7a;
+            }
+        }
+        & > .device-li-control-create {
+            flex: none;
+            & .button {
+                border-radius: 0;
+            }
+        }
+    }
+
     .device-li {
         @include mouse-bg-mixin(transparent, $grey-lighter, $grey-light);
         @extend .device-li-base;
+        cursor: default;
         & > .device-li-start {
             flex: none;
             width: 2.5rem;
