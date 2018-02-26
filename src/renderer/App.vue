@@ -48,4 +48,82 @@
   .text-sle, .text-sle p {
     @include text-sle;
   }
+
+  $vb-bc-light: rgba(48, 121, 244, .1) !default;
+  $vb-bc-middle: rgba(48, 121, 244, .3) !default;
+  $vb-bc-dark: rgba(48, 121, 244, .5) !default;
+
+  // Change default value for background color level here
+  $vb-bc-light: $grey-light;
+  $vb-bc-middle: $grey-light;
+  $vb-bc-dark: hsl(0, 0%, 64%);
+  // ↑
+
+  $vb-dragger-display: block !default;
+  $vb-dragger-width: 12px !default;
+  $vb-styler-margin: 5px 5px 5px 0 !default;
+  $vb-styler-height: calc(100% - 10px) !default;
+
+  $vb-styler-bc: $vb-bc-light !default;
+  $vb-styler-bc-hover: $vb-bc-dark !default;
+  $vb-styler-bc-scrolling-phantom: $vb-bc-middle !default;
+  $vb-styler-bc-dragging: $vb-bc-dark !default;
+  $vb-styler-bc-dragging-phantom: $vb-bc-dark !default;
+
+  // Change default value for variable here
+  $vb-dragger-display: none;
+  $vb-dragger-width: 7px;
+  $vb-styler-margin: 0;
+  $vb-styler-height: 100%;
+  // ↑
+
+  .vb {
+    & > .vb-dragger {
+      display: $vb-dragger-display;
+      z-index: 5;
+      width: $vb-dragger-width;
+      right: 0;
+      & > .vb-dragger-styler {
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -webkit-transform: rotate3d(0,0,0,0);
+        transform: rotate3d(0,0,0,0);
+        -webkit-transition:
+                background-color 100ms ease-out,
+                margin 100ms ease-out,
+                height 100ms ease-out;
+        transition:
+                background-color 100ms ease-out,
+                margin 100ms ease-out,
+                height 100ms ease-out;
+        background-color: $vb-styler-bc;
+        margin: $vb-styler-margin;
+        border-radius: 20px;
+        height: $vb-styler-height;
+        display: block;
+      }
+      &:hover > .vb-dragger-styler {
+        background-color: $vb-styler-bc-hover;
+        margin: 0px;
+        height: 100%;
+      }
+    }
+    &:hover > .vb-dragger{
+      display: block;
+    }
+    &:active > .vb-dragger{
+      display: block;
+    }
+    &.vb-scrolling-phantom > .vb-dragger > .vb-dragger-styler {
+      background-color: $vb-styler-bc-scrolling-phantom;
+    }
+    &.vb-dragging > .vb-dragger > .vb-dragger-styler {
+      background-color: $vb-styler-bc-dragging;
+      margin: 0px;
+      height: 100%;
+    }
+    &.vb-dragging-phantom > .vb-dragger > .vb-dragger-styler {
+      background-color: $vb-styler-bc-dragging-phantom;
+    }
+  }
 </style>

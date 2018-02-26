@@ -13,7 +13,7 @@
 }
 
 @mixin text-sle{
-  min-width: 0;
+  min-width: 0;  // 适配flex-box布局：解决因为不能设置宽度而造成的无效
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
