@@ -36,13 +36,13 @@
     @include electron-no-drag; /* 全局禁用拖拽，单独设置局部部分区域单独配置 */
     overflow-y: hidden !important; /* hack: 解决bulma中 html{overflow-y: scroll}导致的滚动条 */
 
-    /* 禁用文本选择，适配所有浏览器 */
-    -webkit-touch-callout: none;
+    /* 禁用文本选择，注释部分匹配其他浏览器 */
     -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+    /*-webkit-touch-callout: none;*/
+    /*-khtml-user-select: none;*/
+    /*-moz-user-select: none;*/
+    /*-ms-user-select: none;*/
+    /*user-select: none;*/
   }
 
   body,

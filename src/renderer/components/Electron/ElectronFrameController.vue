@@ -1,41 +1,47 @@
 <template>
-    <div class="electron-frame-controller" :class="{'is-clicked': isClicked}" @mouseenter="mouseenter">
-        <a class="button is-small is-normal" :class="{'is-active': isAlwaysOnTop}" @click="setAlwaysOnTop">
-            &nbsp;
-            <span class="icon">
+    <div>
+        <div class="electron-frame-controller" :class="{'is-clicked': isClicked}" @mouseenter="mouseenter">
+            <a class="button is-small is-normal" :class="{'is-active': isAlwaysOnTop}" @click="setAlwaysOnTop">
+                &nbsp;
+                <span class="icon">
                 <i class="fas fa-thumbtack"></i>
             </span>
-            &nbsp;
-        </a>
-        <a class="button is-small is-normal" @click="minimize">
-            &nbsp;
-            <span class="icon">
+                &nbsp;
+            </a>
+            <a class="button is-small is-normal" @click="minimize">
+                &nbsp;
+                <span class="icon">
                 <i class="fas fa-minus"></i>
             </span>
-            &nbsp;
-        </a>
-        <!-- 通过v-if和v-else解决内部v-show方式导致的背景区域异常 -->
-        <a class="button is-small is-normal" @click="maximize"  v-if="isMaximize">
-            &nbsp;
-            <span class="icon">
+                &nbsp;
+            </a>
+            <!-- 通过v-if和v-else解决内部v-show方式导致的背景区域异常 -->
+            <a class="button is-small is-normal" @click="maximize"  v-if="isMaximize">
+                &nbsp;
+                <span class="icon">
                 <i class="far fa-window-restore"></i>
             </span>
-            &nbsp;
-        </a>
-        <a class="button is-small is-normal" @click="maximize"  v-else>
-            &nbsp;
-            <span class="icon">
+                &nbsp;
+            </a>
+            <a class="button is-small is-normal" @click="maximize"  v-else>
+                &nbsp;
+                <span class="icon">
                 <i class="far fa-window-maximize"></i>
             </span>
-            &nbsp;
-        </a>
-        <a class="button is-small is-close" @click="close">
-            &nbsp;
-            <span class="icon">
+                &nbsp;
+            </a>
+            <a class="button is-small is-close" @click="close">
+                &nbsp;
+                <span class="icon">
                 <i class="fas fa-times"></i>
             </span>
-            &nbsp;
-        </a>
+                &nbsp;
+            </a>
+        </div>
+        <div class="electron-frame-resize-region-top"></div>
+        <div class="electron-frame-resize-region-bottom"></div>
+        <div class="electron-frame-resize-region-left"></div>
+        <div class="electron-frame-resize-region-right"></div>
     </div>
 </template>
 
@@ -120,13 +126,62 @@
 </script>
 
 <style lang="scss" scoped>
+    $z-index: 1024;
+
     .electron-frame-controller {
         position: absolute;
         top: 0;
         right: 0;
-        z-index: 1024;
+        z-index: $z-index - 1;
         display: flex;
         justify-content: flex-end;
+    }
+
+    @mixin electron-frame-resize-region($side) {
+        position: absolute;
+        z-index: $z-index;
+        background-color: transparent;
+        @if($side == top) {
+            left: 0;
+            top: 0;
+            height: 3px;
+            width: 100%;
+        }
+        @else if($side == bottom) {
+            left: 0;
+            bottom: 0;
+            height: 3px;
+            width: 100%;
+        }
+        @else if($side == left) {
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+        }
+        @else if($side == right) {
+            right: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+        }
+        @include electron-no-drag;
+    }
+
+    .electron-frame-resize-region-top {
+        @include electron-frame-resize-region(top);
+    }
+
+    .electron-frame-resize-region-bottom {
+        @include electron-frame-resize-region(bottom);
+    }
+
+    .electron-frame-resize-region-left {
+        @include electron-frame-resize-region(left);
+    }
+
+    .electron-frame-resize-region-right {
+        @include electron-frame-resize-region(right);
     }
 
     .button {

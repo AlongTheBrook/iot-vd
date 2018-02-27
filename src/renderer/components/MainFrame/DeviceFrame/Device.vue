@@ -1,7 +1,7 @@
 <template>
     <div class="device">
         <div class="device-title">
-            <div>设备标题</div>
+            设备标题
         </div>
         <div class="device-content">
             <div class="device-content-config">
@@ -10,7 +10,14 @@
             </div>
             <div class="device-content-monitor"></div>
         </div>
-        <div class="device-footer"></div>
+        <div class="device-footer">
+            <div class="device-footer-msg">
+                <p>最后信息：☇ 数据采集 10:27</p>
+            </div>
+            <div class="device-footer-control">
+                <a class="button is-primary is-small">启动</a>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -21,12 +28,12 @@
 </script>
 
 <style lang="scss" scoped>
-    @mixin borderSetOneSide($whichSide, $color: $grey-lighter, $style: solid, $width: 1px)
-    {
+    @mixin borderSetOneSide($whichSide, $color: $grey-lighter, $style: solid, $width: 1px) {
         border-#{$whichSide}-color: $color;
         border-#{$whichSide}-style: $style;
         border-#{$whichSide}-width: $width;
     }
+
     .device {
         display: flex;
         flex-direction: column;
@@ -65,6 +72,22 @@
             flex: none;
             height: 3rem;
             @include borderSetOneSide(top);
+            display: flex;
+            align-items: center;
+            & > .device-footer-msg {
+                flex: 8 8 auto;
+                padding-left: 1.75rem;
+            }
+            & > .device-footer-control {
+                flex: 2 2 auto;
+                width: 4rem;
+                display: flex;
+                justify-content: flex-end;
+                padding-right: 1.75rem;
+                & .button {
+                    border-radius: 0;
+                }
+            }
         }
     }
 </style>
