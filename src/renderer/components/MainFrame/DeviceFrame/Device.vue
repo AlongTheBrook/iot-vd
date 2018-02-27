@@ -1,24 +1,6 @@
 <template>
     <div>
         <div>device</div>
-        <div style="height: 200px; width: 200px;" v-bar>
-            <div>
-                <p>adgagg</p>
-                <p>adgagg</p>
-                <p>adgagg</p>
-                <p>adgagg</p>
-                <p>adgagg</p>
-                <p>adgagg</p>
-                <p>adgagg</p>
-                <p>adgagg</p>
-                <p>adgagg</p>
-                <p>adgagg</p>
-                <p>adgagg</p>
-                <p>adgagg</p>
-                <p>adgagg</p>
-                <p>adgagg</p>
-            </div>
-        </div>
         <section class="section">
             <div class="container">
                 <h1 class="title">Section</h1>

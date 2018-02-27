@@ -22,231 +22,24 @@
             </div>
             <div class="device-list-container" v-bar="{preventParentScroll: true}">
                 <ul class="device-list" >
-                    <li class="device-list-item">
-                        <div class="device-list-item-start">
-                            <figure class="image">
-                                <img src="https://bulma.io/images/placeholders/48x48.png">
-                            </figure>
-                        </div>
-                        <div class="device-list-item-content">
-                            <p class="device-list-item-content-title">设备名称 -> 家乐苑小区进水</p>
-                            <p class="device-list-item-content-subtitle">最后信息 -> √ 15:41</p>
-                        </div>
-                        <div class="device-list-item-end">
-                            <div class="icon">
-                                <i class="far fa-heart fa-lg"></i>
+                    <draggable v-model="deviceList">
+                        <li v-for="item in deviceList" :key="item.id" class="device-list-item">
+                            <div class="device-list-item-start">
+                                <figure class="image">
+                                    <img src="https://bulma.io/images/placeholders/48x48.png">
+                                </figure>
                             </div>
-                        </div>
-                    </li>
-
-                    <li class="device-list-item">
-                        <div class="device-list-item-start">
-                            <figure class="image">
-                                <img src="https://bulma.io/images/placeholders/48x48.png">
-                            </figure>
-                        </div>
-                        <div class="device-list-item-content">
-                            <p class="device-list-item-content-title">设备名称 -> 家乐苑小区进水</p>
-                            <p class="device-list-item-content-subtitle">最后信息 -> √ 15:41</p>
-                        </div>
-                        <div class="device-list-item-end">
-                            <div class="icon">
-                                <i class="far fa-heart fa-lg"></i>
+                            <div class="device-list-item-content">
+                                <p class="device-list-item-content-title">{{ item.name }}</p>
+                                <p class="device-list-item-content-subtitle">{{ item.msg }}</p>
                             </div>
-                        </div>
-                    </li>
-                    <li class="device-list-item">
-                        <div class="device-list-item-start">
-                            <figure class="image">
-                                <img src="https://bulma.io/images/placeholders/48x48.png">
-                            </figure>
-                        </div>
-                        <div class="device-list-item-content">
-                            <p class="device-list-item-content-title">设备名称 -> 家乐苑小区进水</p>
-                            <p class="device-list-item-content-subtitle">最后信息 -> √ 15:41</p>
-                        </div>
-                        <div class="device-list-item-end">
-                            <div class="icon">
-                                <i class="far fa-heart fa-lg"></i>
+                            <div class="device-list-item-end">
+                                <div class="icon">
+                                    <i class="far fa-heart fa-lg"></i>
+                                </div>
                             </div>
-                        </div>
-                    </li>
-                    <li class="device-list-item">
-                        <div class="device-list-item-start">
-                            <figure class="image">
-                                <img src="https://bulma.io/images/placeholders/48x48.png">
-                            </figure>
-                        </div>
-                        <div class="device-list-item-content">
-                            <p class="device-list-item-content-title">设备名称 -> 家乐苑小区进水</p>
-                            <p class="device-list-item-content-subtitle">最后信息 -> √ 15:41</p>
-                        </div>
-                        <div class="device-list-item-end">
-                            <div class="icon">
-                                <i class="far fa-heart fa-lg"></i>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="device-list-item">
-                        <div class="device-list-item-start">
-                            <figure class="image">
-                                <img src="https://bulma.io/images/placeholders/48x48.png">
-                            </figure>
-                        </div>
-                        <div class="device-list-item-content">
-                            <p class="device-list-item-content-title">设备名称 -> 家乐苑小区进水</p>
-                            <p class="device-list-item-content-subtitle">最后信息 -> √ 15:41</p>
-                        </div>
-                        <div class="device-list-item-end">
-                            <div class="icon">
-                                <i class="far fa-heart fa-lg"></i>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="device-list-item">
-                        <div class="device-list-item-start">
-                            <figure class="image">
-                                <img src="https://bulma.io/images/placeholders/48x48.png">
-                            </figure>
-                        </div>
-                        <div class="device-list-item-content">
-                            <p class="device-list-item-content-title">设备名称 -> 家乐苑小区进水</p>
-                            <p class="device-list-item-content-subtitle">最后信息 -> √ 15:41</p>
-                        </div>
-                        <div class="device-list-item-end">
-                            <div class="icon">
-                                <i class="far fa-heart fa-lg"></i>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="device-list-item">
-                        <div class="device-list-item-start">
-                            <figure class="image">
-                                <img src="https://bulma.io/images/placeholders/48x48.png">
-                            </figure>
-                        </div>
-                        <div class="device-list-item-content">
-                            <p class="device-list-item-content-title">设备名称 -> 家乐苑小区进水</p>
-                            <p class="device-list-item-content-subtitle">最后信息 -> √ 15:41</p>
-                        </div>
-                        <div class="device-list-item-end">
-                            <div class="icon">
-                                <i class="far fa-heart fa-lg"></i>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="device-list-item">
-                        <div class="device-list-item-start">
-                            <figure class="image">
-                                <img src="https://bulma.io/images/placeholders/48x48.png">
-                            </figure>
-                        </div>
-                        <div class="device-list-item-content">
-                            <p class="device-list-item-content-title">设备名称 -> 家乐苑小区进水</p>
-                            <p class="device-list-item-content-subtitle">最后信息 -> √ 15:41</p>
-                        </div>
-                        <div class="device-list-item-end">
-                            <div class="icon">
-                                <i class="far fa-heart fa-lg"></i>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="device-list-item">
-                        <div class="device-list-item-start">
-                            <figure class="image">
-                                <img src="https://bulma.io/images/placeholders/48x48.png">
-                            </figure>
-                        </div>
-                        <div class="device-list-item-content">
-                            <p class="device-list-item-content-title">设备名称 -> 家乐苑小区进水</p>
-                            <p class="device-list-item-content-subtitle">最后信息 -> √ 15:41</p>
-                        </div>
-                        <div class="device-list-item-end">
-                            <div class="icon">
-                                <i class="far fa-heart fa-lg"></i>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="device-list-item">
-                        <div class="device-list-item-start">
-                            <figure class="image">
-                                <img src="https://bulma.io/images/placeholders/48x48.png">
-                            </figure>
-                        </div>
-                        <div class="device-list-item-content">
-                            <p class="device-list-item-content-title">设备名称 -> 家乐苑小区进水</p>
-                            <p class="device-list-item-content-subtitle">最后信息 -> √ 15:41</p>
-                        </div>
-                        <div class="device-list-item-end">
-                            <div class="icon">
-                                <i class="far fa-heart fa-lg"></i>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="device-list-item">
-                        <div class="device-list-item-start">
-                            <figure class="image">
-                                <img src="https://bulma.io/images/placeholders/48x48.png">
-                            </figure>
-                        </div>
-                        <div class="device-list-item-content">
-                            <p class="device-list-item-content-title">设备名称 -> 家乐苑小区进水</p>
-                            <p class="device-list-item-content-subtitle">最后信息 -> √ 15:41</p>
-                        </div>
-                        <div class="device-list-item-end">
-                            <div class="icon">
-                                <i class="far fa-heart fa-lg"></i>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="device-list-item">
-                        <div class="device-list-item-start">
-                            <figure class="image">
-                                <img src="https://bulma.io/images/placeholders/48x48.png">
-                            </figure>
-                        </div>
-                        <div class="device-list-item-content">
-                            <p class="device-list-item-content-title">设备名称 -> 家乐苑小区进水</p>
-                            <p class="device-list-item-content-subtitle">最后信息 -> √ 15:41</p>
-                        </div>
-                        <div class="device-list-item-end">
-                            <div class="icon">
-                                <i class="far fa-heart fa-lg"></i>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="device-list-item">
-                        <div class="device-list-item-start">
-                            <figure class="image">
-                                <img src="https://bulma.io/images/placeholders/48x48.png">
-                            </figure>
-                        </div>
-                        <div class="device-list-item-content">
-                            <p class="device-list-item-content-title">设备名称 -> 家乐苑小区进水</p>
-                            <p class="device-list-item-content-subtitle">最后信息 -> √ 15:41</p>
-                        </div>
-                        <div class="device-list-item-end">
-                            <div class="icon">
-                                <i class="far fa-heart fa-lg"></i>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="device-list-item">
-                        <div class="device-list-item-start">
-                            <figure class="image">
-                                <img src="https://bulma.io/images/placeholders/48x48.png">
-                            </figure>
-                        </div>
-                        <div class="device-list-item-content">
-                            <p class="device-list-item-content-title">设备名称 -> 家乐苑小区进水</p>
-                            <p class="device-list-item-content-subtitle">最后信息 -> √ 15:41</p>
-                        </div>
-                        <div class="device-list-item-end">
-                            <div class="icon">
-                                <i class="far fa-heart fa-lg"></i>
-                            </div>
-                        </div>
-                    </li>
+                        </li>
+                    </draggable>
                 </ul>
             </div>
         </div>
@@ -257,8 +50,101 @@
 </template>
 
 <script>
+    import Draggable from 'vuedraggable'
+
     export default {
-      name: 'device-frame'
+      name: 'device-frame',
+      components: { Draggable },
+      data () {
+        return {
+          deviceList: [
+            {
+              id: 1,
+              type: 1,
+              name: '设备名称 -> 家乐苑小区进水',
+              msg: '最后信息 -> ☇ 15:41 ',
+              state: 1
+            },
+            {
+              id: 2,
+              type: 1,
+              name: '设备#002',
+              msg: '☇ 数据采集 10:27 ',
+              state: 1
+            },
+            {
+              id: 3,
+              type: 1,
+              name: '设备#003',
+              msg: '☇ 数据采集 10:27 ',
+              state: 1
+            },
+            {
+              id: 4,
+              type: 1,
+              name: '设备#004',
+              msg: '☇ 数据采集 10:27 ',
+              state: 1
+            },
+            {
+              id: 5,
+              type: 1,
+              name: '设备#005',
+              msg: '☇ 数据采集 10:27 ',
+              state: 1
+            },
+            {
+              id: 6,
+              type: 1,
+              name: '设备#006',
+              msg: '☇ 数据采集 10:27 ',
+              state: 1
+            },
+            {
+              id: 7,
+              type: 1,
+              name: '设备#007',
+              msg: '☇ 数据采集 10:27 ',
+              state: 1
+            },
+            {
+              id: 8,
+              type: 1,
+              name: '设备#008',
+              msg: '☇ 数据采集 10:27 ',
+              state: 1
+            },
+            {
+              id: 9,
+              type: 1,
+              name: '设备#009',
+              msg: '☇ 数据采集 10:27 ',
+              state: 1
+            },
+            {
+              id: 10,
+              type: 1,
+              name: '设备#010',
+              msg: '☇ 数据采集 10:27 ',
+              state: 1
+            },
+            {
+              id: 11,
+              type: 1,
+              name: '设备#011',
+              msg: '☇ 数据采集 10:27 ',
+              state: 1
+            },
+            {
+              id: 12,
+              type: 1,
+              name: '设备#012',
+              msg: '☇ 数据采集 10:27 ',
+              state: 1
+            }
+          ]
+        }
+      }
     }
 </script>
 
