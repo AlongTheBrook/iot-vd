@@ -33,7 +33,7 @@
   @import "~bulma";
 
   html {
-    @include electron-drag;
+    @include electron-no-drag; /* 全局禁用拖拽，单独设置局部部分区域单独配置 */
     overflow-y: hidden !important; /* hack: 解决bulma中 html{overflow-y: scroll}导致的滚动条 */
 
     /* 禁用文本选择，适配所有浏览器 */
@@ -45,19 +45,31 @@
     user-select: none;
   }
 
+  body,
+  button,
+  input,
+  select,
+  textarea {
+    font-family: BlinkMacSystemFont, -apple-system, "Microsoft Yahei", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  }
+
   .text-sle, .text-sle p {
     @include text-sle;
   }
 
-  $vb-bc-light: rgba(48, 121, 244, .1) !default;
-  $vb-bc-middle: rgba(48, 121, 244, .3) !default;
-  $vb-bc-dark: rgba(48, 121, 244, .5) !default;
-
-  // Change default value for background color level here
+  // Change default value for variables here
   $vb-bc-light: $grey-light;
   $vb-bc-middle: $grey-light;
   $vb-bc-dark: hsl(0, 0%, 64%);
+  $vb-dragger-display: none;
+  $vb-dragger-width: 7px;
+  $vb-styler-margin: 0;
+  $vb-styler-height: 100%;
   // ↑
+
+  $vb-bc-light: rgba(48, 121, 244, .1) !default;
+  $vb-bc-middle: rgba(48, 121, 244, .3) !default;
+  $vb-bc-dark: rgba(48, 121, 244, .5) !default;
 
   $vb-dragger-display: block !default;
   $vb-dragger-width: 12px !default;
@@ -69,13 +81,6 @@
   $vb-styler-bc-scrolling-phantom: $vb-bc-middle !default;
   $vb-styler-bc-dragging: $vb-bc-dark !default;
   $vb-styler-bc-dragging-phantom: $vb-bc-dark !default;
-
-  // Change default value for variable here
-  $vb-dragger-display: none;
-  $vb-dragger-width: 7px;
-  $vb-styler-margin: 0;
-  $vb-styler-height: 100%;
-  // ↑
 
   .vb {
     & > .vb-dragger {

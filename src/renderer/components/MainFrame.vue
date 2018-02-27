@@ -52,6 +52,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+        @include electron-drag;
     }
 
     .main-frame-menu > div {

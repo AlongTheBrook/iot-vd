@@ -151,7 +151,7 @@
 <style lang="scss" scoped>
     .device-frame {
         display: flex;
-        height: 100vh;
+        height: 100%;
     }
 
     .device-frame-menu {
@@ -192,6 +192,7 @@
         $border-color: $grey-light;
         $background-color: $grey-lighter;
         @extend .device-list-baseclass;
+        @include electron-drag;
         align-items: flex-end;
         & > .device-list-control-search {
             flex: auto;
