@@ -10,7 +10,7 @@
 
   export default {
     name: 'iot-vd',
-    mounted: function () {
+    mounted () {
       // 禁止任何拖拽行为：主要目的用于阻止外部URL或文件拖入窗口，引发未计划的行为
       let app = document.getElementById('app')
       app.ondragenter = (e) => {
@@ -18,6 +18,7 @@
       }
       app.ondragover = (e) => {
         e.preventDefault()
+        e.dataTransfer.dropEffect = 'none'
       }
       app.ondragleave = (e) => {
         e.preventDefault()
@@ -55,6 +56,10 @@
 
   .text-sle, .text-sle p {
     @include text-sle;
+  }
+
+  .is-no-radius {
+    border-radius: unset!important;
   }
 
   // Change default value for variables here

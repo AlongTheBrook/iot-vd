@@ -126,20 +126,18 @@
 </script>
 
 <style lang="scss" scoped>
-    $z-index: 1024;
-
     .electron-frame-controller {
         position: absolute;
         top: 0;
         right: 0;
-        z-index: $z-index - 1;
+        z-index: $z-index-top - 1;
         display: flex;
         justify-content: flex-end;
     }
 
     @mixin electron-frame-resize-region($side) {
         position: absolute;
-        z-index: $z-index;
+        z-index: $z-index-top;
         background-color: transparent;
         @if($side == top) {
             left: 0;

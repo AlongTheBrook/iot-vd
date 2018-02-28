@@ -4,7 +4,7 @@
             <div class="device-list-control">
                 <div class="device-list-control-search field">
                     <p class="control has-icons-right">
-                        <input class="input is-small" type="text" placeholder="搜索"/>
+                        <input class="input is-small is-no-radius" type="text" placeholder="搜索"/>
                         <span class="icon is-small is-right">
                             <i class="fas fa-search"></i>
                         </span>
@@ -12,7 +12,7 @@
                 </div>
                 <div class="device-list-control-create field">
                     <p class="control">
-                        <a class="button is-small is-primary">
+                        <a class="button is-small is-primary is-no-radius">
                             <span class="icon">
                                 <i class="fas fa-plus"></i>
                             </span>
@@ -23,7 +23,8 @@
             <div class="device-list-container" v-bar="{preventParentScroll: true}">
                 <ul class="device-list" >
                     <draggable v-model="deviceList">
-                        <li v-for="item in deviceList" :key="item.id" class="device-list-item">
+                        <li class="device-list-item" v-for="item in deviceList" :key="item.id"
+                            @contextmenu.prevent="$refs.ctxMenuDeviceItem.open">
                             <div class="device-list-item-start">
                                 <figure class="image">
                                     <img src="https://bulma.io/images/placeholders/48x48.png">
@@ -40,6 +41,11 @@
                             </div>
                         </li>
                     </draggable>
+                    <context-menu ref="ctxMenuDeviceItem" id="context-menu">
+                        <li @click="test">删除设备</li>
+                        <hr>
+                        <li class="disabled">排序：鼠标拖拽</li>
+                    </context-menu>
                 </ul>
             </div>
         </div>
@@ -51,10 +57,11 @@
 
 <script>
     import Draggable from 'vuedraggable'
+    import ContextMenu from 'vue-context-menu'
 
     export default {
       name: 'device-frame',
-      components: { Draggable },
+      components: { Draggable, ContextMenu },
       data () {
         return {
           deviceList: [
@@ -144,6 +151,11 @@
             }
           ]
         }
+      },
+      methods: {
+        test () {
+          alert('test')
+        }
       }
     }
 </script>
@@ -176,7 +188,7 @@
             background-color: $hover;
         }
 
-        &:active, &.is-active {
+        /*&:active, */&.is-active {
             background-color: $active;
         }
     }
@@ -198,7 +210,6 @@
             margin-bottom: 0 !important;
             padding-right: 0.5rem;
             & .input {
-                border-radius: 0;
                 border-color: $border-color;
                 box-shadow: none;
                 background-color: $background-color;
@@ -212,9 +223,6 @@
         }
         & > .device-list-control-create {
             flex: none;
-            & .button {
-                border-radius: 0;
-            }
         }
     }
 
@@ -261,5 +269,37 @@
             justify-content: flex-end;
             align-items: center;
         }
+    }
+</style>
+
+<style lang="scss">
+   #context-menu {
+       &.ctx-menu-container {
+           border: unset;
+       }
+        ul {
+            border-radius: unset;
+            padding: unset;
+            color: black;
+            font-size: 0.8rem;
+            min-width: 9.25rem;
+            border-color:  hsl(0, 0%, 78%) ;
+        }
+        hr {
+            margin: unset;
+            background-color: hsl(0, 0%, 91%);
+        }
+       li {
+           line-height: 1.7rem;
+           padding: 0 1.25rem;
+           &:hover {
+               background-color: hsl(0, 0%, 91%);
+           }
+           &.disabled {
+               background-color: unset;
+               color:  $grey-light;
+               cursor: not-allowed;
+           }
+       }
     }
 </style>

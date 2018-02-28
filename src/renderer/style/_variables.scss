@@ -1,5 +1,7 @@
 @import "~bulma/sass/utilities/initial-variables.sass";
 
+$z-index-top: 1024;
+
 @mixin electron-drag {
   -webkit-app-region: drag;
 }
