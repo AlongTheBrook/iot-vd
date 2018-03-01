@@ -2,8 +2,24 @@
     <div class="device">
         <div class="device-title">
             <div class="device-title-text">设备标题</div>
-            <div class="device-title-menu">...</div>
-            <div class="device-title-menu-content"></div>
+            <div class="device-title-menu" @click="onDeviceMenuClick">...</div>
+            <transition @afterEnter="afterDeviceMenuEnter" @afterLeave="afterDeviceMenuLeave">
+                <div class="device-title-menu-content" v-show="isDeviceMenuShow" @blur="onDeviceMenuBlur" tabindex="-1">
+                    <div class="device-info">
+                        <div class="device-logo">
+                            <figure class="image">
+                                <img src="https://bulma.io/images/placeholders/48x48.png">
+                            </figure>
+                        </div>
+                        <div class="device-content">
+                            <div class="device-name">设备名称</div>
+                            <div class="device-id">ID: 123456</div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="device-title-menu-content-delete">删除此设备</div>
+                </div>
+            </transition>
         </div>
         <div class="device-content">
             <div class="device-content-config">
@@ -151,7 +167,33 @@
 
 <script>
     export default {
-      name: 'device'
+      name: 'device',
+      data () {
+        return {
+          isDeviceMenuShow: false,
+          isDeviceMenuLeaving: false
+        }
+      },
+      methods: {
+        test (msg) {
+          console.log(msg)
+        },
+        onDeviceMenuClick () {
+          if (!this.isDeviceMenuLeaving) {
+            this.isDeviceMenuShow = !this.isDeviceMenuShow
+          }
+        },
+        onDeviceMenuBlur () {
+          this.isDeviceMenuShow = false
+          this.isDeviceMenuLeaving = true
+        },
+        afterDeviceMenuEnter (el) {
+          el.focus()
+        },
+        afterDeviceMenuLeave (el) {
+          this.isDeviceMenuLeaving = false
+        }
+      }
     }
 </script>
 
@@ -188,15 +230,66 @@
                     color: $turquoise;
                 }
             }
+            $content-width: 16rem;
             & > .device-title-menu-content {
                 position: absolute;
                 right: 0;
                 top: 4rem;
-                width: 15rem;
+                width: $content-width;
                 height: calc(100% - 4rem);
                 background-color: white;
                 @include borderSetOneSide(left);
                 z-index: $z-index-top - 10;
+                padding: 1.5rem;
+                font-size: 0.95rem;
+                font-weight: lighter;
+                color: $grey-light;
+                &:focus {
+                    outline: unset;
+                }
+                hr {
+                    @include hr-mixin;
+                    margin-top: 0.75rem;
+                }
+                & > * {
+                    margin-top: 0.75rem;
+                }
+                & > :nth-child(1) {
+                    margin-top: unset;
+                }
+                .device-info {
+                    display: flex;
+                    height: 2.5rem;
+                    & > .device-logo {
+                        flex: none;
+                        width: 2.5rem;
+                    }
+                    & > .device-content {
+                        flex: auto;
+                        padding-left: 0.7rem;
+                        line-height: 1.25rem;
+                        color: $grey;
+                        & > .device-name {
+                            font-weight: 600;
+                        }
+                        & > .device-id {
+                            font-weight: lighter;
+                        }
+                    }
+                }
+                .device-title-menu-content-delete {
+                    text-align: center;
+                    color: $red;
+                    cursor: pointer;
+                    margin: unset;
+                    line-height: 3rem;
+                }
+            }
+            .v-enter, .v-leave-to {
+                transform: translateX($content-width);
+            }
+            .v-enter-active, .v-leave-active {
+                transition: all .3s;
             }
         }
         & > .device-content {

@@ -24,7 +24,7 @@
                 <ul class="device-list" >
                     <draggable v-model="deviceList">
                         <li class="device-list-item" v-for="item in deviceList" :key="item.id"
-                            @contextmenu.prevent="$refs.ctxMenuDeviceItem.open">
+                            @contextmenu.prevent="$refs.deviceItemCtxMenu.open">
                             <div class="device-list-item-start">
                                 <figure class="image">
                                     <img src="https://bulma.io/images/placeholders/48x48.png">
@@ -41,10 +41,10 @@
                             </div>
                         </li>
                     </draggable>
-                    <context-menu ref="ctxMenuDeviceItem" id="context-menu">
-                        <li @click="test">删除设备</li>
+                    <context-menu ref="deviceItemCtxMenu" id="context-menu">
+                        <li>删除设备</li>
                         <hr>
-                        <li class="disabled">排序：鼠标拖拽</li>
+                        <li class="disabled">可以通过拖拽排序</li>
                     </context-menu>
                 </ul>
             </div>
@@ -150,11 +150,6 @@
               state: 1
             }
           ]
-        }
-      },
-      methods: {
-        test () {
-          alert('test')
         }
       }
     }
@@ -274,6 +269,7 @@
 
 <style lang="scss">
    #context-menu {
+       cursor: default;
        &.ctx-menu-container {
            border: unset;
        }
@@ -286,8 +282,7 @@
             border-color:  hsl(0, 0%, 78%) ;
         }
         hr {
-            margin: unset;
-            background-color: hsl(0, 0%, 91%);
+            @include hr-mixin;
         }
        li {
            line-height: 1.7rem;

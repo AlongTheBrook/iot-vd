@@ -20,3 +20,8 @@ $z-index-top: 1024;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+@mixin hr-mixin($margin: unset) {
+  margin: $margin;
+  background-color: hsl(0, 0%, 91%);
+}
