@@ -42,53 +42,47 @@
 
     .main-frame {
         display: flex;
-        height: 100vh;
-    }
-
-    .main-frame-menu {
-        width: 3.75rem;
-        flex: none;
-        background-color: #24292e;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        @include electron-drag;
-    }
-
-    .main-frame-menu > div {
-        margin-bottom: 24px;
-    }
-
-    .main-frame-menu-item-start {
-        display: flex;
-        flex-direction: column;
-        margin-top: 18px;
-    }
-
-    .main-frame-menu-item-start > div {
-        margin-bottom: 5px;
-    }
-
-    .main-frame-menu-item-start > .fa-stack {
-        color: 	hsl(121, 51%, 28%);
-    }
-
-    .main-frame-menu-item-start > .fa-stack > .fa-inverse {
-        color: 	hsl(0, 0%, 71%);
-    }
-
-    .main-frame-menu-item-end {
-        flex: auto;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-    }
-
-    .main-frame-menu-item-end > div {
-        margin-bottom: 20px;
-    }
-
-    .main-frame-content {
-        flex: auto;
+        height: 100%;
+        width: 100%;
+        & > .main-frame-menu {
+            flex: none;
+            width: 3.75rem;
+            background-color: #24292e;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            @include electron-drag;
+            & > div {
+                margin-bottom: 24px;
+            }
+            & > .main-frame-menu-item-start {
+                display: flex;
+                flex-direction: column;
+                margin-top: 18px;
+                & > div {
+                    margin-bottom: 5px;
+                }
+                & > .fa-stack {
+                     color: 	hsl(121, 51%, 28%);
+                    & > .fa-inverse {
+                        color: 	hsl(0, 0%, 71%);
+                    }
+                 }
+            }
+            & > .main-frame-menu-item-end {
+                flex: auto;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+                & > div {
+                    margin-bottom: 20px;
+                }
+            }
+        }
+        & > .main-frame-content {
+            flex: auto;
+            $fix-item-width: 10px;
+            width: calc(100% - 3.75rem);
+        }
     }
 </style>

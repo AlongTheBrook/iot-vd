@@ -34,8 +34,23 @@
   @import "~bulma";
 
   html {
+    overflow: hidden; /* hack: 解决bulma中 html{overflow-y: scroll}导致的html全局滚动条 */
+  }
+
+  // 更改应用尺寸的百分比数值n（取值0~100，默认值100）,表示长宽各位窗口长宽的n%，且居中
+  //$app-size-rate: 50;
+
+  #app {
+    display: block;
+    position: absolute;
+
+    top: #{(100 - $app-size-rate) / 2}vh;
+    left: #{(100 - $app-size-rate) / 2}vw;
+    height: #{$app-size-rate}vh;
+    width: #{$app-size-rate}vw;
+
     @include electron-no-drag; /* 全局禁用拖拽，单独设置局部部分区域单独配置 */
-    overflow-y: hidden !important; /* hack: 解决bulma中 html{overflow-y: scroll}导致的滚动条 */
+    overflow: hidden;
 
     /* 禁用文本选择，注释部分匹配其他浏览器 */
     -webkit-user-select: none;

@@ -151,7 +151,21 @@
                 </div>
             </div>
             <div class="device-content-monitor">
-                <div>device-content-monitor</div>
+                <div>
+                    <pre class="device-content-monitor-displayer">
+2018-3-2 13:18:30.123 采集 [aaaaabbbbcccc2747u532915udiafhi]
+2018-3-2 13:18:30.123 采集 [aaaaabbbbcccc2747u532915udiafhiaaa]
+2018-3-2 13:18:30.123 采集 [aaaaabbbbcccc2747u532915udiafhi]
+2018-3-2 13:18:30.123 采集 [aaaaabbbbcccc2747u532915udiafhiaaaaabbbbcccc2747u532915udiafhiaaaaabbbbcccc2747u532915udiafhiaaaaabbbbcccc2747u532915udiafhi]
+2018-3-2 13:18:30.123 采集 [aaaaabbbbcccc2747u532915udiafhi]
+2018-3-2 13:18:30.123 采集 [aaaaabbbbcccc2747u532915udiafhi]
+2018-3-2 13:18:30.123 采集 [aaaaabbbbcccc2747u532915udiafhi]
+                    </pre>
+                    <div>
+                        <p>2018-3-2 13:18:30.123 采集</p>
+                        <pre>[aaaaabbbbcccc2747u532915udiafhi]</pre>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="device-footer">
@@ -208,6 +222,7 @@
         display: flex;
         flex-direction: column;
         height: 100%;
+        width: 100%;
         & > .device-title {
             flex: none;
             height: 4rem;
@@ -231,7 +246,7 @@
                 }
             }
             $content-width: 16rem;
-            & > .device-title-menu-content {
+            & .device-title-menu-content {
                 position: absolute;
                 right: 0;
                 top: 4rem;
@@ -336,6 +351,12 @@
             }
             & > .device-content-monitor {
                 flex: auto;
+                width: calc(100% - 22rem);
+                /*padding: 0.75rem;*/
+                .device-content-monitor-displayer {
+                    white-space: pre-wrap;
+                    word-wrap: break-word;
+                }
             }
         }
         & > .device-footer {
