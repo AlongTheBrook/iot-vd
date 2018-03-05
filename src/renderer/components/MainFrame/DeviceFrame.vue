@@ -218,7 +218,6 @@
                 flex-direction: column;
                 & > .device-list {
                     flex: auto;
-                    overflow-y: scroll;
                     .device-list-item {
                         @include mouse-bg-mixin(transparent, $grey-lighter, $grey-light);
                         @extend .device-list-baseclass;

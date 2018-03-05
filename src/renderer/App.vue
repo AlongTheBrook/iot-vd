@@ -38,7 +38,7 @@
   }
 
   // 更改应用尺寸的百分比数值n（取值0~100，默认值100）,表示长宽各位窗口长宽的n%，且居中
-  //$app-size-rate: 50;
+  // $app-size-rate: 90;
 
   #app {
     display: block;
@@ -69,7 +69,7 @@
     font-family: BlinkMacSystemFont, -apple-system, "Microsoft Yahei", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   }
 
-  .text-sle, .text-sle p {
+  .text-sle, .text-sle * {
     @include text-sle;
   }
 

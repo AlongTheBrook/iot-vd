@@ -4,7 +4,7 @@
             <div class="device-title-text">设备标题</div>
             <div class="device-title-menu" @click="onDeviceMenuClick">...</div>
             <transition @afterEnter="afterDeviceMenuEnter" @afterLeave="afterDeviceMenuLeave">
-                <div class="device-title-menu-content" v-show="isDeviceMenuShow" @blur="onDeviceMenuBlur" tabindex="-1">
+                <div class="device-title-menu-content text-sle" v-show="isDeviceMenuShow" @blur="onDeviceMenuBlur" tabindex="-1">
                     <div class="device-info">
                         <div class="device-logo">
                             <figure class="image">
@@ -15,6 +15,10 @@
                             <div class="device-name">设备名称</div>
                             <div class="device-id">ID: 123456</div>
                         </div>
+                    </div>
+                    <hr>
+                    <div>
+                        通讯数据展开
                     </div>
                     <hr>
                     <div class="device-title-menu-content-delete">删除此设备</div>
@@ -150,22 +154,13 @@
                     </div>
                 </div>
             </div>
-            <div class="device-content-monitor">
-                <div>
-                    <pre class="device-content-monitor-displayer">
-2018-3-2 13:18:30.123 采集 [aaaaabbbbcccc2747u532915udiafhi]
-2018-3-2 13:18:30.123 采集 [aaaaabbbbcccc2747u532915udiafhiaaa]
-2018-3-2 13:18:30.123 采集 [aaaaabbbbcccc2747u532915udiafhi]
-2018-3-2 13:18:30.123 采集 [aaaaabbbbcccc2747u532915udiafhiaaaaabbbbcccc2747u532915udiafhiaaaaabbbbcccc2747u532915udiafhiaaaaabbbbcccc2747u532915udiafhi]
-2018-3-2 13:18:30.123 采集 [aaaaabbbbcccc2747u532915udiafhi]
-2018-3-2 13:18:30.123 采集 [aaaaabbbbcccc2747u532915udiafhi]
-2018-3-2 13:18:30.123 采集 [aaaaabbbbcccc2747u532915udiafhi]
-                    </pre>
-                    <div>
-                        <p>2018-3-2 13:18:30.123 采集</p>
-                        <pre>[aaaaabbbbcccc2747u532915udiafhi]</pre>
-                    </div>
-                </div>
+            <div class="device-content-monitor" v-bar="{preventParentScroll: true}">
+                <ul class="device-event-list" ref="deviceEventList">
+                    <li class="device-event" v-for="item in deviceEventList" @click="onDeviceEventClick(item)">
+                        <div class="device-event-title">{{ item.title }}</div>
+                        <pre class="device-event-content" v-show="item.isContentExpand">{{ item.content }}</pre>
+                    </li>
+                </ul>
             </div>
         </div>
         <div class="device-footer">
@@ -185,12 +180,84 @@
       data () {
         return {
           isDeviceMenuShow: false,
-          isDeviceMenuLeaving: false
+          isDeviceMenuLeaving: false,
+          count: 0,
+          deviceEventList: [
+            {
+              title: '2018-3-2 17:49:30.123 服务器 -> 设备',
+              content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
+              isContentExpand: false
+            },
+            {
+              title: '2018-3-2 17:49:30.123 服务器 -> 设备',
+              content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
+              isContentExpand: false
+            },
+            {
+              title: '2018-3-2 17:49:30.123 服务器 -> 设备  2018-3-2 17:49:30.123 服务器 -> 设备 2018-3-2 17:49:30.123 服务器 -> 设备',
+              content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93 f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93 f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
+              isContentExpand: false
+            },
+            {
+              title: '2018-3-2 17:49:30.123 服务器 -> 设备',
+              content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
+              isContentExpand: false
+            },
+            {
+              title: '2018-3-2 17:49:30.123 服务器 -> 设备',
+              content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
+              isContentExpand: false
+            },
+            {
+              title: '2018-3-2 17:49:30.123 服务器 -> 设备',
+              content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
+              isContentExpand: false
+            },
+            {
+              title: '2018-3-2 17:49:30.123 服务器 -> 设备',
+              content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
+              isContentExpand: false
+            },
+            {
+              title: '2018-3-2 17:49:30.123 服务器 -> 设备',
+              content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
+              isContentExpand: false
+            },
+            {
+              title: '2018-3-2 17:49:30.123 服务器 -> 设备',
+              content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
+              isContentExpand: false
+            },
+            {
+              title: '2018-3-2 17:49:30.123 服务器 -> 设备',
+              content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
+              isContentExpand: false
+            },
+            {
+              title: '2018-3-2 17:49:30.123 服务器 -> 设备',
+              content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
+              isContentExpand: false
+            }
+          ]
         }
       },
       methods: {
-        test (msg) {
-          console.log(msg)
+        addDeviceEvent (deviceEvent) {
+          if (this.deviceEventList.length >= 128) {
+            this.deviceEventList.shift()
+          }
+          this.deviceEventList.push(deviceEvent)
+          this.$nextTick(() => {
+            this.$refs.deviceEventList.lastChild.scrollIntoViewIfNeeded()
+          })
+        },
+        traggerDeviceEventContentExpand (flag) {
+          for (let deviceEvent of this.deviceEventList) {
+            deviceEvent.isContentExpand = flag
+          }
+        },
+        onDeviceEventClick (targetData) {
+          targetData.isContentExpand = !targetData.isContentExpand
         },
         onDeviceMenuClick () {
           if (!this.isDeviceMenuLeaving) {
@@ -352,10 +419,24 @@
             & > .device-content-monitor {
                 flex: auto;
                 width: calc(100% - 22rem);
-                /*padding: 0.75rem;*/
-                .device-content-monitor-displayer {
-                    white-space: pre-wrap;
-                    word-wrap: break-word;
+                // padding: 0.75rem;  // 此行代码会造成原生滚动条显示
+                /*overflow-y: scroll;*/
+                & > .device-event-list {
+                    padding: 0.75rem;
+                    & > .device-event {
+                        cursor: pointer;
+                        font-size: 0.9rem;
+                        padding: 0.35rem;
+                        &:hover, &:hover pre {
+                            background-color: #e8e8e8;
+                        }
+                        pre {
+                            font-size: 0.85rem;
+                            padding: 0.25rem 0.5rem;
+                            white-space: pre-wrap;
+                            word-break: break-all;
+                        }
+                    }
                 }
             }
         }
