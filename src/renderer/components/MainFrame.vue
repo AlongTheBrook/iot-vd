@@ -27,7 +27,7 @@
 </template>
 
 <script>
-    import ElectronFrameController from './electron/ElectronFrameController'
+    import ElectronFrameController from './Electron/ElectronFrameController'
 
     export default {
       name: 'main-frame',

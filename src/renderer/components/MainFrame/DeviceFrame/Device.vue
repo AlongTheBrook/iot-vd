@@ -18,7 +18,11 @@
                     </div>
                     <hr>
                     <div>
-                        通讯数据展开
+                        <div>通讯数据展开</div>
+                        <s-toggle-button
+                                @toggle="onDeviceEventContentExpandToggle"
+                                @toggleAnimationend="onDeviceEventContentExpandToggleAnimationend">
+                        </s-toggle-button>
                     </div>
                     <hr>
                     <div class="device-title-menu-content-delete">删除此设备</div>
@@ -175,13 +179,14 @@
 </template>
 
 <script>
+    import SToggleButton from '../../Common/SToggleButton'
     export default {
       name: 'device',
+      components: { SToggleButton },
       data () {
         return {
           isDeviceMenuShow: false,
           isDeviceMenuLeaving: false,
-          count: 0,
           deviceEventList: [
             {
               title: '2018-3-2 17:49:30.123 服务器 -> 设备',
@@ -242,6 +247,12 @@
         }
       },
       methods: {
+        onDeviceEventContentExpandToggle (flag) {
+          console.log('onDeviceEventContentExpandToggle: ' + flag)
+        },
+        onDeviceEventContentExpandToggleAnimationend (flag) {
+          console.log('onDeviceEventContentExpandToggleAnimationend: ' + flag)
+        },
         addDeviceEvent (deviceEvent) {
           if (this.deviceEventList.length >= 128) {
             this.deviceEventList.shift()
