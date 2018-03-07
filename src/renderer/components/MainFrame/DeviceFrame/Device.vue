@@ -19,10 +19,7 @@
                     <hr>
                     <div>
                         <div>通讯数据展开</div>
-                        <s-toggle-button
-                                @toggle="onDeviceEventContentExpandToggle"
-                                @toggleAnimationend="onDeviceEventContentExpandToggleAnimationend">
-                        </s-toggle-button>
+                        <s-toggle-button v-model="isDeviceEventContentExpand"></s-toggle-button>
                     </div>
                     <hr>
                     <div class="device-title-menu-content-delete">删除此设备</div>
@@ -185,6 +182,7 @@
       components: { SToggleButton },
       data () {
         return {
+          isDeviceEventContentExpand: true,
           isDeviceMenuShow: false,
           isDeviceMenuLeaving: false,
           deviceEventList: [
@@ -247,12 +245,6 @@
         }
       },
       methods: {
-        onDeviceEventContentExpandToggle (flag) {
-          console.log('onDeviceEventContentExpandToggle: ' + flag)
-        },
-        onDeviceEventContentExpandToggleAnimationend (flag) {
-          console.log('onDeviceEventContentExpandToggleAnimationend: ' + flag)
-        },
         addDeviceEvent (deviceEvent) {
           if (this.deviceEventList.length >= 128) {
             this.deviceEventList.shift()
