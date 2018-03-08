@@ -69,6 +69,7 @@
     font-family: BlinkMacSystemFont, -apple-system, "Microsoft Yahei", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
   }
 
+  // 为避免可能产生的重绘问题，应该尽可能只在需要的元素上应用该类
   .text-sle, .text-sle * {
     @include text-sle;
   }

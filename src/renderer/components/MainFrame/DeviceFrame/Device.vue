@@ -4,14 +4,14 @@
             <div class="device-title-text">设备标题</div>
             <div class="device-title-menu" @click="onDeviceMenuClick">...</div>
             <transition @afterEnter="afterDeviceMenuEnter" @afterLeave="afterDeviceMenuLeave">
-                <div class="device-title-menu-content text-sle" v-show="isDeviceMenuShow" @blur="onDeviceMenuBlur" tabindex="-1">
+                <div class="device-title-menu-content" v-show="isDeviceMenuShow" @blur="onDeviceMenuBlur" tabindex="-1">
                     <div class="device-info">
                         <div class="device-logo">
                             <figure class="image">
                                 <img src="https://bulma.io/images/placeholders/48x48.png">
                             </figure>
                         </div>
-                        <div class="device-content">
+                        <div class="device-content text-sle">
                             <div class="device-name">设备名称</div>
                             <div class="device-id">ID: 123456</div>
                         </div>
