@@ -32,17 +32,32 @@
         isOff: true,
         isOn: false,
         isOffActive: false,
-        isOnActive: false
+        isOnActive: false,
+        isClicked: false
       }
     },
     created () {
       this.isOn = this.value
       this.isOff = !this.value
     },
+    watch: {
+      value (newValue, oldValue) {
+        if (this.isClicked) {
+          this.isClicked = false
+        } else {
+          this.toggle(newValue)
+        }
+      }
+    },
     methods: {
       onClick () {
         let toggledValue = !this.value
-        if (toggledValue) {
+        this.toggle(toggledValue)
+        this.$emit('input', toggledValue)
+        this.isClicked = true
+      },
+      toggle (value) {
+        if (value) {
           this.isOff = false
           this.isOn = true
           this.isOffActive = false
@@ -53,7 +68,6 @@
           this.isOffActive = true
           this.isOnActive = false
         }
-        this.$emit('input', toggledValue)
       },
       onAnimationend (e) {
         if (this.isOnActive) {
