@@ -19,7 +19,7 @@
                     <hr>
                     <div>
                         <div>通讯数据展开</div>
-                        <s-toggle-button v-model="isDeviceEventContentExpand" on-text="ONON" off-text="OFF"></s-toggle-button>
+                        <s-toggle-button v-model="isDeviceEventContentExpand"></s-toggle-button>
                     </div>
                     <hr>
                     <div class="device-title-menu-content-delete">删除此设备</div>

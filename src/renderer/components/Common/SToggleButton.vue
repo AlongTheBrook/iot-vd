@@ -1,11 +1,12 @@
 <template>
     <div class="s-toggle-button"
-         :class="{'s-toggle-button-on': value, 's-toggle-button-off': !value, disabled: disabled}"
+         :class="{disabled: disabled}"
+         :style="style"
          @transitionend.self="onTransitionend"
          @click="onClick">
-        <div class="s-toggle-button-on-text">{{ onText }}</div>
-        <div class="s-toggle-button-slider"></div>
-        <div class="s-toggle-button-off-text">{{ offText }}</div>
+        <div class="s-toggle-button-on-text" :style="onTextStyle">{{ onText }}</div>
+        <div class="s-toggle-button-slider" :style="sliderStyle"></div>
+        <div class="s-toggle-button-off-text" :style="offTextStyle">{{ offText }}</div>
     </div>
 </template>
 
@@ -26,9 +27,93 @@
       },
       offText: {
         type: String
+      },
+      unit: {
+        type: String,
+        default: 'rem'
+      },
+      height: {
+        type: [Number, String],
+        default: 1.2
+      },
+      width: {
+        type: [Number, String],
+        default: 2.6
+      },
+      bgColorOn: {
+        type: String,
+        default: '#00d1b2'
+      },
+      bgColorOff: {
+        type: String,
+        default: '#dbdbdb'
+      },
+      textColor: {
+        type: String,
+        default: 'white'
+      },
+      sliderInterval: {
+        type: [Number, String],
+        default: 0.2
+      },
+      sliderBgColor: {
+        type: String,
+        default: 'white'
+      }
+    },
+    computed: {
+      borderRadius () {
+        return (this.height / 2)
+      },
+      sliderRadius () {
+        return (this.height - this.sliderInterval * 2)
+      },
+      textInterval () {
+        return (this.sliderRadius / 2)
+      },
+      style () {
+        return {
+          height: this.unitize(this.height),
+          width: this.unitize(this.width),
+          borderRadius: this.unitize(this.borderRadius),
+          backgroundColor: this.value ? this.bgColorOn : this.bgColorOff
+        }
+      },
+      onTextStyle () {
+        return {
+          lineHeight: this.unitize(this.sliderRadius),
+          fontSize: this.unitize(this.sliderRadius),
+          color: this.textColor,
+          transform: this.translateX(this.unitize(this.textInterval)),
+          opacity: this.value ? 1 : 0
+        }
+      },
+      sliderStyle () {
+        return {
+          height: this.unitize(this.sliderRadius),
+          width: this.unitize(this.sliderRadius),
+          borderRadius: this.unitize(this.sliderRadius / 2),
+          backgroundColor: this.sliderBgColor,
+          transform: this.value ? this.translateX(this.unitize(this.width - this.sliderRadius - this.sliderInterval)) : this.translateX(this.unitize(this.sliderInterval))
+        }
+      },
+      offTextStyle () {
+        return {
+          lineHeight: this.unitize(this.sliderRadius),
+          fontSize: this.unitize(this.sliderRadius),
+          color: this.textColor,
+          transform: this.translateX(this.unitize(-this.textInterval)),
+          opacity: this.value ? 0 : 1
+        }
       }
     },
     methods: {
+      unitize (value) {
+        return value + this.unit
+      },
+      translateX (value) {
+        return 'translateX(' + value + ')'
+      },
       onClick () {
         this.$emit('input', !this.value)
       },
@@ -41,71 +126,26 @@
 
 <style lang="scss" scoped>
     .s-toggle-button {
-        $height: 1.2rem;
-        $width: 4.6rem;
-        $bg-color-on: $turquoise;
-        $bg-color-off: $grey-lighter;
-        $text-color: white;
-        $slider-interval: 0.2rem;
-        $slider-radius: $height -  $slider-interval * 2 ;
-        $slider-bg-color: white;
-        $text-interval: $slider-radius / 2;
         display: flex;
         justify-content: space-between;
         align-items: center;
         cursor: pointer;
-        height: $height;
-        width: $width;
-        border-radius: $height / 2;
         &, & * {
             transition: all 0.2s linear;
         }
         @mixin s-toggle-button-text {
             flex: auto;
             width: 0;
-            line-height: $slider-radius;
-            font-size: $slider-radius;
-            color: $text-color;
         }
         & > .s-toggle-button-on-text {
             @include s-toggle-button-text;
-            transform: translateX($text-interval);
         }
         & > .s-toggle-button-slider {
             position: absolute;
-            height: $slider-radius;
-            width: $slider-radius;
-            border-radius: $slider-radius / 2;
-            background-color: $slider-bg-color;
         }
         & > .s-toggle-button-off-text {
             @include s-toggle-button-text;
-            transform: translateX(-$text-interval);
             text-align: right;
-        }
-        &.s-toggle-button-on {
-            background-color: $bg-color-on;
-            & > .s-toggle-button-on-text {
-                opacity: 1;
-            }
-            & > .s-toggle-button-slider {
-                transform: translateX(#{$width - $slider-radius - $slider-interval});
-            }
-            & > .s-toggle-button-off-text {
-                opacity: 0;
-            }
-        }
-        &.s-toggle-button-off {
-            background-color: $bg-color-off;
-            & > .s-toggle-button-on-text {
-                opacity: 0;
-            }
-            & > .s-toggle-button-slider {
-                transform: translateX($slider-interval);
-            }
-            & > .s-toggle-button-off-text {
-                opacity: 1;
-            }
         }
         &.disabled {
             opacity: 0.4;
