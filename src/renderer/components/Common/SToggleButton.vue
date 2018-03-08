@@ -1,14 +1,11 @@
 <template>
     <div class="s-toggle-button"
-         :class="{'s-toggle-button-off': isOff,
-             's-toggle-button-on': isOn,
-             's-toggle-button-off-active': isOffActive,
-             's-toggle-button-on-active': isOnActive}"
-         @animationend.self="onAnimationend"
+         :class="{'s-toggle-button-on': value, 's-toggle-button-off': !value, disabled: disabled}"
+         @transitionend.self="onTransitionend"
          @click="onClick">
         <div class="s-toggle-button-on-text">{{ onText }}</div>
-        <div class="s-toggle-button-off-text">{{ offText }}</div>
         <div class="s-toggle-button-slider"></div>
+        <div class="s-toggle-button-off-text">{{ offText }}</div>
     </div>
 </template>
 
@@ -20,6 +17,10 @@
         type: Boolean,
         default: false
       },
+      disabled: {
+        type: Boolean,
+        default: false
+      },
       onText: {
         type: String
       },
@@ -27,61 +28,12 @@
         type: String
       }
     },
-    data () {
-      return {
-        isOff: true,
-        isOn: false,
-        isOffActive: false,
-        isOnActive: false,
-        isClicked: false
-      }
-    },
-    created () {
-      this.isOn = this.value
-      this.isOff = !this.value
-    },
-    watch: {
-      value (newValue, oldValue) {
-        if (this.isClicked) {
-          this.isClicked = false
-        } else {
-          this.toggle(newValue)
-        }
-      }
-    },
     methods: {
       onClick () {
-        let toggledValue = !this.value
-        this.toggle(toggledValue)
-        this.$emit('input', toggledValue)
-        this.isClicked = true
+        this.$emit('input', !this.value)
       },
-      toggle (value) {
-        if (value) {
-          this.isOff = false
-          this.isOn = true
-          this.isOffActive = false
-          this.isOnActive = true
-        } else {
-          this.isOff = true
-          this.isOn = false
-          this.isOffActive = true
-          this.isOnActive = false
-        }
-      },
-      onAnimationend (e) {
-        if (this.isOnActive) {
-          this.isOff = false
-          this.isOn = true
-          this.isOffActive = false
-          this.isOnActive = false
-        } else if (this.isOffActive) {
-          this.isOff = true
-          this.isOn = false
-          this.isOffActive = false
-          this.isOnActive = false
-        }
-        this.$emit('toggleAnimationend', this.value)
+      onTransitionend (e) {
+        this.$emit('toggleTransitionend', this.value)
       }
     }
   }
@@ -90,119 +42,75 @@
 <style lang="scss" scoped>
     .s-toggle-button {
         $height: 1.2rem;
-        $width: 2.6rem;
-        $bg-color-off: $grey-lighter;
+        $width: 4.6rem;
         $bg-color-on: $turquoise;
+        $bg-color-off: $grey-lighter;
         $text-color: white;
-        $slider-bg-color: white;
-        $animation-duration: 0.2s;
         $slider-interval: 0.2rem;
         $slider-radius: $height -  $slider-interval * 2 ;
-        display: block;
-        position: relative;
+        $slider-bg-color: white;
+        $text-interval: $slider-radius / 2;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         cursor: pointer;
         height: $height;
         width: $width;
         border-radius: $height / 2;
-        @mixin s-toggle-button-text($state) {
-            position: absolute;
-            top: $slider-interval;
+        &, & * {
+            transition: all 0.2s linear;
+        }
+        @mixin s-toggle-button-text {
+            flex: auto;
+            width: 0;
             line-height: $slider-radius;
             font-size: $slider-radius;
             color: $text-color;
-            $text-interval: $slider-radius / 2;
-            @if($state == 'off') {
-                right: $text-interval;
-            }
-            @else if($state == 'on') {
-                left: $text-interval;
-            }
         }
         & > .s-toggle-button-on-text {
-            @include s-toggle-button-text('on');
-        }
-        & > .s-toggle-button-off-text {
-            @include s-toggle-button-text('off');
+            @include s-toggle-button-text;
+            transform: translateX($text-interval);
         }
         & > .s-toggle-button-slider {
-              position: absolute;
-              top:  $slider-interval;
-              height: $slider-radius;
-              width: $slider-radius;
-              border-radius: $slider-radius / 2;
-              background-color: $slider-bg-color;
+            position: absolute;
+            height: $slider-radius;
+            width: $slider-radius;
+            border-radius: $slider-radius / 2;
+            background-color: $slider-bg-color;
+        }
+        & > .s-toggle-button-off-text {
+            @include s-toggle-button-text;
+            transform: translateX(-$text-interval);
+            text-align: right;
         }
         &.s-toggle-button-on {
             background-color: $bg-color-on;
-            & > .s-toggle-button-off-text {
-                opacity: 0;
-            }
             & > .s-toggle-button-on-text {
                 opacity: 1;
             }
-            & >  .s-toggle-button-slider {
-                left: $width - $slider-radius - $slider-interval;
+            & > .s-toggle-button-slider {
+                transform: translateX(#{$width - $slider-radius - $slider-interval});
+            }
+            & > .s-toggle-button-off-text {
+                opacity: 0;
             }
         }
         &.s-toggle-button-off {
             background-color: $bg-color-off;
-            & > .s-toggle-button-off-text {
-                opacity: 1;
-            }
             & > .s-toggle-button-on-text {
                 opacity: 0;
             }
-            & >  .s-toggle-button-slider {
-                left: $slider-interval;
-            }
-        }
-        &.s-toggle-button-on-active {
-            animation: s-toggle-button-frames #{$animation-duration} linear;
-            & > .s-toggle-button-on-text {
-                animation: s-toggle-button-text-frames #{$animation-duration} linear;
+            & > .s-toggle-button-slider {
+                transform: translateX($slider-interval);
             }
             & > .s-toggle-button-off-text {
-                animation: s-toggle-button-text-frames #{$animation-duration} linear reverse;
-            }
-            & > .s-toggle-button-slider {
-                animation: s-toggle-button-slider-frames #{$animation-duration} linear;
-            }
-        }
-        &.s-toggle-button-off-active {
-            animation: s-toggle-button-frames #{$animation-duration} linear reverse;
-            & > .s-toggle-button-on-text {
-                animation: s-toggle-button-text-frames #{$animation-duration} linear reverse;
-            }
-            & > .s-toggle-button-off-text {
-                animation: s-toggle-button-text-frames #{$animation-duration} linear;
-            }
-            & > .s-toggle-button-slider {
-                animation: s-toggle-button-slider-frames #{$animation-duration} linear reverse;
-            }
-        }
-        @keyframes s-toggle-button-frames {
-            from {
-                background-color: $bg-color-off;
-            }
-            to {
-                background-color: $bg-color-on;
-            }
-        }
-        @keyframes s-toggle-button-text-frames {
-            from {
-                opacity: 0;
-            }
-            to {
                 opacity: 1;
             }
         }
-        @keyframes s-toggle-button-slider-frames {
-            from {
-                left: $slider-interval;
-            }
-            to {
-                left: $width - $slider-radius - $slider-interval;
-            }
+        &.disabled {
+            opacity: 0.4;
+            pointer-events: none;
+            // cursor: not-allowed; // 因为“pointer-events: none;”禁用一切鼠标事件，导致此句完全无效
         }
     }
 </style>

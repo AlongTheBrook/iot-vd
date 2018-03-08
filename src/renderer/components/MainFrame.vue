@@ -81,7 +81,6 @@
         }
         & > .main-frame-content {
             flex: auto;
-            $fix-item-width: 10px;
             width: calc(100% - 3.75rem);
         }
     }
