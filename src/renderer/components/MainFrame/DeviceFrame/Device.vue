@@ -19,7 +19,7 @@
                     <hr>
                     <div>
                         <div>通讯数据展开</div>
-                        <s-toggle-button v-model="isDeviceEventContentExpand"></s-toggle-button>
+                        <s-toggle-button v-model="isDeviceEventExpand"></s-toggle-button>
                     </div>
                     <hr>
                     <div class="device-title-menu-content-delete">删除此设备</div>
@@ -182,66 +182,73 @@
       components: { SToggleButton },
       data () {
         return {
-          isDeviceEventContentExpand: true,
+          isDeviceEventExpand: false,
           isDeviceMenuShow: false,
           isDeviceMenuLeaving: false,
           deviceEventList: [
             {
-              title: '2018-3-2 17:49:30.123 服务器 -> 设备',
+              title: '2018-3-2 17:49:30.1 服务器 -> 设备',
               content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
               isContentExpand: false
             },
             {
-              title: '2018-3-2 17:49:30.123 服务器 -> 设备',
+              title: '2018-3-2 17:49:30.2 服务器 -> 设备',
               content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
               isContentExpand: false
             },
             {
-              title: '2018-3-2 17:49:30.123 服务器 -> 设备  2018-3-2 17:49:30.123 服务器 -> 设备 2018-3-2 17:49:30.123 服务器 -> 设备',
+              title: '2018-3-2 17:49:30.3 服务器 -> 设备  2018-3-2 17:49:30.123 服务器 -> 设备 2018-3-2 17:49:30.123 服务器 -> 设备',
               content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93 f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93 f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
               isContentExpand: false
             },
             {
-              title: '2018-3-2 17:49:30.123 服务器 -> 设备',
+              title: '2018-3-2 17:49:30.4 服务器 -> 设备',
               content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
               isContentExpand: false
             },
             {
-              title: '2018-3-2 17:49:30.123 服务器 -> 设备',
+              title: '2018-3-2 17:49:30.5 服务器 -> 设备',
               content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
               isContentExpand: false
             },
             {
-              title: '2018-3-2 17:49:30.123 服务器 -> 设备',
+              title: '2018-3-2 17:49:30.6 服务器 -> 设备',
               content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
               isContentExpand: false
             },
             {
-              title: '2018-3-2 17:49:30.123 服务器 -> 设备',
+              title: '2018-3-2 17:49:30.7 服务器 -> 设备',
               content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
               isContentExpand: false
             },
             {
-              title: '2018-3-2 17:49:30.123 服务器 -> 设备',
+              title: '2018-3-2 17:49:30.8 服务器 -> 设备',
               content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
               isContentExpand: false
             },
             {
-              title: '2018-3-2 17:49:30.123 服务器 -> 设备',
+              title: '2018-3-2 17:49:30.9 服务器 -> 设备',
               content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
               isContentExpand: false
             },
             {
-              title: '2018-3-2 17:49:30.123 服务器 -> 设备',
+              title: '2018-3-2 17:49:30.10 服务器 -> 设备',
               content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
               isContentExpand: false
             },
             {
-              title: '2018-3-2 17:49:30.123 服务器 -> 设备',
+              title: '2018-3-2 17:49:30.11 服务器 -> 设备',
               content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
               isContentExpand: false
             }
           ]
+        }
+      },
+      watch: {
+        isDeviceEventExpand (value) {
+          for (let deviceEvent of this.deviceEventList) {
+            deviceEvent.isContentExpand = value
+          }
         }
       },
       methods: {

@@ -1,3 +1,21 @@
+/**
+version: 0.9.0
+属性			值类型		默认值		说明
+value			Boolean		false		状态值。直接使用可以初始化按钮状态，方式：on则添加value属性（且不填值），否则不添加该属性
+disabled		Boolean		false		是否禁用按钮，禁用后，无法通过鼠标操作，但是可以通过父组件绑定的数据操作
+onText			String		null		on状态的文本
+offText			String		null		off状态的文本
+unit			String 		'rem'		计算所用的单位，对所有数值属性有效，支持所有css支持的长度单位
+height			Number		1.2			定义按钮高度值，同时也是组件内部其他属性按比例自动缩放的基础值
+width			Number		2.6			定义按钮宽度值，同时也是组件内部其他属性按比例自动缩放的基础值
+bgColorOn		String		'#00d1b2'	on状态按钮背景色
+bgColorOff		String		'#dbdbdb'	off状态按钮背景色
+textColorOn		String 		'white'		on状态文本颜色
+textColorOff	String 		'white'		off状态文本颜色
+sliderInterval	Number		0.2			滑块与边缘的间距值
+sliderBgColor	String		'white'		滑块背景色
+说明：以上属性均能通过父组件单向绑定，以动态改变组件特性；若想双向绑定状态，则使用v-model指令来绑定，取代value的单向绑定
+*/
 <template>
     <div class="s-toggle-button"
          :class="{disabled: disabled}"
@@ -48,7 +66,11 @@
         type: String,
         default: '#dbdbdb'
       },
-      textColor: {
+      textColorOn: {
+        type: String,
+        default: 'white'
+      },
+      textColorOff: {
         type: String,
         default: 'white'
       },
@@ -62,48 +84,59 @@
       }
     },
     computed: {
-      borderRadius () {
-        return (this.height / 2)
-      },
-      sliderRadius () {
+      sliderSideLength () {
         return (this.height - this.sliderInterval * 2)
       },
       textInterval () {
-        return (this.sliderRadius / 2)
+        return (this.sliderSideLength / 2)
       },
       style () {
         return {
           height: this.unitize(this.height),
           width: this.unitize(this.width),
-          borderRadius: this.unitize(this.borderRadius),
-          backgroundColor: this.value ? this.bgColorOn : this.bgColorOff
+          borderRadius: this.unitize(this.height),
+          backgroundColor: this.state ? this.bgColorOn : this.bgColorOff
         }
       },
       onTextStyle () {
         return {
-          lineHeight: this.unitize(this.sliderRadius),
-          fontSize: this.unitize(this.sliderRadius),
-          color: this.textColor,
+          lineHeight: this.unitize(this.sliderSideLength),
+          fontSize: this.unitize(this.sliderSideLength),
+          color: this.textColorOn,
           transform: this.translateX(this.unitize(this.textInterval)),
-          opacity: this.value ? 1 : 0
+          opacity: this.state ? 1 : 0
         }
       },
       sliderStyle () {
         return {
-          height: this.unitize(this.sliderRadius),
-          width: this.unitize(this.sliderRadius),
-          borderRadius: this.unitize(this.sliderRadius / 2),
+          height: this.unitize(this.sliderSideLength),
+          width: this.unitize(this.sliderSideLength),
           backgroundColor: this.sliderBgColor,
-          transform: this.value ? this.translateX(this.unitize(this.width - this.sliderRadius - this.sliderInterval)) : this.translateX(this.unitize(this.sliderInterval))
+          transform: this.state ? this.translateX(this.unitize(this.width - this.sliderSideLength - this.sliderInterval)) : this.translateX(this.unitize(this.sliderInterval))
         }
       },
       offTextStyle () {
         return {
-          lineHeight: this.unitize(this.sliderRadius),
-          fontSize: this.unitize(this.sliderRadius),
-          color: this.textColor,
+          lineHeight: this.unitize(this.sliderSideLength),
+          fontSize: this.unitize(this.sliderSideLength),
+          color: this.textColorOff,
           transform: this.translateX(this.unitize(-this.textInterval)),
-          opacity: this.value ? 0 : 1
+          opacity: this.state ? 0 : 1
+        }
+      }
+    },
+    data () {
+      return {
+        state: this.value,
+        clicked: false
+      }
+    },
+    watch: {
+      value (newValue) {
+        if (this.clicked) {
+          this.clicked = false
+        } else {
+          this.state = newValue
         }
       }
     },
@@ -115,10 +148,12 @@
         return 'translateX(' + value + ')'
       },
       onClick () {
-        this.$emit('input', !this.value)
+        this.clicked = true
+        this.state = !this.state
+        this.$emit('input', this.state)
       },
       onTransitionend (e) {
-        this.$emit('toggleTransitionend', this.value)
+        this.$emit('toggleTransitionend', this.state)
       }
     }
   }
@@ -142,6 +177,7 @@
         }
         & > .s-toggle-button-slider {
             position: absolute;
+            border-radius: 100%;
         }
         & > .s-toggle-button-off-text {
             @include s-toggle-button-text;
