@@ -37,7 +37,6 @@ export default new Router({
     {
       path: '*',
       redirect: '/main-frame'
-      // component: require('@/components/LandingPage').default
     }
   ]
 })

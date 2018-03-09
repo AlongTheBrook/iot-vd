@@ -22,8 +22,8 @@
             </div>
             <div class="device-list-container" v-bar="{preventParentScroll: true}">
                 <ul class="device-list" >
-                    <draggable v-model="deviceList">
-                        <li class="device-list-item" v-for="item in deviceList" :key="item.id"
+                    <draggable v-model="list">
+                        <li class="device-list-item" v-for="(item, index) in list" :key="item.id" @dblclick="onDblclick(item, index)"
                             @contextmenu.prevent="$refs.deviceItemCtxMenu.open">
                             <div class="device-list-item-start">
                                 <figure class="image">
@@ -56,6 +56,7 @@
 </template>
 
 <script>
+    import { mapMutations } from 'vuex'
     import Draggable from 'vuedraggable'
     import ContextMenu from 'vue-context-menu'
 
@@ -64,92 +65,115 @@
       components: { Draggable, ContextMenu },
       data () {
         return {
-          deviceList: [
-            {
-              id: 1,
-              type: 1,
-              name: '设备名称 -> 家乐苑小区进水',
-              msg: '最后信息 -> ☇ 15:41 ',
-              state: 1
-            },
-            {
-              id: 2,
-              type: 1,
-              name: '设备#002',
-              msg: '☇ 数据采集 10:27 ',
-              state: 1
-            },
-            {
-              id: 3,
-              type: 1,
-              name: '设备#003',
-              msg: '☇ 数据采集 10:27 ',
-              state: 1
-            },
-            {
-              id: 4,
-              type: 1,
-              name: '设备#004',
-              msg: '☇ 数据采集 10:27 ',
-              state: 1
-            },
-            {
-              id: 5,
-              type: 1,
-              name: '设备#005',
-              msg: '☇ 数据采集 10:27 ',
-              state: 1
-            },
-            {
-              id: 6,
-              type: 1,
-              name: '设备#006',
-              msg: '☇ 数据采集 10:27 ',
-              state: 1
-            },
-            {
-              id: 7,
-              type: 1,
-              name: '设备#007',
-              msg: '☇ 数据采集 10:27 ',
-              state: 1
-            },
-            {
-              id: 8,
-              type: 1,
-              name: '设备#008',
-              msg: '☇ 数据采集 10:27 ',
-              state: 1
-            },
-            {
-              id: 9,
-              type: 1,
-              name: '设备#009',
-              msg: '☇ 数据采集 10:27 ',
-              state: 1
-            },
-            {
-              id: 10,
-              type: 1,
-              name: '设备#010',
-              msg: '☇ 数据采集 10:27 ',
-              state: 1
-            },
-            {
-              id: 11,
-              type: 1,
-              name: '设备#011',
-              msg: '☇ 数据采集 10:27 ',
-              state: 1
-            },
-            {
-              id: 12,
-              type: 1,
-              name: '设备#012',
-              msg: '☇ 数据采集 10:27 ',
-              state: 1
-            }
-          ]
+          // deviceList: [
+          //   {
+          //     id: 1,
+          //     type: 1,
+          //     name: '设备名称 -> 家乐苑小区进水',
+          //     msg: '最后信息 -> ☇ 15:41 ',
+          //     state: 1
+          //   },
+          //   {
+          //     id: 2,
+          //     type: 1,
+          //     name: '设备#002',
+          //     msg: '☇ 数据采集 10:27 ',
+          //     state: 1
+          //   },
+          //   {
+          //     id: 3,
+          //     type: 1,
+          //     name: '设备#003',
+          //     msg: '☇ 数据采集 10:27 ',
+          //     state: 1
+          //   },
+          //   {
+          //     id: 4,
+          //     type: 1,
+          //     name: '设备#004',
+          //     msg: '☇ 数据采集 10:27 ',
+          //     state: 1
+          //   },
+          //   {
+          //     id: 5,
+          //     type: 1,
+          //     name: '设备#005',
+          //     msg: '☇ 数据采集 10:27 ',
+          //     state: 1
+          //   },
+          //   {
+          //     id: 6,
+          //     type: 1,
+          //     name: '设备#006',
+          //     msg: '☇ 数据采集 10:27 ',
+          //     state: 1
+          //   },
+          //   {
+          //     id: 7,
+          //     type: 1,
+          //     name: '设备#007',
+          //     msg: '☇ 数据采集 10:27 ',
+          //     state: 1
+          //   },
+          //   {
+          //     id: 8,
+          //     type: 1,
+          //     name: '设备#008',
+          //     msg: '☇ 数据采集 10:27 ',
+          //     state: 1
+          //   },
+          //   {
+          //     id: 9,
+          //     type: 1,
+          //     name: '设备#009',
+          //     msg: '☇ 数据采集 10:27 ',
+          //     state: 1
+          //   },
+          //   {
+          //     id: 10,
+          //     type: 1,
+          //     name: '设备#010',
+          //     msg: '☇ 数据采集 10:27 ',
+          //     state: 1
+          //   },
+          //   {
+          //     id: 11,
+          //     type: 1,
+          //     name: '设备#011',
+          //     msg: '☇ 数据采集 10:27 ',
+          //     state: 1
+          //   },
+          //   {
+          //     id: 12,
+          //     type: 1,
+          //     name: '设备#012',
+          //     msg: '☇ 数据采集 10:27 ',
+          //     state: 1
+          //   }
+          // ]
+        }
+      },
+      computed: {
+        list: {
+          get () {
+            return this.$store.state.device.list
+          },
+          set (newList) {
+            this.replace(newList)
+          }
+        }
+      },
+      methods: {
+        ...mapMutations('device', [
+          'replace',
+          'updateDeviceProp'
+        ]),
+        onDblclick (item, index) {
+          this.updateDeviceProp({
+            index,
+            key: 'name',
+            value: item.name + ' dblclick'
+          })
         }
       }
     }
