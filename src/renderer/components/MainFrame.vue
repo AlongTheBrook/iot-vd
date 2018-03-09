@@ -7,14 +7,14 @@
                     <i class="fas fa-paper-plane fa-stack-1x fa-inverse"></i>
                 </div>
             </div>
-            <div class="icon s-icon">
+            <div class="icon s-icon" router="device" :class="{'s-active': router === 'device'}" @click="onRouting">
                 <i class="fab fa-lg fa-hubspot"></i>
             </div>
-            <div class="icon s-icon">
+            <div class="icon s-icon" router="history-frame" :class="{'s-active': router === 'history-frame'}" @click="onRouting">
                 <i class="fas fa-lg fa-history"></i>
             </div>
             <div class="main-frame-menu-item-end">
-                <div class="icon s-icon">
+                <div class="icon s-icon" router="more-frame" :class="{'s-active': router === 'more-frame'}" @click="onRouting">
                     <i class="fas fa-lg fa-bars"></i>
                 </div>
             </div>
@@ -33,6 +33,24 @@
       name: 'main-frame',
       components: {
         ElectronFrameController
+      },
+      data () {
+        return {
+          router: null
+        }
+      },
+      mounted () {
+        this.router = 'device'
+      },
+      watch: {
+        router (value) {
+          this.$router.push({name: value})
+        }
+      },
+      methods: {
+        onRouting (e) {
+          this.router = e.currentTarget.attributes.router.value
+        }
       }
     }
 </script>

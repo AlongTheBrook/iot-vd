@@ -152,7 +152,7 @@ sliderBgColor	String		'white'		滑块背景色
         this.state = !this.state
         this.$emit('input', this.state)
       },
-      onTransitionend (e) {
+      onTransitionend () {
         this.$emit('toggleTransitionend', this.state)
       }
     }

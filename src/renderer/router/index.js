@@ -21,12 +21,22 @@ export default new Router({
               component: require('@/components/MainFrame/DeviceFrame/Device').default
             }
           ]
+        },
+        {
+          path: 'history-frame',
+          name: 'history-frame',
+          component: require('@/components/MainFrame/HistoryFrame').default
+        },
+        {
+          path: 'more-frame',
+          name: 'more-frame',
+          component: require('@/components/MainFrame/MoreFrame').default
         }
       ]
     },
     {
       path: '*',
-      redirect: '/main-frame/device-frame/device'
+      redirect: '/main-frame'
       // component: require('@/components/LandingPage').default
     }
   ]
