@@ -1,7 +1,7 @@
 <template>
-    <div class="placeholder">
+    <div class="placeholder" :style="{backgroundColor: bgColor}">
         <div class="placeholder-title"></div>
-        <div class="placeholder-content">
+        <div class="placeholder-content" :style="{color: color}">
             <div class="placeholder-icon icon s-icon">
                 <i class="fas fa-lg" :class="[icon]"></i>
             </div>
@@ -20,6 +20,14 @@
       },
       text: {
         type: String
+      },
+      bgColor: {
+        type: String,
+        default: '#e8e8e8'
+      },
+      color: {
+        type: String,
+        default: 'hsl(0, 0%, 71%)'
       }
     }
   }
@@ -29,7 +37,6 @@
     .placeholder {
         height: 100%;
         width: 100%;
-        background-color: #e8e8e8;
         display: flex;
         flex-direction: column;
         & > .placeholder-title {
@@ -44,7 +51,6 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: $grey-light;
             & > .placeholder-icon {
                 font-size: 4rem;
                 margin-bottom: 2rem;

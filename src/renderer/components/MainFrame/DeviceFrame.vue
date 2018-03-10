@@ -23,7 +23,8 @@
             <div class="device-list-container" v-bar="{preventParentScroll: true}">
                 <ul class="device-list" >
                     <draggable v-model="list">
-                        <li class="device-list-item" v-for="(item, index) in list" :key="item.id" @dblclick="onDblclick(item, index)"
+                        <li class="device-list-item" v-for="(item, index) in list" :key="item.id" @click="onClick(item.id)"
+                            :class="{'is-active': item.selected}"
                             @contextmenu.prevent="$refs.deviceItemCtxMenu.open">
                             <div class="device-list-item-start">
                                 <figure class="image">
@@ -50,19 +51,22 @@
             </div>
         </div>
         <div class="device-frame-content">
-            <router-view></router-view>
+            <device v-if="hasSelected"></device>
+            <placeholder v-else icon="fa-paper-plane" bgColor="#f5f5f5" color="hsl(0, 0%, 86%)"></placeholder>
         </div>
     </div>
 </template>
 
 <script>
-    import { mapMutations } from 'vuex'
+    import { mapGetters, mapMutations } from 'vuex'
+    import Device from './DeviceFrame/Device'
+    import Placeholder from '../Common/Placeholder'
     import Draggable from 'vuedraggable'
     import ContextMenu from 'vue-context-menu'
 
     export default {
       name: 'device-frame',
-      components: { Draggable, ContextMenu },
+      components: { Device, Placeholder, Draggable, ContextMenu },
       data () {
         return {
           // deviceList: [
@@ -161,19 +165,24 @@
           set (newList) {
             this.replace(newList)
           }
+        },
+        ...mapGetters('device', [
+          'selected'
+        ]),
+        hasSelected () {
+          if (this.selected) {
+            return true
+          }
+          return false
         }
       },
       methods: {
         ...mapMutations('device', [
           'replace',
-          'updateDeviceProp'
+          'setSelected'
         ]),
-        onDblclick (item, index) {
-          this.updateDeviceProp({
-            index,
-            key: 'name',
-            value: item.name + ' dblclick'
-          })
+        onClick (id) {
+          this.setSelected(id)
         }
       }
     }

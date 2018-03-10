@@ -1,7 +1,7 @@
 <template>
     <div class="device">
         <div class="device-title">
-            <div class="device-title-text">设备标题</div>
+            <div class="device-title-text">{{ device.name }}</div>
             <div class="device-title-menu" @click="onDeviceMenuClick">...</div>
             <transition @afterEnter="afterDeviceMenuEnter" @afterLeave="afterDeviceMenuLeave">
                 <div class="device-title-menu-content" v-show="isDeviceMenuShow" @blur="onDeviceMenuBlur" tabindex="-1">
@@ -12,8 +12,8 @@
                             </figure>
                         </div>
                         <div class="device-content text-sle">
-                            <div class="device-name">设备名称</div>
-                            <div class="device-id">ID: 123456</div>
+                            <div class="device-name">{{ device.name }}</div>
+                            <div class="device-id">ID: {{ device.deviceId }}</div>
                         </div>
                     </div>
                     <hr>
@@ -176,7 +176,9 @@
 </template>
 
 <script>
+    import { mapGetters } from 'vuex'
     import SToggleButton from '../../Common/SToggleButton'
+
     export default {
       name: 'device',
       components: { SToggleButton },
@@ -243,6 +245,11 @@
             }
           ]
         }
+      },
+      computed: {
+        ...mapGetters('device', {
+          device: 'selected'
+        })
       },
       watch: {
         isDeviceEventExpand (value) {

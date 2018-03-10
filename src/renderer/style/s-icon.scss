@@ -1,6 +1,7 @@
 @import "_variables";
 
 .s-icon {
+  cursor: pointer;
   color: hsl(0, 0%, 48%) ;  /* has-text-grey */
   @include electron-no-drag;
 }

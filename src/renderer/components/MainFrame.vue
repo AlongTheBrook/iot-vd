@@ -7,7 +7,7 @@
                     <i class="fas fa-paper-plane fa-stack-1x fa-inverse"></i>
                 </div>
             </div>
-            <div class="icon s-icon" router="device" :class="{'s-active': router === 'device'}" @click="onRouting">
+            <div class="icon s-icon" router="device-frame" :class="{'s-active': router === 'device-frame'}" @click="onRouting">
                 <i class="fab fa-lg fa-hubspot"></i>
             </div>
             <div class="icon s-icon" router="history-frame" :class="{'s-active': router === 'history-frame'}" @click="onRouting">
@@ -40,7 +40,7 @@
         }
       },
       mounted () {
-        this.router = 'device'
+        this.router = 'device-frame'
       },
       watch: {
         router (value) {
