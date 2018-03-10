@@ -19,10 +19,10 @@
                     <hr>
                     <div>
                         <div>通讯数据展开</div>
-                        <s-toggle-button v-model="isDeviceEventExpand"></s-toggle-button>
+                        <s-toggle-button v-model="isEventExpand"></s-toggle-button>
                     </div>
                     <hr>
-                    <div class="device-title-menu-content-delete">删除此设备</div>
+                    <div class="device-title-menu-content-delete" @click="onDelete">删除此设备</div>
                 </div>
             </transition>
         </div>
@@ -156,27 +156,27 @@
                 </div>
             </div>
             <div class="device-content-monitor" v-bar="{preventParentScroll: true}">
-                <ul class="device-event-list" ref="deviceEventList">
-                    <li class="device-event" v-for="item in deviceEventList" @click="onDeviceEventClick(item)">
+                <ul class="device-event-list" ref="eventList">
+                    <li class="device-event" v-for="(item, index) in eventList" @click="onEventClick(index)">
                         <div class="device-event-title">{{ item.title }}</div>
-                        <pre class="device-event-content" v-show="item.isContentExpand">{{ item.content }}</pre>
+                        <pre class="device-event-content" v-show="item.isExpand">{{ item.content }}</pre>
                     </li>
                 </ul>
             </div>
         </div>
         <div class="device-footer">
             <div class="device-footer-msg">
-                <p>最后信息：☇ 数据采集 10:27</p>
+                <p>{{ device.msg }}</p>
             </div>
             <div class="device-footer-control">
-                <a class="button is-primary is-small is-no-radius">启动</a>
+                <a class="button is-primary is-small is-no-radius" @click="addEvent({id: device.id, event: {title: 'abc ' + Math.random(), content: 'def'}})">启动</a>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import { mapGetters } from 'vuex'
+    import { mapGetters, mapMutations } from 'vuex'
     import SToggleButton from '../../Common/SToggleButton'
 
     export default {
@@ -184,97 +184,45 @@
       components: { SToggleButton },
       data () {
         return {
-          isDeviceEventExpand: false,
           isDeviceMenuShow: false,
-          isDeviceMenuLeaving: false,
-          deviceEventList: [
-            {
-              title: '2018-3-2 17:49:30.1 服务器 -> 设备',
-              content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-              isContentExpand: false
-            },
-            {
-              title: '2018-3-2 17:49:30.2 服务器 -> 设备',
-              content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-              isContentExpand: false
-            },
-            {
-              title: '2018-3-2 17:49:30.3 服务器 -> 设备  2018-3-2 17:49:30.123 服务器 -> 设备 2018-3-2 17:49:30.123 服务器 -> 设备',
-              content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93 f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93 f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-              isContentExpand: false
-            },
-            {
-              title: '2018-3-2 17:49:30.4 服务器 -> 设备',
-              content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-              isContentExpand: false
-            },
-            {
-              title: '2018-3-2 17:49:30.5 服务器 -> 设备',
-              content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-              isContentExpand: false
-            },
-            {
-              title: '2018-3-2 17:49:30.6 服务器 -> 设备',
-              content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-              isContentExpand: false
-            },
-            {
-              title: '2018-3-2 17:49:30.7 服务器 -> 设备',
-              content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-              isContentExpand: false
-            },
-            {
-              title: '2018-3-2 17:49:30.8 服务器 -> 设备',
-              content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-              isContentExpand: false
-            },
-            {
-              title: '2018-3-2 17:49:30.9 服务器 -> 设备',
-              content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-              isContentExpand: false
-            },
-            {
-              title: '2018-3-2 17:49:30.10 服务器 -> 设备',
-              content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-              isContentExpand: false
-            },
-            {
-              title: '2018-3-2 17:49:30.11 服务器 -> 设备',
-              content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-              isContentExpand: false
-            }
-          ]
+          isDeviceMenuLeaving: false
         }
       },
       computed: {
         ...mapGetters('device', {
           device: 'selected'
-        })
-      },
-      watch: {
-        isDeviceEventExpand (value) {
-          for (let deviceEvent of this.deviceEventList) {
-            deviceEvent.isContentExpand = value
+        }),
+        eventList () {
+          return this.device.eventList
+        },
+        msg () {
+          return this.device.msg
+        },
+        isEventExpand: {
+          get () {
+            return this.device.isEventExpand
+          },
+          set (isEventExpand) {
+            this.setEventExpand({id: this.device.id, isEventExpand: isEventExpand})
           }
         }
       },
-      methods: {
-        addDeviceEvent (deviceEvent) {
-          if (this.deviceEventList.length >= 128) {
-            this.deviceEventList.shift()
-          }
-          this.deviceEventList.push(deviceEvent)
+      watch: {
+        msg () {
           this.$nextTick(() => {
-            this.$refs.deviceEventList.lastChild.scrollIntoViewIfNeeded()
+            this.$refs.eventList.lastChild.scrollIntoViewIfNeeded()
           })
-        },
-        traggerDeviceEventContentExpand (flag) {
-          for (let deviceEvent of this.deviceEventList) {
-            deviceEvent.isContentExpand = flag
-          }
-        },
-        onDeviceEventClick (targetData) {
-          targetData.isContentExpand = !targetData.isContentExpand
+        }
+      },
+      methods: {
+        ...mapMutations('device', [
+          'setEventExpand',
+          'setSingleEventExpand',
+          'addEvent',
+          'delete'
+        ]),
+        onEventClick (index) {
+          this.setSingleEventExpand({id: this.device.id, index: index})
         },
         onDeviceMenuClick () {
           if (!this.isDeviceMenuLeaving) {
@@ -290,6 +238,9 @@
         },
         afterDeviceMenuLeave (el) {
           this.isDeviceMenuLeaving = false
+        },
+        onDelete () {
+          this.delete(this.device.id)
         }
       }
     }

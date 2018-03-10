@@ -25,7 +25,7 @@
                     <draggable v-model="list">
                         <li class="device-list-item" v-for="(item, index) in list" :key="item.id" @click="onClick(item.id)"
                             :class="{'is-active': item.selected}"
-                            @contextmenu.prevent="$refs.deviceItemCtxMenu.open">
+                            @contextmenu.prevent="$refs.deviceItemCtxMenu.open($event, item.id)">
                             <div class="device-list-item-start">
                                 <figure class="image">
                                     <img src="https://bulma.io/images/placeholders/48x48.png">
@@ -42,8 +42,8 @@
                             </div>
                         </li>
                     </draggable>
-                    <context-menu ref="deviceItemCtxMenu" id="context-menu">
-                        <li>删除设备</li>
+                    <context-menu ref="deviceItemCtxMenu" id="context-menu" @ctx-open="onDeviceItemCtxMenuOpen">
+                        <li @click="onDelete">删除设备</li>
                         <hr>
                         <li class="disabled">可以通过拖拽排序</li>
                     </context-menu>
@@ -69,92 +69,7 @@
       components: { Device, Placeholder, Draggable, ContextMenu },
       data () {
         return {
-          // deviceList: [
-          //   {
-          //     id: 1,
-          //     type: 1,
-          //     name: '设备名称 -> 家乐苑小区进水',
-          //     msg: '最后信息 -> ☇ 15:41 ',
-          //     state: 1
-          //   },
-          //   {
-          //     id: 2,
-          //     type: 1,
-          //     name: '设备#002',
-          //     msg: '☇ 数据采集 10:27 ',
-          //     state: 1
-          //   },
-          //   {
-          //     id: 3,
-          //     type: 1,
-          //     name: '设备#003',
-          //     msg: '☇ 数据采集 10:27 ',
-          //     state: 1
-          //   },
-          //   {
-          //     id: 4,
-          //     type: 1,
-          //     name: '设备#004',
-          //     msg: '☇ 数据采集 10:27 ',
-          //     state: 1
-          //   },
-          //   {
-          //     id: 5,
-          //     type: 1,
-          //     name: '设备#005',
-          //     msg: '☇ 数据采集 10:27 ',
-          //     state: 1
-          //   },
-          //   {
-          //     id: 6,
-          //     type: 1,
-          //     name: '设备#006',
-          //     msg: '☇ 数据采集 10:27 ',
-          //     state: 1
-          //   },
-          //   {
-          //     id: 7,
-          //     type: 1,
-          //     name: '设备#007',
-          //     msg: '☇ 数据采集 10:27 ',
-          //     state: 1
-          //   },
-          //   {
-          //     id: 8,
-          //     type: 1,
-          //     name: '设备#008',
-          //     msg: '☇ 数据采集 10:27 ',
-          //     state: 1
-          //   },
-          //   {
-          //     id: 9,
-          //     type: 1,
-          //     name: '设备#009',
-          //     msg: '☇ 数据采集 10:27 ',
-          //     state: 1
-          //   },
-          //   {
-          //     id: 10,
-          //     type: 1,
-          //     name: '设备#010',
-          //     msg: '☇ 数据采集 10:27 ',
-          //     state: 1
-          //   },
-          //   {
-          //     id: 11,
-          //     type: 1,
-          //     name: '设备#011',
-          //     msg: '☇ 数据采集 10:27 ',
-          //     state: 1
-          //   },
-          //   {
-          //     id: 12,
-          //     type: 1,
-          //     name: '设备#012',
-          //     msg: '☇ 数据采集 10:27 ',
-          //     state: 1
-          //   }
-          // ]
+          ctxMenuTargetDeviceId: null
         }
       },
       computed: {
@@ -179,10 +94,17 @@
       methods: {
         ...mapMutations('device', [
           'replace',
-          'setSelected'
+          'setSelected',
+          'delete'
         ]),
         onClick (id) {
           this.setSelected(id)
+        },
+        onDelete () {
+          this.delete(this.ctxMenuTargetDeviceId)
+        },
+        onDeviceItemCtxMenuOpen (id) {
+          this.ctxMenuTargetDeviceId = id
         }
       }
     }

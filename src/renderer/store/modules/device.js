@@ -19,16 +19,17 @@ const state = {
       state: 2,
       hbCountdownSeconds: 56,
       msg: '2018-3-2 17:49:30.2 服务器 -> 设备',
+      isEventExpand: false,
       eventList: [
         {
           title: '2018-3-2 17:49:30.1 服务器 -> 设备',
           content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-          isContentExpand: false
+          isExpand: false
         },
         {
           title: '2018-3-2 17:49:30.2 服务器 -> 设备',
           content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-          isContentExpand: false
+          isExpand: false
         }
       ]
     },
@@ -51,26 +52,27 @@ const state = {
       state: 3,
       hbCountdownSeconds: 12,
       msg: '2018-3-2 17:49:30.2 服务器 -> 设备',
+      isEventExpand: false,
       eventList: [
         {
           title: '2018-3-2 17:49:30.1 服务器 -> 设备',
           content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-          isContentExpand: false
+          isExpand: false
         },
         {
           title: '2018-3-2 17:49:30.2 服务器 -> 设备',
           content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-          isContentExpand: false
+          isExpand: false
         },
         {
           title: '2018-3-2 17:49:30.1 服务器 -> 设备',
           content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-          isContentExpand: false
+          isExpand: false
         },
         {
           title: '2018-3-2 17:49:30.2 服务器 -> 设备',
           content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-          isContentExpand: false
+          isExpand: false
         }
       ]
     },
@@ -93,21 +95,22 @@ const state = {
       state: 1,
       hbCountdownSeconds: 34,
       msg: '2018-3-2 17:49:30.2 服务器 -> 设备',
+      isEventExpand: false,
       eventList: [
         {
           title: '2018-3-2 17:49:30.1 服务器 -> 设备',
           content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-          isContentExpand: false
+          isExpand: false
         },
         {
           title: '2018-3-2 17:49:30.2 服务器 -> 设备',
           content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-          isContentExpand: false
+          isExpand: false
         },
         {
           title: '2018-3-2 17:49:30.2 服务器 -> 设备',
           content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-          isContentExpand: false
+          isExpand: false
         }
       ]
     }
@@ -140,6 +143,37 @@ const mutations = {
       } else {
         device.selected = false
       }
+    }
+  },
+  delete (state, id) {
+    let index = state.list.findIndex(device => device.id === id)
+    if (index !== -1) {
+      state.list.splice(index, 1)
+    }
+  },
+  setEventExpand (state, payload) {
+    let device = state.list.find(device => device.id === payload.id)
+    if (device) {
+      device.isEventExpand = payload.isEventExpand
+      for (let event of device.eventList) {
+        event.isExpand = payload.isEventExpand
+      }
+    }
+  },
+  setSingleEventExpand (state, payload) {
+    let device = state.list.find(device => device.id === payload.id)
+    if (device) {
+      device.eventList[payload.index].isExpand = !device.eventList[payload.index].isExpand
+    }
+  },
+  addEvent (state, payload) {
+    let device = state.list.find(device => device.id === payload.id)
+    if (device) {
+      if (device.eventList.length >= 128) {
+        device.eventList.shift()
+      }
+      device.eventList.push(Object.assign({}, payload.event, {isExpand: device.isEventExpand}))
+      device.msg = payload.event.title
     }
   }
 }
