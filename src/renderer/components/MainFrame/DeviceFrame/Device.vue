@@ -28,128 +28,137 @@
         </div>
         <div class="device-content">
             <div class="device-content-config">
-                <div class="device-content-config-host">
-                    <p class="device-content-config-title">服务器参数</p>
-                    <div class="field is-horizontal">
-                        <div class="field-label is-small">
-                            <label class="label">服务器</label>
-                        </div>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control">
-                                    <input class="input is-small is-no-radius" type="text" placeholder="IP地址或域名地址"/>
-                                </div>
-                            </div>
-                        </div>
+                <p class="device-content-config-title">基本参数</p>
+                <div class="field is-horizontal">
+                    <div class="field-label is-small">
+                        <label class="label">名称</label>
                     </div>
-                    <div class="field is-horizontal">
-                        <div class="field-label is-small">
-                            <label class="label">端口</label>
-                        </div>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control">
-                                    <input class="input is-small is-no-radius" type="text" placeholder=""/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field is-horizontal">
-                        <div class="field-label is-small">
-                            <label class="label">注册包</label>
-                        </div>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control">
-                                    <input class="input is-small is-no-radius" type="text" placeholder=""/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field is-horizontal">
-                        <div class="field-label is-small">
-                            <label class="label">心跳包</label>
-                        </div>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control">
-                                    <input class="input is-small is-no-radius" type="text" placeholder=""/>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="field is-horizontal">
-                        <div class="field-label is-small">
-                            <label class="label">心跳周期</label>
-                        </div>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control">
-                                    <input class="input is-small is-no-radius" type="text" placeholder=""/>
-                                </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input class="input is-small is-no-radius" type="text" placeholder=""/>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="device-content-config-device">
-                    <p class="device-content-config-title">设备参数</p>
-                    <div class="field is-horizontal">
-                        <div class="field-label is-small">
-                            <label class="label">串口号</label>
-                        </div>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control">
-                                    <input class="input is-small is-no-radius" type="text" placeholder=""/>
-                                </div>
+                <p class="device-content-config-title">设备参数</p>
+                <div class="field is-horizontal">
+                    <div class="field-label is-small">
+                        <label class="label">串口号</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input class="input is-small is-no-radius" type="text" placeholder=""/>
                             </div>
                         </div>
                     </div>
-                    <div class="field is-horizontal">
-                        <div class="field-label is-small">
-                            <label class="label">波特率</label>
-                        </div>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control">
-                                    <input class="input is-small is-no-radius" type="text" placeholder=""/>
-                                </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-small">
+                        <label class="label">波特率</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input class="input is-small is-no-radius" type="text" placeholder=""/>
                             </div>
                         </div>
                     </div>
-                    <div class="field is-horizontal">
-                        <div class="field-label is-small">
-                            <label class="label">数据位</label>
-                        </div>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control">
-                                    <input class="input is-small is-no-radius" type="text" placeholder=""/>
-                                </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-small">
+                        <label class="label">数据位</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input class="input is-small is-no-radius" type="text" placeholder=""/>
                             </div>
                         </div>
                     </div>
-                    <div class="field is-horizontal">
-                        <div class="field-label is-small">
-                            <label class="label">奇偶校验</label>
-                        </div>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control">
-                                    <input class="input is-small is-no-radius" type="text" placeholder=""/>
-                                </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-small">
+                        <label class="label">奇偶校验</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input class="input is-small is-no-radius" type="text" placeholder=""/>
                             </div>
                         </div>
                     </div>
-                    <div class="field is-horizontal">
-                        <div class="field-label is-small">
-                            <label class="label">停止位</label>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-small">
+                        <label class="label">停止位</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input class="input is-small is-no-radius" type="text" placeholder=""/>
+                            </div>
                         </div>
-                        <div class="field-body">
-                            <div class="field">
-                                <div class="control">
-                                    <input class="input is-small is-no-radius" type="text" placeholder=""/>
-                                </div>
+                    </div>
+                </div>
+                <p class="device-content-config-title">服务器参数</p>
+                <div class="field is-horizontal">
+                    <div class="field-label is-small">
+                        <label class="label">服务器</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input class="input is-small is-no-radius" type="text" placeholder="IP地址或域名地址"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-small">
+                        <label class="label">端口</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input class="input is-small is-no-radius" type="text" placeholder=""/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-small">
+                        <label class="label">注册包</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input class="input is-small is-no-radius" type="text" placeholder=""/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-small">
+                        <label class="label">心跳包</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input class="input is-small is-no-radius" type="text" placeholder=""/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field is-horizontal">
+                    <div class="field-label is-small">
+                        <label class="label">心跳周期</label>
+                    </div>
+                    <div class="field-body">
+                        <div class="field">
+                            <div class="control">
+                                <input class="input is-small is-no-radius" type="text" placeholder=""/>
                             </div>
                         </div>
                     </div>
@@ -351,22 +360,14 @@
                 display: flex;
                 flex-direction: column;
                 @include borderSetOneSide(right);
-                $el-padding: 0 1.75rem 0 1.75rem;
-                $overflow-y: hidden;
+                padding: 0.6rem 1.75rem 0 1.75rem;
+                overflow-y: hidden;
                 .device-content-config-title {
-                    padding: 0.75rem 0 0.75rem 0.25rem;
+                    padding: 0.6rem 0 0.6rem 0.25rem;
                     font-weight: 500;
                 }
-                & > .device-content-config-host {
-                    flex: auto;
-                    @include borderSetOneSide(bottom);
-                    padding: $el-padding;
-                    overflow-y: $overflow-y;
-                }
-                & > .device-content-config-device {
-                    flex: auto;
-                    padding: $el-padding;
-                    overflow-y: $overflow-y;
+                .field:not(:last-child) {
+                    margin-bottom: 0.6rem;
                 }
                 .field-label {
                     flex: none;

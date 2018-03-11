@@ -62,9 +62,9 @@ function createWindow () {
    */
   mainWindow = new BrowserWindow({
     width: 960,
-    height: 618,
+    height: 678,
     minWidth: 960,
-    minHeight: 618,
+    minHeight: 678,
     frame: false,
     show: false,
     // thickFrame: false, // 为false时，窗口最小化和恢复的动画消失，窗口阴影消失，最大化和还原被禁用
