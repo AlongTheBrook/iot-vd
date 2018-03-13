@@ -36,10 +36,13 @@
                                 <p class="device-list-item-content-title">{{ item.name }}</p>
                                 <p class="device-list-item-content-subtitle">{{ item.msg }}</p>
                             </div>
+                            <div class="device-list-item-end-pre" v-show="!((item.state === state.STOPPING) || (item.state === state.STOPED))">
+                                <svg class="iconfont" aria-hidden="true">
+                                    <use xlink:href="#icon-stop"></use>
+                                </svg>
+                            </div>
                             <div class="device-list-item-end">
-                                <div class="icon">
-                                    <i class="far fa-heart fa-lg"></i>
-                                </div>
+                                <op-and-state-icon :device="item"></op-and-state-icon>
                             </div>
                         </li>
                     </draggable>
@@ -60,6 +63,7 @@
 
 <script>
     import { mapGetters, mapMutations } from 'vuex'
+    import OpAndStateIcon from '../Common/OpAndStateIcon'
     import Device from './DeviceFrame/Device'
     import Placeholder from '../Common/Placeholder'
     import Draggable from 'vuedraggable'
@@ -67,7 +71,7 @@
 
     export default {
       name: 'device-frame',
-      components: { Device, Placeholder, Draggable, ContextMenu },
+      components: { OpAndStateIcon, Device, Placeholder, Draggable, ContextMenu },
       data () {
         return {
           ctxMenuTargetDeviceId: null
@@ -83,6 +87,7 @@
           }
         },
         ...mapGetters('device', [
+          'state',
           'selected',
           'iconHref',
           'iconBgColor'
@@ -177,7 +182,7 @@
                 & > .device-list {
                     flex: auto;
                     .device-list-item {
-                        @include mouse-bg-mixin(transparent, $grey-lighter, $grey-light);
+                        @include mouse-bg-mixin(transparent, $grey-lighter, hsl(0, 0%, 76%));
                         @extend .device-list-baseclass;
                         cursor: default;
                         & > .device-list-item-start {
@@ -207,12 +212,28 @@
                                 color: hsl(0, 0%, 48%);
                             }
                         }
+                        &:hover > .device-list-item-end-pre {
+                            display: flex;
+                        }
+                        & > .device-list-item-end-pre {
+                            flex: none;
+                            width: 2.5rem;
+                            display: none;
+                            justify-content: flex-end;
+                            align-items: center;
+                            font-size: 1.5rem;
+                            line-height: 1;
+                            color: $red;
+                            cursor: pointer;
+                        }
                         & > .device-list-item-end {
                             flex: none;
                             width: 2.5rem;
                             display: flex;
                             justify-content: flex-end;
                             align-items: center;
+                            font-size: 1.5rem;
+                            line-height: 1;
                         }
                     }
                 }

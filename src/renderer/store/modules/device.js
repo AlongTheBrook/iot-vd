@@ -6,9 +6,12 @@ const state = {
   state: {
     STOPED: 'STOPED',
     STARTING: 'STARTING',
-    CONNECTING: 'CONNECTING',
+    DEVICE_CONNECTING: 'DEVICE_CONNECTING',
+    DEVICE_RECONNECTING: 'DEVICE_RECONNECTING',
+    SERVER_CONNECTING: 'SERVER_CONNECTING',
+    SERVER_RECONNECTING: 'SERVER_RECONNECTING',
     RUNNING: 'RUNNING',
-    RECONNECTING: 'RECONNECTING',
+    HEARTBEAT: 'HEARTBEAT',
     STOPPING: 'STOPPING'
   },
   list: [
@@ -104,7 +107,7 @@ const state = {
       parity: 'NONE',
       stopbits: 1,
       selected: false,
-      state: 'RECONNECTING',
+      state: 'STOPED',
       hbCountdownSeconds: 34,
       msg: '2018-3-2 17:49:30.2 服务器 -> 设备',
       isEventExpand: false,
@@ -188,8 +191,9 @@ const getters = {
     switch (stateValue) {
       case state.state.RUNNING:
         return 'hsl(141, 71%, 48%)'
-      case state.state.RECONNECTING:
-        return 'hsl(14, 100%, 53%)'
+      case state.state.DEVICE_RECONNECTING:
+      case state.state.SERVER_RECONNECTING:
+        return 'hsl(348, 100%, 61%)'
       default:
         return 'hsl(0, 0%, 57.5%)'
     }

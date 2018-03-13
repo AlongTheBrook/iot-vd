@@ -219,7 +219,7 @@
         $hover: hsl(0, 0%, 86%);
         $hover_text: $_text;
 
-        $active: hsl(0, 0%, 71%);
+        $active: hsl(0, 0%, 76%);
         $active_text: $_text;
 
         @include button-mixin($_, $_text, $hover, $hover_text, $active, $active_text);
