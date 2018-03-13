@@ -27,9 +27,10 @@
                             :class="{'is-active': item.selected}"
                             @contextmenu.prevent="$refs.deviceItemCtxMenu.open($event, item.id)">
                             <div class="device-list-item-start">
-                                <figure class="image">
-                                    <img src="https://bulma.io/images/placeholders/48x48.png">
-                                </figure>
+                                <svg class="iconfont device-list-item-start-icon" aria-hidden="true"
+                                     :style="{backgroundColor: iconBgColor(item.state)}">
+                                    <use :xlink:href="iconHref(item.type)"></use>
+                                </svg>
                             </div>
                             <div class="device-list-item-content">
                                 <p class="device-list-item-content-title">{{ item.name }}</p>
@@ -82,7 +83,9 @@
           }
         },
         ...mapGetters('device', [
-          'selected'
+          'selected',
+          'iconHref',
+          'iconBgColor'
         ]),
         hasSelected () {
           if (this.selected) {
@@ -180,6 +183,12 @@
                         & > .device-list-item-start {
                             flex: none;
                             width: 2.5rem;
+                            font-size: 2.5rem;
+                            line-height: 1;
+                            & > .device-list-item-start-icon {
+                                border-radius: 0.2rem;
+                                color: hsl(0, 0%, 91%);
+                            }
                         }
                         & > .device-list-item-content {
                             flex: auto;

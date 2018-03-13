@@ -7,9 +7,10 @@
                 <div class="device-title-menu-content" v-show="isDeviceMenuShow" @blur="onDeviceMenuBlur" tabindex="-1">
                     <div class="device-info">
                         <div class="device-logo">
-                            <figure class="image">
-                                <img src="https://bulma.io/images/placeholders/48x48.png">
-                            </figure>
+                            <svg class="iconfont device-logo-icon" aria-hidden="true"
+                                 :style="{backgroundColor: iconBgColor(device.state)}">
+                                <use :xlink:href="iconHref(device.type)"></use>
+                            </svg>
                         </div>
                         <div class="device-content text-sle">
                             <div class="device-name">{{ device.name }}</div>
@@ -201,6 +202,10 @@
         ...mapGetters('device', {
           device: 'selected'
         }),
+        ...mapGetters('device', [
+          'iconHref',
+          'iconBgColor'
+        ]),
         eventList () {
           return this.device.eventList
         },
@@ -322,6 +327,12 @@
                     & > .device-logo {
                         flex: none;
                         width: 2.5rem;
+                        font-size: 2.5rem;
+                        line-height: 1;
+                        & > .device-logo-icon {
+                            border-radius: 0.2rem;
+                            color: hsl(0, 0%, 91%);
+                        }
                     }
                     & > .device-content {
                         flex: auto;
@@ -357,8 +368,6 @@
             & > .device-content-config {
                 flex: none;
                 width: 22rem;
-                display: flex;
-                flex-direction: column;
                 @include borderSetOneSide(right);
                 padding: 0.6rem 1.75rem 0 1.75rem;
                 overflow-y: hidden;

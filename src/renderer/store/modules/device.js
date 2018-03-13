@@ -1,10 +1,22 @@
 const state = {
+  type: {
+    SERIAL_PORT: 'SERIAL_PORT',
+    TCP: 'TCP'
+  },
+  state: {
+    STOPED: 'STOPED',
+    STARTING: 'STARTING',
+    CONNECTING: 'CONNECTING',
+    RUNNING: 'RUNNING',
+    RECONNECTING: 'RECONNECTING',
+    STOPPING: 'STOPPING'
+  },
   list: [
     {
       id: 101,
       name: '设备101',
       deviceId: 10001,
-      type: 1,
+      type: 'SERIAL_PORT',
       serialPortName: 'COM2',
       baudRate: 9600,
       databits: 8,
@@ -16,7 +28,7 @@ const state = {
       hbPackage: 'H',
       hbMinutes: 5,
       selected: false,
-      state: 2,
+      state: 'RUNNING',
       hbCountdownSeconds: 56,
       msg: '2018-3-2 17:49:30.2 服务器 -> 设备',
       isEventExpand: false,
@@ -37,7 +49,7 @@ const state = {
       id: 102,
       name: '设备102',
       deviceId: 10002,
-      type: 2,
+      type: 'SERIAL_PORT',
       host: '127.0.0.1',
       port: 50021,
       regPackage: '{NDMyMTBAOTg3NjU=}',
@@ -49,7 +61,7 @@ const state = {
       parity: 'NONE',
       stopbits: 1,
       selected: false,
-      state: 3,
+      state: 'STOPED',
       hbCountdownSeconds: 12,
       msg: '2018-3-2 17:49:30.2 服务器 -> 设备',
       isEventExpand: false,
@@ -80,7 +92,7 @@ const state = {
       id: 103,
       name: '设备103',
       deviceId: 10003,
-      type: 3,
+      type: 'TCP',
       host: '127.0.0.1',
       port: 50021,
       regPackage: '{NDMyMTBAOTg3NjU=}',
@@ -92,7 +104,45 @@ const state = {
       parity: 'NONE',
       stopbits: 1,
       selected: false,
-      state: 1,
+      state: 'RECONNECTING',
+      hbCountdownSeconds: 34,
+      msg: '2018-3-2 17:49:30.2 服务器 -> 设备',
+      isEventExpand: false,
+      eventList: [
+        {
+          title: '2018-3-2 17:49:30.1 服务器 -> 设备',
+          content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
+          isExpand: false
+        },
+        {
+          title: '2018-3-2 17:49:30.2 服务器 -> 设备',
+          content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
+          isExpand: false
+        },
+        {
+          title: '2018-3-2 17:49:30.2 服务器 -> 设备',
+          content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
+          isExpand: false
+        }
+      ]
+    },
+    {
+      id: 104,
+      name: '设备104',
+      deviceId: 10004,
+      type: 'TCP',
+      host: '127.0.0.1',
+      port: 50021,
+      regPackage: '{NDMyMTBAOTg3NjU=}',
+      hbPackage: 'H',
+      hbMinutes: 5,
+      serialPortName: 'COM2',
+      baudRate: 9600,
+      databits: 8,
+      parity: 'NONE',
+      stopbits: 1,
+      selected: false,
+      state: 'STARTING',
       hbCountdownSeconds: 34,
       msg: '2018-3-2 17:49:30.2 服务器 -> 设备',
       isEventExpand: false,
@@ -118,11 +168,31 @@ const state = {
 }
 
 const getters = {
-  selected: (state) => {
-    return state.list.find(device => device.selected)
-  },
+  selected: state => state.list.find(device => device.selected),
   getById: (state) => (id) => {
     return state.list.find(device => device.id === id)
+  },
+  type: state => state.type,
+  state: state => state.state,
+  iconHref: (state) => (type) => {
+    switch (type) {
+      case state.type.SERIAL_PORT:
+        return '#icon-serial-port'
+      case state.type.TCP:
+        return '#icon-ethernet-port'
+      default:
+        return ''
+    }
+  },
+  iconBgColor: (state) => (stateValue) => {
+    switch (stateValue) {
+      case state.state.RUNNING:
+        return 'hsl(141, 71%, 48%)'
+      case state.state.RECONNECTING:
+        return 'hsl(14, 100%, 53%)'
+      default:
+        return 'hsl(0, 0%, 57.5%)'
+    }
   }
 }
 

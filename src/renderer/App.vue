@@ -8,6 +8,9 @@
   // fontawesome 5 必须的js
   require('./external/fontawesome-all')
 
+  // 项目内打包的iconfont的symbol方式的js
+  require('./external/iconfont')
+
   export default {
     name: 'iot-vd',
     mounted () {
@@ -32,6 +35,14 @@
 
 <style lang="scss">
   @import "~bulma";
+
+  .iconfont {
+    width: 1em;
+    height: 1em;
+    //vertical-align: -0.15em;  // 图标和文字相邻时，垂直对齐：flex布局下可以不用
+    fill: currentColor;
+    overflow: hidden;  // path 和 stroke 溢出 viewBox 部分在 IE 下会显示，故需要此行
+  }
 
   html {
     overflow: hidden; /* hack: 解决bulma中 html{overflow-y: scroll}导致的html全局滚动条 */
