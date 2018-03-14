@@ -18,9 +18,11 @@
         <svg class="iconfont state-server-reconnecting" aria-hidden="true" v-show="device.state === state.SERVER_RECONNECTING">
             <use xlink:href="#icon-server"></use>
         </svg>
-        <svg class="iconfont state-running" aria-hidden="true" v-show="device.state === state.RUNNING">
-            <use xlink:href="#icon-circle"></use>
-        </svg>
+        <radial-progress-bar class="state-running" v-show="device.state === state.RUNNING"
+                             :diameter="24" :stroke-width="2"
+                             :start-color="'hsl(141, 71%, 48%)'" :stop-color="'hsl(141, 71%, 48%)'"
+                             :completed-steps="100">
+        </radial-progress-bar>
         <svg class="iconfont state-heartbeat" aria-hidden="true" v-show="device.state === state.HEARTBEAT">
             <use xlink:href="#icon-heart"></use>
         </svg>
@@ -32,9 +34,11 @@
 
 <script>
   import { mapGetters } from 'vuex'
+  import RadialProgressBar from './RadialProgressBar'
 
   export default {
     name: 'op-and-state-icon',
+    components: { RadialProgressBar },
     props: {
       device: {
         type: Object,
@@ -50,66 +54,64 @@
 </script>
 
 <style lang="scss" scoped>
-    .state {
-        @keyframes rotate {
+    @keyframes rotate {
+        0% {
+            transform: rotate(0deg);
+        }
+        25% {
+            transform: rotate(90deg);
+        }
+        50% {
+            transform: rotate(180deg);
+        }
+        75% {
+            transform: rotate(270deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+    .state-stoped {
+        cursor: pointer;
+    }
+    .state-starting {
+        animation: rotate 1s linear 0s infinite;
+    }
+    .state-device-connecting {
+
+    }
+    .state-device-reconnecting {
+        color: $red;
+    }
+    .state-server-connecting {
+
+    }
+    .state-server-reconnecting {
+        color: $red;
+    }
+    .state-running {
+        color: $green;
+    }
+    .state-heartbeat {
+        color: $red;
+        animation: beat 0.5s ease-in 0s infinite;
+        @keyframes beat {
             0% {
-                transform: rotate(0deg);
+                transform: scale(1, 1);
             }
             25% {
-                transform: rotate(90deg);
+                transform: scale(1.5, 1.5);
             }
             50% {
-                transform: rotate(180deg);
-            }
-            75% {
-                transform: rotate(270deg);
+                transform: scale(2, 2);
             }
             100% {
-                transform: rotate(360deg);
+                transform: scale(1, 1);
             }
         }
-        &-stoped {
-            cursor: pointer;
-        }
-        &-starting {
-            animation: rotate 1s linear 0s infinite;
-        }
-        &-device-connecting {
-
-        }
-        &-device-reconnecting {
-            color: $red;
-        }
-        &-server-connecting {
-
-        }
-        &-server-reconnecting {
-            color: $red;
-        }
-        &-running {
-            color: $green;
-        }
-        &-heartbeat {
-            color: $red;
-            animation: beat 0.5s ease-in 0s infinite;
-            @keyframes beat {
-                0% {
-                    transform: scale(1, 1);
-                }
-                25% {
-                    transform: scale(1.5, 1.5);
-                }
-                50% {
-                    transform: scale(2, 2);
-                }
-                100% {
-                    transform: scale(1, 1);
-                }
-            }
-        }
-        &-stopping {
-            color: $red;
-            animation: rotate 1s linear 0s infinite;
-        }
+    }
+    .state-stopping {
+        color: $red;
+        animation: rotate 1s linear 0s infinite;
     }
 </style>

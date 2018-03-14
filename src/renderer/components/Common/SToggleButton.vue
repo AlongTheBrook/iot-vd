@@ -1,7 +1,7 @@
 /**
 version: 0.9.0
 属性			值类型		默认值		说明
-value			Boolean		false		状态值。直接使用可以初始化按钮状态，方式：on则添加value属性（且不填值），否则不添加该属性
+value			Boolean		false		状态值
 disabled		Boolean		false		是否禁用按钮，禁用后，无法通过鼠标操作，但是可以通过父组件绑定的数据操作
 onText			String		null		on状态的文本
 offText			String		null		off状态的文本
@@ -51,11 +51,11 @@ sliderBgColor	String		'white'		滑块背景色
         default: 'rem'
       },
       height: {
-        type: [Number, String],
+        type: Number,
         default: 1.2
       },
       width: {
-        type: [Number, String],
+        type: Number,
         default: 2.6
       },
       bgColorOn: {
@@ -75,7 +75,7 @@ sliderBgColor	String		'white'		滑块背景色
         default: 'white'
       },
       sliderInterval: {
-        type: [Number, String],
+        type: Number,
         default: 0.2
       },
       sliderBgColor: {
@@ -177,7 +177,7 @@ sliderBgColor	String		'white'		滑块背景色
         }
         & > .s-toggle-button-slider {
             position: absolute;
-            border-radius: 100%;
+            border-radius: 50%;
         }
         & > .s-toggle-button-off-text {
             @include s-toggle-button-text;
