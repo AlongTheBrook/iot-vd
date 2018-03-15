@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="op-and-state-icon">
         <svg class="iconfont state-stoped" aria-hidden="true" v-show="device.state === state.STOPED">
             <use xlink:href="#icon-play"></use>
         </svg>
@@ -21,7 +21,7 @@
         <radial-progress-bar class="state-running" v-show="device.state === state.RUNNING"
                              :diameter="24" :stroke-width="2"
                              :start-color="'hsl(141, 71%, 48%)'" :stop-color="'hsl(141, 71%, 48%)'"
-                             :completed-steps="100">
+                             :completed-steps="50">
         </radial-progress-bar>
         <svg class="iconfont state-heartbeat" aria-hidden="true" v-show="device.state === state.HEARTBEAT">
             <use xlink:href="#icon-heart"></use>
@@ -54,64 +54,68 @@
 </script>
 
 <style lang="scss" scoped>
-    @keyframes rotate {
-        0% {
-            transform: rotate(0deg);
-        }
-        25% {
-            transform: rotate(90deg);
-        }
-        50% {
-            transform: rotate(180deg);
-        }
-        75% {
-            transform: rotate(270deg);
-        }
-        100% {
-            transform: rotate(360deg);
-        }
-    }
-    .state-stoped {
-        cursor: pointer;
-    }
-    .state-starting {
-        animation: rotate 1s linear 0s infinite;
-    }
-    .state-device-connecting {
-
-    }
-    .state-device-reconnecting {
-        color: $red;
-    }
-    .state-server-connecting {
-
-    }
-    .state-server-reconnecting {
-        color: $red;
-    }
-    .state-running {
-        color: $green;
-    }
-    .state-heartbeat {
-        color: $red;
-        animation: beat 0.5s ease-in 0s infinite;
-        @keyframes beat {
+    .op-and-state-icon {
+        display: flex;
+        align-items: center;
+        @keyframes rotate {
             0% {
-                transform: scale(1, 1);
+                transform: rotate(0deg);
             }
             25% {
-                transform: scale(1.5, 1.5);
+                transform: rotate(90deg);
             }
             50% {
-                transform: scale(2, 2);
+                transform: rotate(180deg);
+            }
+            75% {
+                transform: rotate(270deg);
             }
             100% {
-                transform: scale(1, 1);
+                transform: rotate(360deg);
             }
         }
-    }
-    .state-stopping {
-        color: $red;
-        animation: rotate 1s linear 0s infinite;
+        .state-stoped {
+            cursor: pointer;
+        }
+        .state-starting {
+            animation: rotate 1s linear 0s infinite;
+        }
+        .state-device-connecting {
+
+        }
+        .state-device-reconnecting {
+            color: $red;
+        }
+        .state-server-connecting {
+
+        }
+        .state-server-reconnecting {
+            color: $red;
+        }
+        .state-running {
+            color: $green;
+        }
+        .state-heartbeat {
+            color: $red;
+            animation: beat 0.5s ease-in-out 0s infinite;
+            @keyframes beat {
+                0% {
+                    transform: scale(1, 1);
+                }
+                50% {
+                    transform: scale(2, 2);
+                }
+                75% {
+                    transform: scale(1.5, 1.5);
+                }
+                100% {
+                    transform: scale(1, 1);
+                }
+            }
+        }
+        .state-stopping {
+            color: $red;
+            animation: rotate 1s linear 0s infinite;
+        }
     }
 </style>

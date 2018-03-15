@@ -221,7 +221,7 @@
                             display: none;
                             justify-content: flex-end;
                             align-items: center;
-                            font-size: 1.5rem;
+                            font-size: 1.625rem;
                             line-height: 1;
                             color: $red;
                             cursor: pointer;

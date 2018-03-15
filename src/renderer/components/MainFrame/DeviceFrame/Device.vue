@@ -179,7 +179,12 @@
                 <p>{{ device.msg }}</p>
             </div>
             <div class="device-footer-control">
-                <a class="button is-primary is-small is-no-radius" @click="addEvent({id: device.id, event: {title: 'abc ' + Math.random(), content: 'def'}})">启动</a>
+                <div class="device-footer-control-stop-button"  v-show="!((device.state === state.STOPPING) || (device.state === state.STOPED))">
+                    <svg class="iconfont " aria-hidden="true">
+                        <use xlink:href="#icon-stop"></use>
+                    </svg>
+                </div>
+                <op-and-state-icon :device="device"></op-and-state-icon>
             </div>
         </div>
     </div>
@@ -188,10 +193,11 @@
 <script>
     import { mapGetters, mapMutations } from 'vuex'
     import SToggleButton from '../../Common/SToggleButton'
+    import OpAndStateIcon from '../../Common/OpAndStateIcon'
 
     export default {
       name: 'device',
-      components: { SToggleButton },
+      components: { SToggleButton, OpAndStateIcon },
       data () {
         return {
           isDeviceMenuShow: false,
@@ -203,6 +209,7 @@
           device: 'selected'
         }),
         ...mapGetters('device', [
+          'state',
           'iconHref',
           'iconBgColor'
         ]),
@@ -232,7 +239,6 @@
         ...mapMutations('device', [
           'setEventExpand',
           'setSingleEventExpand',
-          'addEvent',
           'delete'
         ]),
         onEventClick (index) {
@@ -430,10 +436,22 @@
             }
             & > .device-footer-control {
                 flex: 2 2 auto;
-                width: 4rem;
+                width: 6rem;
                 display: flex;
                 justify-content: flex-end;
+                align-items: center;
                 padding-right: 1.75rem;
+                font-size: 1.5rem;
+                line-height: 1;
+                & > .device-footer-control-stop-button {
+                    flex: none;
+                    width: 2.3rem;
+                    color: $red;
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    font-size: 1.625rem;
+                }
             }
         }
     }

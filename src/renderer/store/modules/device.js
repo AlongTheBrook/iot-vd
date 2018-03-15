@@ -31,7 +31,7 @@ const state = {
       hbPackage: 'H',
       hbMinutes: 5,
       selected: false,
-      state: 'RUNNING',
+      state: 'STOPPING',
       hbCountdownSeconds: 56,
       msg: '2018-3-2 17:49:30.2 服务器 -> 设备',
       isEventExpand: false,
