@@ -65,7 +65,7 @@
                         </li>
                     </draggable>
                     <context-menu ref="deviceItemCtxMenu" id="context-menu" @ctx-open="onDeviceItemCtxMenuOpen">
-                        <li @click="onClearEventList">清空通信数据</li>
+                        <li @click="onEmptyEventList">清空通讯数据</li>
                         <li @click="onOpenMonitorPage">打开监控页</li>
                         <hr>
                         <li @click="onDelete" class="delete-device">删除设备</li>
@@ -125,7 +125,7 @@
           'replace',
           'setSelected',
           'delete',
-          'clearEventList'
+          'emptyEventList'
         ]),
         ...mapActions('device', [
           'createDevice'
@@ -164,8 +164,8 @@
         onClick (id) {
           this.setSelected(id)
         },
-        onClearEventList () {
-          this.clearEventList(this.ctxMenuTargetDevice.id)
+        onEmptyEventList () {
+          this.emptyEventList(this.ctxMenuTargetDevice.id)
         },
         onOpenMonitorPage () {
           this.$electron.shell.openExternal('http://iot.thisyet.com/monitor/' + this.ctxMenuTargetDevice.deviceId)

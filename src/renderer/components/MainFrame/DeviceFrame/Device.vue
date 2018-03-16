@@ -23,7 +23,7 @@
                         <s-toggle-button v-model="isEventExpand"></s-toggle-button>
                     </div>
                     <hr>
-                    <div class="device-title-menu-content-op-button" @click="clearEventList(device.id)">清空通讯数据</div>
+                    <div class="device-title-menu-content-op-button" @click="emptyEventList(device.id)">清空通讯数据</div>
                     <hr>
                     <div class="device-title-menu-content-op-button" @click="onOpenMonitorPage">打开监控页</div>
                     <hr>
@@ -248,7 +248,7 @@
           'setEventExpand',
           'setSingleEventExpand',
           'delete',
-          'clearEventList'
+          'emptyEventList'
         ]),
         onEventClick (index) {
           this.setSingleEventExpand({id: this.device.id, index: index})

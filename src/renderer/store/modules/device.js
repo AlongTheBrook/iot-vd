@@ -253,7 +253,7 @@ const mutations = {
       device.msg = payload.event.title
     }
   },
-  clearEventList (state, id) {
+  emptyEventList (state, id) {
     let device = state.list.find(device => device.id === id)
     device.eventList = []
   }
