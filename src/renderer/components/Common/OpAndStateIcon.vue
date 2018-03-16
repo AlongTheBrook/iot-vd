@@ -1,8 +1,10 @@
 <template>
     <div class="op-and-state-icon">
-        <svg class="iconfont state-stoped" aria-hidden="true" v-show="device.state === state.STOPED">
-            <use xlink:href="#icon-play"></use>
-        </svg>
+        <div v-tooltip="'启动'">
+            <svg class="iconfont state-stoped" aria-hidden="true" v-show="device.state === state.STOPED">
+                <use xlink:href="#icon-play"></use>
+            </svg>
+        </div>
         <svg class="iconfont state-starting" aria-hidden="true" v-show="device.state === state.STARTING">
             <use xlink:href="#icon-loading"></use>
         </svg>

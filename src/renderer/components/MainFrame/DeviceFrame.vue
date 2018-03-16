@@ -10,7 +10,25 @@
                         </span>
                     </p>
                 </div>
-                <div class="device-list-control-create field">
+                <div class="device-list-control-button field" v-tooltip="'全部停止'">
+                    <p class="control">
+                        <a class="button is-small is-danger is-no-radius">
+                            <span class="icon">
+                                <i class="fas fa-stop"></i>
+                            </span>
+                        </a>
+                    </p>
+                </div>
+                <div class="device-list-control-button field" v-tooltip="'全部启动'">
+                    <p class="control">
+                        <a class="button is-small is-success is-no-radius">
+                            <span class="icon">
+                                <i class="fas fa-play"></i>
+                            </span>
+                        </a>
+                    </p>
+                </div>
+                <div class="device-list-control-button field" v-tooltip="'创建设备'" @click="onCreateDevice">
                     <p class="control">
                         <a class="button is-small is-primary is-no-radius">
                             <span class="icon">
@@ -21,11 +39,11 @@
                 </div>
             </div>
             <div class="device-list-container" v-bar="{preventParentScroll: true}">
-                <ul class="device-list" >
+                <ul class="device-list"  ref="deviceList">
                     <draggable v-model="list">
                         <li class="device-list-item" v-for="(item, index) in list" :key="item.id" @click="onClick(item.id)"
                             :class="{'is-active': item.selected}"
-                            @contextmenu.prevent="$refs.deviceItemCtxMenu.open($event, item.id)">
+                            @contextmenu.prevent="$refs.deviceItemCtxMenu.open($event, item)">
                             <div class="device-list-item-start">
                                 <svg class="iconfont device-list-item-start-icon" aria-hidden="true"
                                      :style="{backgroundColor: iconBgColor(item.state)}">
@@ -36,7 +54,7 @@
                                 <p class="device-list-item-content-title">{{ item.name }}</p>
                                 <p class="device-list-item-content-subtitle">{{ item.msg }}</p>
                             </div>
-                            <div class="device-list-item-end-pre" v-show="!((item.state === state.STOPPING) || (item.state === state.STOPED))">
+                            <div class="device-list-item-end-pre" v-tooltip="'停止'" v-show="!((item.state === state.STOPPING) || (item.state === state.STOPED))">
                                 <svg class="iconfont" aria-hidden="true">
                                     <use xlink:href="#icon-stop"></use>
                                 </svg>
@@ -47,7 +65,10 @@
                         </li>
                     </draggable>
                     <context-menu ref="deviceItemCtxMenu" id="context-menu" @ctx-open="onDeviceItemCtxMenuOpen">
-                        <li @click="onDelete">删除设备</li>
+                        <li @click="onClearEventList">清空通信数据</li>
+                        <li @click="onOpenMonitorPage">打开监控页</li>
+                        <hr>
+                        <li @click="onDelete" class="delete-device">删除设备</li>
                         <hr>
                         <li class="disabled">可以通过拖拽排序</li>
                     </context-menu>
@@ -62,7 +83,7 @@
 </template>
 
 <script>
-    import { mapGetters, mapMutations } from 'vuex'
+    import { mapGetters, mapMutations, mapActions } from 'vuex'
     import OpAndStateIcon from '../Common/OpAndStateIcon'
     import Device from './DeviceFrame/Device'
     import Placeholder from '../Common/Placeholder'
@@ -74,7 +95,7 @@
       components: { OpAndStateIcon, Device, Placeholder, Draggable, ContextMenu },
       data () {
         return {
-          ctxMenuTargetDeviceId: null
+          ctxMenuTargetDevice: null
         }
       },
       computed: {
@@ -103,16 +124,57 @@
         ...mapMutations('device', [
           'replace',
           'setSelected',
-          'delete'
+          'delete',
+          'clearEventList'
         ]),
+        ...mapActions('device', [
+          'createDevice'
+        ]),
+        onCreateDevice () {
+          const id = Math.floor(Math.random() * 1000)
+          this.createDevice({
+            id: id,
+            name: '设备' + id,
+            deviceId: id,
+            type: Math.random() > 0.5 ? 'SERIAL_PORT' : 'TCP',
+            serialPortName: 'COM2',
+            baudRate: 9600,
+            databits: 8,
+            parity: 'NONE',
+            stopbits: 1,
+            host: '127.0.0.1',
+            port: 50021,
+            regPackage: '{NDMyMTBAOTg3NjU=}',
+            hbPackage: 'H',
+            hbMinutes: 5,
+            selected: false,
+            state: 'STOPED',
+            hbCountdownSeconds: 56,
+            msg: '',
+            isEventExpand: false,
+            eventList: []
+          })
+          this.$nextTick(() => {
+            const firstDeviceElement = this.$refs.deviceList.firstChild.firstChild
+            if (firstDeviceElement) {
+              firstDeviceElement.scrollIntoViewIfNeeded()
+            }
+          })
+        },
         onClick (id) {
           this.setSelected(id)
         },
-        onDelete () {
-          this.delete(this.ctxMenuTargetDeviceId)
+        onClearEventList () {
+          this.clearEventList(this.ctxMenuTargetDevice.id)
         },
-        onDeviceItemCtxMenuOpen (id) {
-          this.ctxMenuTargetDeviceId = id
+        onOpenMonitorPage () {
+          this.$electron.shell.openExternal('http://iot.thisyet.com/monitor/' + this.ctxMenuTargetDevice.deviceId)
+        },
+        onDelete () {
+          this.delete(this.ctxMenuTargetDevice.id)
+        },
+        onDeviceItemCtxMenuOpen (device) {
+          this.ctxMenuTargetDevice = device
         }
       }
     }
@@ -154,11 +216,13 @@
                 $border-color: $grey-light;
                 $background-color: $grey-lighter;
                 @extend .device-list-baseclass;
+                justify-content: space-between;
                 align-items: flex-end;
+                & > * {
+                    margin-bottom: 0 !important;
+                }
                 & > .device-list-control-search {
                     flex: auto;
-                    margin-bottom: 0 !important;
-                    padding-right: 0.5rem;
                     & .input {
                         border-color: $border-color;
                         box-shadow: none;
@@ -171,8 +235,12 @@
                         color: #7a7a7a;
                     }
                 }
-                & > .device-list-control-create {
+                & > .device-list-control-button {
                     flex: none;
+                    margin-left: 0.5rem;
+                    .icon {
+                        color: $white-ter;
+                    }
                 }
             }
             & > .device-list-container {
@@ -252,6 +320,9 @@
        cursor: default;
        &.ctx-menu-container {
            border: unset;
+       }
+       .delete-device {
+           color: $red;
        }
         ul {
             border-radius: unset;

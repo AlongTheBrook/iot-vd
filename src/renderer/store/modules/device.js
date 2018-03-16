@@ -18,7 +18,7 @@ const state = {
     {
       id: 101,
       name: '设备101',
-      deviceId: 10001,
+      deviceId: 43,
       type: 'SERIAL_PORT',
       serialPortName: 'COM2',
       baudRate: 9600,
@@ -51,7 +51,7 @@ const state = {
     {
       id: 102,
       name: '设备102',
-      deviceId: 10002,
+      deviceId: 13,
       type: 'SERIAL_PORT',
       host: '127.0.0.1',
       port: 50021,
@@ -64,7 +64,7 @@ const state = {
       parity: 'NONE',
       stopbits: 1,
       selected: false,
-      state: 'STOPED',
+      state: 'RUNNING',
       hbCountdownSeconds: 12,
       msg: '2018-3-2 17:49:30.2 服务器 -> 设备',
       isEventExpand: false,
@@ -94,7 +94,7 @@ const state = {
     {
       id: 103,
       name: '设备103',
-      deviceId: 10003,
+      deviceId: 45,
       type: 'TCP',
       host: '127.0.0.1',
       port: 50021,
@@ -132,7 +132,7 @@ const state = {
     {
       id: 104,
       name: '设备104',
-      deviceId: 10004,
+      deviceId: 40,
       type: 'TCP',
       host: '127.0.0.1',
       port: 50021,
@@ -204,6 +204,9 @@ const mutations = {
   replace (state, newList) {
     state.list = newList
   },
+  unshiftDevice (state, device) {
+    state.list.unshift(device)
+  },
   updateDeviceProp (state, payload) {
     let device = state.list.find(device => device.id === payload.id)
     if (device) {
@@ -249,6 +252,17 @@ const mutations = {
       device.eventList.push(Object.assign({}, payload.event, {isExpand: device.isEventExpand}))
       device.msg = payload.event.title
     }
+  },
+  clearEventList (state, id) {
+    let device = state.list.find(device => device.id === id)
+    device.eventList = []
+  }
+}
+
+const actions = {
+  createDevice ({ commit }, device) {
+    commit('unshiftDevice', device)
+    commit('setSelected', device.id)
   }
 }
 
@@ -256,5 +270,6 @@ export default {
   namespaced: true,
   state,
   getters,
-  mutations
+  mutations,
+  actions
 }

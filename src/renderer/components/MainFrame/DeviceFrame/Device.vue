@@ -1,7 +1,7 @@
 <template>
     <div class="device">
         <div class="device-title">
-            <div class="device-title-text">{{ device.name }}</div>
+            <div class="device-title-text" @click="onDeviceMenuClick">{{ device.name }}</div>
             <div class="device-title-menu" @click="onDeviceMenuClick">...</div>
             <transition @afterEnter="afterDeviceMenuEnter" @afterLeave="afterDeviceMenuLeave">
                 <div class="device-title-menu-content" v-show="isDeviceMenuShow" @blur="onDeviceMenuBlur" tabindex="-1">
@@ -19,9 +19,13 @@
                     </div>
                     <hr>
                     <div>
-                        <div>通讯数据展开</div>
+                        <div>展开通讯数据</div>
                         <s-toggle-button v-model="isEventExpand"></s-toggle-button>
                     </div>
+                    <hr>
+                    <div class="device-title-menu-content-op-button" @click="clearEventList(device.id)">清空通讯数据</div>
+                    <hr>
+                    <div class="device-title-menu-content-op-button" @click="onOpenMonitorPage">打开监控页</div>
                     <hr>
                     <div class="device-title-menu-content-delete" @click="onDelete">删除此设备</div>
                 </div>
@@ -179,7 +183,7 @@
                 <p>{{ device.msg }}</p>
             </div>
             <div class="device-footer-control">
-                <div class="device-footer-control-stop-button"  v-show="!((device.state === state.STOPPING) || (device.state === state.STOPED))">
+                <div class="device-footer-control-stop-button" v-tooltip="'停止'"  v-show="!((device.state === state.STOPPING) || (device.state === state.STOPED))">
                     <svg class="iconfont " aria-hidden="true">
                         <use xlink:href="#icon-stop"></use>
                     </svg>
@@ -229,9 +233,13 @@
         }
       },
       watch: {
+        // 观察msg会导致设备间切换后，滚动每次都会滚动到最底部，由于为每台设备记录滚动条的状态比较费时，暂且搁置
         msg () {
           this.$nextTick(() => {
-            this.$refs.eventList.lastChild.scrollIntoViewIfNeeded()
+            const lastEventElement = this.$refs.eventList.lastChild
+            if (lastEventElement) {
+              lastEventElement.scrollIntoViewIfNeeded()
+            }
           })
         }
       },
@@ -239,7 +247,8 @@
         ...mapMutations('device', [
           'setEventExpand',
           'setSingleEventExpand',
-          'delete'
+          'delete',
+          'clearEventList'
         ]),
         onEventClick (index) {
           this.setSingleEventExpand({id: this.device.id, index: index})
@@ -258,6 +267,9 @@
         },
         afterDeviceMenuLeave (el) {
           this.isDeviceMenuLeaving = false
+        },
+        onOpenMonitorPage () {
+          this.$electron.shell.openExternal('http://iot.thisyet.com/monitor/' + this.device.deviceId)
         },
         onDelete () {
           this.delete(this.device.id)
@@ -289,7 +301,8 @@
             display: flex;
             justify-content: space-between;
             & > .device-title-text {
-
+                @include electron-no-drag;
+                cursor: pointer;
             }
             & > .device-title-menu {
                 @include electron-no-drag;
@@ -352,6 +365,10 @@
                             font-weight: lighter;
                         }
                     }
+                }
+                .device-title-menu-content-op-button {
+                    cursor: pointer;
+                    color: hsl(0, 0%, 56%);
                 }
                 .device-title-menu-content-delete {
                     text-align: center;
