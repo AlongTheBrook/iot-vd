@@ -5,6 +5,8 @@
 </template>
 
 <script>
+  import { mapMutations } from 'vuex'
+
   // fontawesome 5 必须的js
   require('./external/fontawesome-all')
 
@@ -29,6 +31,20 @@
       app.ondrop = (e) => {
         e.preventDefault()
       }
+      this.$electron.ipcRenderer.on('@device', (e, msg) => {
+        this.addEvent({
+          id: 101,
+          event: {
+            title: msg,
+            content: msg
+          }
+        })
+      })
+    },
+    methods: {
+      ...mapMutations('device', [
+        'addEvent'
+      ])
     }
   }
 </script>

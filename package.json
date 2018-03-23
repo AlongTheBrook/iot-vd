@@ -19,7 +19,8 @@
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
     "test": "npm run unit && npm run e2e",
     "unit": "karma start test/unit/karma.conf.js",
-    "postinstall": "npm run lint:fix"
+    "postinstall": "npm run lint:fix",
+    "install": "electron-rebuild"
   },
   "build": {
     "productName": "iot-vd",
@@ -58,7 +59,9 @@
   "dependencies": {
     "axios": "^0.16.1",
     "bulma": "^0.6.2",
+    "log4js": "^2.5.3",
     "mdi": "^2.1.19",
+    "serialport": "^6.1.1",
     "v-tooltip": "^2.0.0-rc.31",
     "vue": "^2.3.3",
     "vue-context-menu": "^2.0.6",
@@ -90,6 +93,7 @@
     "electron-builder": "^19.19.1",
     "electron-debug": "^1.4.0",
     "electron-devtools-installer": "^2.2.0",
+    "electron-rebuild": "^1.7.3",
     "eslint": "^4.4.1",
     "eslint-config-standard": "^10.2.1",
     "eslint-friendly-formatter": "^3.0.0",

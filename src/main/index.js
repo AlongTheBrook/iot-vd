@@ -1,8 +1,14 @@
 'use strict'
-
+import log from './log'
+import data from './data'
 import { app, BrowserWindow, Menu, Tray } from 'electron'
 
+import serialportTest from './serialport.test' // debug
+
 const path = require('path')
+const logger = log.getLogger()
+
+logger.info('App start')
 
 /**
  * Set `__static` path to static files in production
@@ -78,6 +84,37 @@ function createWindow () {
     mainWindow.show()
     // 初始化托盘
     initTray()
+    // 数据模块启动
+    data.start().then(() => {
+      logger.info('Data module stated')
+    })
+    // debug
+    serialportTest.run(mainWindow)
+    try {
+      // console.log('home: ', app.getPath('home'))
+      // console.log('appData: ', app.getPath('appData'))
+      // console.log('userData: ', app.getPath('userData'))
+      // console.log('temp: ', app.getPath('temp'))
+      // console.log('desktop: ', app.getPath('desktop'))
+      // console.log('exe: ', app.getPath('exe'))
+      // console.log('logs: ', app.getPath('logs'))
+      logger.info(`home: ${app.getPath('home')}`)
+      logger.info(`appData: ${app.getPath('appData')}`)
+      logger.info(`userData: ${app.getPath('userData')}`)
+      logger.debug(`temp: ${app.getPath('temp')}`)
+      logger.debug(`desktop: ${app.getPath('desktop')}`)
+      logger.debug(`logs: ${app.getPath('logs')}`)
+      logger.debug(`exe: ${app.getPath('exe')}`)
+      mainWindow.webContents.send('@device', `home: ${app.getPath('home')}`)
+      mainWindow.webContents.send('@device', `appData: ${app.getPath('appData')}`)
+      mainWindow.webContents.send('@device', `userData: ${app.getPath('userData')}`)
+      mainWindow.webContents.send('@device', `temp: ${app.getPath('temp')}`)
+      mainWindow.webContents.send('@device', `desktop: ${app.getPath('desktop')}`)
+      mainWindow.webContents.send('@device', `logs: ${app.getPath('logs')}`)
+      mainWindow.webContents.send('@device', `exe: ${app.getPath('exe')}`)
+    } catch (err) {
+      console.log(err)
+    }
   })
 
   mainWindow.on('closed', () => {
@@ -95,10 +132,24 @@ if (isDuplicateInstance) {
 
 app.on('ready', createWindow)
 
+app.on('before-quit', () => {
+  logger.info('App is going to quit, and now executing some jobs before quit')
+  data.shutdownSync()
+  logger.info('Data module was shut down safely')
+})
+
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
   }
+})
+
+app.on('will-quit', () => {
+  logger.info('App was quited')
+  log.shutdown(() => {
+    // 在日志模块关闭的回调函数中，日志功能已经不能使用，故只得只用控制台输出
+    console.log('Log module was shut down safely (You can see me only in deployment mode)')
+  })
 })
 
 // app.on('activate', () => {
