@@ -14,160 +14,8 @@ const state = {
     HEARTBEAT: 'HEARTBEAT',
     STOPPING: 'STOPPING'
   },
-  list: [
-    {
-      id: 101,
-      name: '设备101',
-      deviceId: 43,
-      type: 'SERIAL_PORT',
-      serialPortName: 'COM2',
-      baudRate: 9600,
-      databits: 8,
-      parity: 'NONE',
-      stopbits: 1,
-      host: '127.0.0.1',
-      port: 50021,
-      regPackage: '{NDMyMTBAOTg3NjU=}',
-      hbPackage: 'H',
-      hbMinutes: 5,
-      selected: false,
-      state: 'STOPPING',
-      hbCountdownSeconds: 56,
-      msg: '2018-3-2 17:49:30.2 服务器 -> 设备',
-      isEventExpand: false,
-      eventList: [
-        {
-          title: '2018-3-2 17:49:30.1 服务器 -> 设备',
-          content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-          isExpand: false
-        },
-        {
-          title: '2018-3-2 17:49:30.2 服务器 -> 设备',
-          content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-          isExpand: false
-        }
-      ]
-    },
-    {
-      id: 102,
-      name: '设备102',
-      deviceId: 13,
-      type: 'SERIAL_PORT',
-      host: '127.0.0.1',
-      port: 50021,
-      regPackage: '{NDMyMTBAOTg3NjU=}',
-      hbPackage: 'H',
-      hbMinutes: 5,
-      serialPortName: 'COM2',
-      baudRate: 9600,
-      databits: 8,
-      parity: 'NONE',
-      stopbits: 1,
-      selected: false,
-      state: 'RUNNING',
-      hbCountdownSeconds: 12,
-      msg: '2018-3-2 17:49:30.2 服务器 -> 设备',
-      isEventExpand: false,
-      eventList: [
-        {
-          title: '2018-3-2 17:49:30.1 服务器 -> 设备',
-          content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-          isExpand: false
-        },
-        {
-          title: '2018-3-2 17:49:30.2 服务器 -> 设备',
-          content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-          isExpand: false
-        },
-        {
-          title: '2018-3-2 17:49:30.1 服务器 -> 设备',
-          content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-          isExpand: false
-        },
-        {
-          title: '2018-3-2 17:49:30.2 服务器 -> 设备',
-          content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-          isExpand: false
-        }
-      ]
-    },
-    {
-      id: 103,
-      name: '设备103',
-      deviceId: 45,
-      type: 'TCP',
-      host: '127.0.0.1',
-      port: 50021,
-      regPackage: '{NDMyMTBAOTg3NjU=}',
-      hbPackage: 'H',
-      hbMinutes: 5,
-      serialPortName: 'COM2',
-      baudRate: 9600,
-      databits: 8,
-      parity: 'NONE',
-      stopbits: 1,
-      selected: false,
-      state: 'STOPED',
-      hbCountdownSeconds: 34,
-      msg: '2018-3-2 17:49:30.2 服务器 -> 设备',
-      isEventExpand: false,
-      eventList: [
-        {
-          title: '2018-3-2 17:49:30.1 服务器 -> 设备',
-          content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-          isExpand: false
-        },
-        {
-          title: '2018-3-2 17:49:30.2 服务器 -> 设备',
-          content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-          isExpand: false
-        },
-        {
-          title: '2018-3-2 17:49:30.2 服务器 -> 设备',
-          content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-          isExpand: false
-        }
-      ]
-    },
-    {
-      id: 104,
-      name: '设备104',
-      deviceId: 40,
-      type: 'TCP',
-      host: '127.0.0.1',
-      port: 50021,
-      regPackage: '{NDMyMTBAOTg3NjU=}',
-      hbPackage: 'H',
-      hbMinutes: 5,
-      serialPortName: 'COM2',
-      baudRate: 9600,
-      databits: 8,
-      parity: 'NONE',
-      stopbits: 1,
-      selected: false,
-      state: 'STARTING',
-      hbCountdownSeconds: 34,
-      msg: '2018-3-2 17:49:30.2 服务器 -> 设备',
-      isEventExpand: false,
-      eventList: [
-        {
-          title: '2018-3-2 17:49:30.1 服务器 -> 设备',
-          content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-          isExpand: false
-        },
-        {
-          title: '2018-3-2 17:49:30.2 服务器 -> 设备',
-          content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-          isExpand: false
-        },
-        {
-          title: '2018-3-2 17:49:30.2 服务器 -> 设备',
-          content: '[f89q23u5a09udfioh3q290iur09uedc9yq329048u9fj93]',
-          isExpand: false
-        }
-      ]
-    }
-  ]
+  listUpdateCount: 0,
+  list: []
 }
 
 const getters = {
@@ -256,6 +104,9 @@ const mutations = {
   emptyEventList (state, id) {
     let device = state.list.find(device => device.id === id)
     device.eventList = []
+  },
+  resetListUpdateCount (state) {
+    state.listUpdateCount = 0
   }
 }
 

@@ -15,6 +15,14 @@
 
   export default {
     name: 'iot-vd',
+    computed: {
+      listUpdateCount () {
+        return this.$store.state.device.listUpdateCount
+      },
+      list () {
+        return this.$store.state.device.list
+      }
+    },
     mounted () {
       // 禁止任何拖拽行为：主要目的用于阻止外部URL或文件拖入窗口，引发未计划的行为
       let app = document.getElementById('app')
@@ -31,20 +39,34 @@
       app.ondrop = (e) => {
         e.preventDefault()
       }
-      this.$electron.ipcRenderer.on('@device', (e, msg) => {
-        this.addEvent({
-          id: 101,
-          event: {
-            title: msg,
-            content: msg
-          }
-        })
-      })
+      this.$electron.ipcRenderer.on('@device.list', this.onDeviceList)
+      this.$electron.ipcRenderer.on('@device.list.check', this.onDeviceListCheck)
+      this.$electron.ipcRenderer.on('@readyQuit', this.onReadyQuit)
+      this.$electron.ipcRenderer.send('@device.list.load')
     },
     methods: {
       ...mapMutations('device', [
-        'addEvent'
-      ])
+        'resetListUpdateCount',
+        'replace'
+      ]),
+      onDeviceList (e, deviceList) {
+        this.replace(deviceList)
+      },
+      onDeviceListCheck () {
+        if (this.listUpdateCount > 0) {
+          this.$electron.ipcRenderer.send('@device.list.save', this.list)
+          this.resetListUpdateCount()
+        }
+      },
+      onReadyQuit () {
+        // 此处采用同步方式处理所有工作
+        if (this.listUpdateCount > 0) {
+          this.$electron.ipcRenderer.sendSync('@device.list.saveSync', this.list)
+          this.resetListUpdateCount()
+        }
+        // 发送准备退出就绪消息
+        this.$electron.ipcRenderer.send('@readyQuitSet')
+      }
     }
   }
 </script>

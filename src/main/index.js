@@ -1,9 +1,7 @@
 'use strict'
 import log from './log'
 import data from './data'
-import { app, BrowserWindow, Menu, Tray } from 'electron'
-
-import serialportTest from './serialport.test' // debug
+import { app, BrowserWindow, ipcMain, Menu, Tray } from 'electron'
 
 const path = require('path')
 const logger = log.getLogger()
@@ -23,6 +21,10 @@ let tray
 const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
+
+function getRenderer () {
+  return mainWindow.webContents
+}
 
 function activateWindow () {
   if (mainWindow) {
@@ -51,7 +53,7 @@ function initTray () {
       {
         label: '退出',
         click () {
-          mainWindow.webContents.send('@quit')
+          getRenderer().send('@readyQuit')
         }
       }
     ])
@@ -84,37 +86,6 @@ function createWindow () {
     mainWindow.show()
     // 初始化托盘
     initTray()
-    // 数据模块启动
-    data.start().then(() => {
-      logger.info('Data module stated')
-    })
-    // debug
-    serialportTest.run(mainWindow)
-    try {
-      // console.log('home: ', app.getPath('home'))
-      // console.log('appData: ', app.getPath('appData'))
-      // console.log('userData: ', app.getPath('userData'))
-      // console.log('temp: ', app.getPath('temp'))
-      // console.log('desktop: ', app.getPath('desktop'))
-      // console.log('exe: ', app.getPath('exe'))
-      // console.log('logs: ', app.getPath('logs'))
-      logger.info(`home: ${app.getPath('home')}`)
-      logger.info(`appData: ${app.getPath('appData')}`)
-      logger.info(`userData: ${app.getPath('userData')}`)
-      logger.debug(`temp: ${app.getPath('temp')}`)
-      logger.debug(`desktop: ${app.getPath('desktop')}`)
-      logger.debug(`logs: ${app.getPath('logs')}`)
-      logger.debug(`exe: ${app.getPath('exe')}`)
-      mainWindow.webContents.send('@device', `home: ${app.getPath('home')}`)
-      mainWindow.webContents.send('@device', `appData: ${app.getPath('appData')}`)
-      mainWindow.webContents.send('@device', `userData: ${app.getPath('userData')}`)
-      mainWindow.webContents.send('@device', `temp: ${app.getPath('temp')}`)
-      mainWindow.webContents.send('@device', `desktop: ${app.getPath('desktop')}`)
-      mainWindow.webContents.send('@device', `logs: ${app.getPath('logs')}`)
-      mainWindow.webContents.send('@device', `exe: ${app.getPath('exe')}`)
-    } catch (err) {
-      console.log(err)
-    }
   })
 
   mainWindow.on('closed', () => {
@@ -130,18 +101,18 @@ if (isDuplicateInstance) {
   app.quit()
 }
 
-app.on('ready', createWindow)
-
-app.on('before-quit', () => {
-  logger.info('App is going to quit, and now executing some jobs before quit')
-  data.shutdownSync()
-  logger.info('Data module was shut down safely')
-})
+app.on('ready', onReady)
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()
   }
+})
+
+app.on('before-quit', () => {
+  logger.info('App is going to quit, and now executing some jobs before quit')
+  // data.shutdownSync()  // TODO
+  logger.info('Data module was shut down safely')
 })
 
 app.on('will-quit', () => {
@@ -150,6 +121,37 @@ app.on('will-quit', () => {
     // 在日志模块关闭的回调函数中，日志功能已经不能使用，故只得只用控制台输出
     console.log('Log module was shut down safely (You can see me only in deployment mode)')
   })
+})
+
+function onReady () {
+  Promise.all([data.start(getRenderer)]).then(() => {
+    logger.info('App create window')
+    createWindow()
+  }).catch((err) => {
+    err.msg = 'App Starting failed on some job'
+    logger.fatal(err)
+    logger.fatal('App has to quit')
+    app.quit()
+  })
+}
+
+ipcMain.on('@readyQuitSet', () => {
+  // 此处全部采用同步方式完成工作
+  // TODO
+  getRenderer().send('@quit')
+})
+
+ipcMain.on('@device.list.load', (e) => {
+  data.load().then(deviceList => e.sender.send('@device.list', deviceList))
+})
+
+ipcMain.on('@device.list.save', (e, deviceList) => {
+  data.save(deviceList)
+})
+
+ipcMain.on('@device.list.saveSync', (e, deviceList) => {
+  data.saveSync(deviceList)
+  e.returnValue = true
 })
 
 // app.on('activate', () => {
