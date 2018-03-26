@@ -172,7 +172,7 @@
             <div class="device-content-monitor" v-bar="{preventParentScroll: true}">
                 <ul class="device-event-list" ref="eventList">
                     <li class="device-event" v-for="(item, index) in eventList" @click="onEventClick(index)">
-                        <div class="device-event-title">{{ item.title }}</div>
+                        <div class="device-event-title">{{ currMsgShow(item.time, item.title) }}</div>
                         <pre class="device-event-content" v-show="item.isExpand">{{ item.content }}</pre>
                     </li>
                 </ul>
@@ -180,7 +180,7 @@
         </div>
         <div class="device-footer">
             <div class="device-footer-msg">
-                <p>{{ device.msg }}</p>
+                <p>{{ currMsgShow(device.currMsgUptime, device.currMsg) }}</p>
             </div>
             <div class="device-footer-control">
                 <div class="device-footer-control-stop-button" v-tooltip="'停止'"  v-show="!((device.state === state.STOPPING) || (device.state === state.STOPED))">
@@ -198,6 +198,7 @@
     import { mapGetters, mapMutations } from 'vuex'
     import SToggleButton from '../../Common/SToggleButton'
     import OpAndStateIcon from '../../Common/OpAndStateIcon'
+    import moment from 'moment'
 
     export default {
       name: 'device',
@@ -230,6 +231,9 @@
           set (isEventExpand) {
             this.setEventExpand({id: this.device.id, isEventExpand: isEventExpand})
           }
+        },
+        currMsgShow () {
+          return (currMsgUptime, currMsg) => moment(currMsgUptime).format('YYYY-MM-DD HH:mm:ss.SSS') + ' ' + currMsg
         }
       },
       watch: {

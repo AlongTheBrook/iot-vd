@@ -52,7 +52,7 @@
                             </div>
                             <div class="device-list-item-content">
                                 <p class="device-list-item-content-title">{{ item.name }}</p>
-                                <p class="device-list-item-content-subtitle">{{ item.msg }}</p>
+                                <p class="device-list-item-content-subtitle">{{ currMsgShow(item.currMsgUptime, item.currMsg) }}</p>
                             </div>
                             <div class="device-list-item-end-pre" v-tooltip="'停止'" v-show="!((item.state === state.STOPPING) || (item.state === state.STOPED))">
                                 <svg class="iconfont" aria-hidden="true">
@@ -89,6 +89,7 @@
     import Placeholder from '../Common/Placeholder'
     import Draggable from 'vuedraggable'
     import ContextMenu from 'vue-context-menu'
+    import moment from 'moment'
 
     export default {
       name: 'device-frame',
@@ -118,6 +119,9 @@
             return true
           }
           return false
+        },
+        currMsgShow () {
+          return (currMsgUptime, currMsg) => moment(currMsgUptime).format('HH:mm:ss') + ' ' + currMsg
         }
       },
       methods: {

@@ -98,7 +98,8 @@ const mutations = {
         device.eventList.shift()
       }
       device.eventList.push(Object.assign({}, payload.event, {isExpand: device.isEventExpand}))
-      device.msg = payload.event.title
+      device.currMsgUptime = payload.event.time
+      device.currMsg = payload.event.title
     }
   },
   emptyEventList (state, id) {

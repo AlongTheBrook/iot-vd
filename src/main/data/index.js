@@ -62,14 +62,21 @@ const load = async function () {
   const deviceList = []
   try {
     const deviceListLoad = JSON.parse(data.toString())
+    const uptime = Date.now()
     for (let device of deviceListLoad) {
       deviceList.push(Object.assign({}, device, {
         selected: false,
         state: 'STOPED',
         hbCountdownSeconds: 0,
-        msg: '',
+        currMsgUptime: uptime,
+        currMsg: '已加载',
         isEventExpand: false,
-        eventList: []
+        eventList: [{
+          time: uptime,
+          title: '已加载',
+          content: '设备配置参数已加载',
+          isExpand: false
+        }]
       }))
     }
   } catch (err) {
