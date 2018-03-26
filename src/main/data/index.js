@@ -95,7 +95,8 @@ const stringifyDeviceList = function (deviceList) {
       selected: undefined,
       state: undefined,
       hbCountdownSeconds: undefined,
-      msg: undefined,
+      currMsgUptime: undefined,
+      currMsg: undefined,
       isEventExpand: undefined,
       eventList: undefined
     }))
