@@ -1,6 +1,7 @@
 'use strict'
 import log from './log'
 import data from './data'
+import { initSender } from './event'
 import { app, BrowserWindow, ipcMain, Menu, Tray } from 'electron'
 
 const path = require('path')
@@ -25,6 +26,8 @@ const winURL = process.env.NODE_ENV === 'development'
 function getRenderer () {
   return mainWindow.webContents
 }
+
+initSender(getRenderer)
 
 function activateWindow () {
   if (mainWindow) {
