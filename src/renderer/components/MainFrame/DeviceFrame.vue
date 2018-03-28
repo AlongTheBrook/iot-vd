@@ -91,6 +91,7 @@
     import Draggable from 'vuedraggable'
     import ContextMenu from 'vue-context-menu'
     import moment from 'moment'
+    import deviceDataModel from '../../../common/device-data-model'
 
     export default {
       name: 'device-frame',
@@ -111,6 +112,7 @@
         },
         ...mapGetters('device', [
           'state',
+          'nextId',
           'selected',
           'iconHref',
           'iconBgColor'
@@ -136,29 +138,7 @@
           'createDevice'
         ]),
         onCreateDevice () {
-          const id = Math.floor(Math.random() * 1000)
-          this.createDevice({
-            id: id,
-            name: '设备' + id,
-            deviceId: id,
-            type: Math.random() > 0.5 ? 'SERIAL_PORT' : 'TCP',
-            serialPortName: 'COM2',
-            baudRate: 9600,
-            databits: 8,
-            parity: 'NONE',
-            stopbits: 1,
-            host: '127.0.0.1',
-            port: 50021,
-            regPackage: '{NDMyMTBAOTg3NjU=}',
-            hbPackage: 'H',
-            hbMinutes: 5,
-            selected: false,
-            state: 'STOPED',
-            hbCountdownSeconds: 56,
-            msg: '',
-            isEventExpand: false,
-            eventList: []
-          })
+          this.createDevice({...deviceDataModel.newBase(this.nextId), ...deviceDataModel.newRuntime()})
           this.$nextTick(() => {
             const firstDeviceElement = this.$refs.deviceList.firstChild.firstChild
             if (firstDeviceElement) {

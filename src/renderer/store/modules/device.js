@@ -34,6 +34,12 @@ const getters = {
       default:
         return 'hsl(0, 0%, 57.5%)'
     }
+  },
+  nextId: (state) => {
+    const maxId = state.list.reduce((larger, { id }) => {
+      return id > larger ? id : larger
+    }, 0)
+    return maxId + 1
   }
 }
 
@@ -97,6 +103,16 @@ const mutations = {
   },
   resetListUpdateCount (state) {
     state.listUpdateCount = 0
+  },
+  reduceListUpdateCount (state, count) {
+    if (count < 0) {
+      return
+    }
+    if (count > state.listUpdateCount) {
+      state.listUpdateCount = 0
+      return
+    }
+    state.listUpdateCount -= count
   },
   updateState (state, payload) {
     let device = state.list.find(device => device.id === payload.id)

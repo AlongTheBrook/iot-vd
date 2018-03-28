@@ -41,6 +41,7 @@
       }
       this.$electron.ipcRenderer.on('@device.list', this.onDeviceList)
       this.$electron.ipcRenderer.on('@device.list.check', this.onDeviceListCheck)
+      this.$electron.ipcRenderer.on('@device.list.saved', this.onDeviceListSaved)
       this.$electron.ipcRenderer.on('@device.state', this.onDeviceState)
       this.$electron.ipcRenderer.on('@readyQuit', this.onReadyQuit)
       this.$electron.ipcRenderer.send('@device.list.load')
@@ -48,6 +49,7 @@
     methods: {
       ...mapMutations('device', [
         'resetListUpdateCount',
+        'reduceListUpdateCount',
         'replace',
         'updateState'
       ]),
@@ -56,9 +58,11 @@
       },
       onDeviceListCheck () {
         if (this.listUpdateCount > 0) {
-          this.$electron.ipcRenderer.send('@device.list.save', this.list)
-          this.resetListUpdateCount()
+          this.$electron.ipcRenderer.send('@device.list.save', this.list, this.listUpdateCount)
         }
+      },
+      onDeviceListSaved (e, updateCount) {
+        this.reduceListUpdateCount(updateCount)
       },
       onDeviceState (e, payload) {
         this.updateState(payload)

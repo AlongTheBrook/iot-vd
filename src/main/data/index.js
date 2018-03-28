@@ -2,7 +2,8 @@ import { app } from 'electron'
 import path from 'path'
 import fs from 'fs'
 import log from '../log'
-import { send } from '../ipc'
+import { send, receive } from '../ipc'
+import deviceDataModel from '../../common/device-data-model'
 
 const logger = log.getLogger()
 const dataPath = path.join(app.getPath('userData'), 'data')
@@ -39,6 +40,19 @@ const start = async function () {
       throw err
     }
   }
+  // 配置ipc事件响应
+  receive('@device.list.load', (e) => {
+    load().then(deviceList => send('@device.list', deviceList))
+  })
+  receive('@device.list.save', (e, deviceList, updateCount) => {
+    save(deviceList).then(() => {
+      send('@device.list.saved', updateCount)
+    })
+  })
+  receive('@device.list.saveSync', (e, deviceList) => {
+    saveSync(deviceList)
+    e.returnValue = true
+  })
   // 启动周期保存,1分钟检查一次
   const checkPeriodOfMinutes = 1
   logger.info(`Start data update checking job: every ${checkPeriodOfMinutes} minutes`)
@@ -63,22 +77,8 @@ const load = async function () {
   const deviceList = []
   try {
     const deviceListLoad = JSON.parse(data.toString())
-    const uptime = Date.now()
     for (let device of deviceListLoad) {
-      deviceList.push(Object.assign({}, device, {
-        selected: false,
-        state: 'STOPED',
-        hbCountdownSeconds: 0,
-        currMsgUptime: uptime,
-        currMsg: '已加载',
-        isEventExpand: false,
-        eventList: [{
-          time: uptime,
-          title: '已加载',
-          content: '设备配置参数已加载',
-          isExpand: false
-        }]
-      }))
+      deviceList.push({...device, ...deviceDataModel.loadRuntime()})
     }
   } catch (err) {
     err.desc = 'Parse device list file error'
@@ -92,15 +92,7 @@ const load = async function () {
 const stringifyDeviceList = function (deviceList) {
   const deviceListSave = []
   for (let device of deviceList) {
-    deviceListSave.push(Object.assign({}, device, {
-      selected: undefined,
-      state: undefined,
-      hbCountdownSeconds: undefined,
-      currMsgUptime: undefined,
-      currMsg: undefined,
-      isEventExpand: undefined,
-      eventList: undefined
-    }))
+    deviceListSave.push({...device, ...deviceDataModel.undefinedRuntime()})
   }
   return JSON.stringify(deviceListSave)
 }

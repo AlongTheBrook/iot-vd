@@ -1,13 +1,21 @@
 import { ipcMain } from 'electron'
+import log from '../log'
 
-let getMainWindow
+const logger = log.getLogger()
+
+let getMainWindow = function () {}
 
 export const init = function (_getMainWindow) {
-  this.getMainWindow = _getMainWindow
+  getMainWindow = _getMainWindow
 }
 
 export const send = function (...args) {
-  getMainWindow().webContents.send(...args)
+  const mainWindow = getMainWindow()
+  if (mainWindow && mainWindow.webContents) {
+    mainWindow.webContents.send(...args)
+  } else {
+    logger.warn(`The Message was not sent because of the main window was not initialized : ${JSON.stringify(args)}`)
+  }
 }
 
 export const receive = function (...args) {

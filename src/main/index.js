@@ -1,8 +1,8 @@
 'use strict'
 import log from './log'
 import data from './data'
-import { init, send } from './ipc'
-import { app, BrowserWindow, ipcMain, Menu, Tray } from 'electron'
+import { init, send, receive } from './ipc'
+import { app, BrowserWindow, Menu, Tray } from 'electron'
 import vdtu from './vdtu'
 
 const path = require('path')
@@ -139,23 +139,10 @@ function onReady () {
   })
 }
 
-ipcMain.on('@readyQuitSet', () => {
+receive('@readyQuitSet', () => {
   // 此处全部采用同步方式完成工作
   // TODO
   send('@quit')
-})
-
-ipcMain.on('@device.list.load', (e) => {
-  data.load().then(deviceList => send('@device.list', deviceList))
-})
-
-ipcMain.on('@device.list.save', (e, deviceList) => {
-  data.save(deviceList)
-})
-
-ipcMain.on('@device.list.saveSync', (e, deviceList) => {
-  data.saveSync(deviceList)
-  e.returnValue = true
 })
 
 // app.on('activate', () => {
