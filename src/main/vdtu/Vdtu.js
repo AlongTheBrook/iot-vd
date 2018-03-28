@@ -2,11 +2,12 @@ import Vd from './Vd'
 import ClientVd from './ClientVd'
 import SerialPortVd from './SerialPortVd'
 import NetPortTcpVd from './NetPortTcpVd'
-import { vdType } from '../../common/symbol'
+import { vdType, vdState } from '../../common/symbol'
+import { state } from '../ipc'
 
 const Vdtu = class extends Vd {
   constructor (config) {
-    super()
+    super(false)
 
     this.config = config
 
@@ -14,6 +15,7 @@ const Vdtu = class extends Vd {
     this.clientVd = new ClientVd(config)
 
     this.deviceVd.on('start', () => {
+      state(this.config.id, vdState.SERVER_CONNECTING)
       this.clientVd.setAutoRestart(true)
       this.clientVd.start()
     })
@@ -27,6 +29,14 @@ const Vdtu = class extends Vd {
       this.clientVd.stop()
     })
 
+    this.deviceVd.on('destroy', () => {
+      this.emit('destroy')
+    })
+
+    this.clientVd.on('start', () => {
+      state(this.config.id, vdState.RUNNING)
+    })
+
     this.clientVd.on('data', (data) => {
       this.deviceVd.write(data)
     })
@@ -34,6 +44,7 @@ const Vdtu = class extends Vd {
     // 响应父类的事件
 
     this.on('doStart', () => {
+      state(this.config.id, vdState.DEVICE_CONNECTING)
       this.deviceVd.start()
     })
 
@@ -42,8 +53,10 @@ const Vdtu = class extends Vd {
     })
 
     this.on('doDestroy', () => {
+      this.clientVd.once('destroy', () => {
+        this.deviceVd.destroy()
+      })
       this.clientVd.destroy()
-      this.deviceVd.destroy()
     })
   }
 

@@ -1,19 +1,8 @@
+import { vdType, vdState } from '../../../common/symbol'
+
 const state = {
-  type: {
-    SERIAL_PORT: 'SERIAL_PORT',
-    TCP: 'TCP'
-  },
-  state: {
-    STOPED: 'STOPED',
-    STARTING: 'STARTING',
-    DEVICE_CONNECTING: 'DEVICE_CONNECTING',
-    DEVICE_RECONNECTING: 'DEVICE_RECONNECTING',
-    SERVER_CONNECTING: 'SERVER_CONNECTING',
-    SERVER_RECONNECTING: 'SERVER_RECONNECTING',
-    RUNNING: 'RUNNING',
-    HEARTBEAT: 'HEARTBEAT',
-    STOPPING: 'STOPPING'
-  },
+  type: vdType,
+  state: vdState,
   listUpdateCount: 0,
   list: []
 }
@@ -108,6 +97,12 @@ const mutations = {
   },
   resetListUpdateCount (state) {
     state.listUpdateCount = 0
+  },
+  updateState (state, payload) {
+    let device = state.list.find(device => device.id === payload.id)
+    if (device) {
+      device.state = payload.state
+    }
   }
 }
 

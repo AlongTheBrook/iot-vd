@@ -10,7 +10,7 @@
                         </span>
                     </p>
                 </div>
-                <div class="device-list-control-button field" v-tooltip="'全部停止'">
+                <div class="device-list-control-button field" v-tooltip="'全部停止'" @click="stopBatch">
                     <p class="control">
                         <a class="button is-small is-danger is-no-radius">
                             <span class="icon">
@@ -19,7 +19,7 @@
                         </a>
                     </p>
                 </div>
-                <div class="device-list-control-button field" v-tooltip="'全部启动'">
+                <div class="device-list-control-button field" v-tooltip="'全部启动'" @click="startBatch">
                     <p class="control">
                         <a class="button is-small is-success is-no-radius">
                             <span class="icon">
@@ -54,7 +54,8 @@
                                 <p class="device-list-item-content-title">{{ item.name }}</p>
                                 <p class="device-list-item-content-subtitle">{{ currMsgShow(item.currMsgUptime, item.currMsg) }}</p>
                             </div>
-                            <div class="device-list-item-end-pre" v-tooltip="'停止'" v-show="!((item.state === state.STOPPING) || (item.state === state.STOPED))">
+                            <div class="device-list-item-end-pre" @click="stop(item.id)"
+                                 v-tooltip="'停止'" v-show="!((item.state === state.STOPPING) || (item.state === state.STOPED))">
                                 <svg class="iconfont" aria-hidden="true">
                                     <use xlink:href="#icon-stop"></use>
                                 </svg>
@@ -179,6 +180,15 @@
         },
         onDeviceItemCtxMenuOpen (device) {
           this.ctxMenuTargetDevice = device
+        },
+        stop (id) {
+          this.$electron.ipcRenderer.send('@device.stop', id)
+        },
+        startBatch () {
+          this.$electron.ipcRenderer.send('@device.startBatch', this.list)
+        },
+        stopBatch () {
+          this.$electron.ipcRenderer.send('@device.stopBatch', this.list.map(device => device.id))
         }
       }
     }

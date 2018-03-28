@@ -183,7 +183,8 @@
                 <p>{{ currMsgShow(device.currMsgUptime, device.currMsg) }}</p>
             </div>
             <div class="device-footer-control">
-                <div class="device-footer-control-stop-button" v-tooltip="'停止'"  v-show="!((device.state === state.STOPPING) || (device.state === state.STOPED))">
+                <div class="device-footer-control-stop-button" @click="stop"
+                     v-tooltip="'停止'"  v-show="!((device.state === state.STOPPING) || (device.state === state.STOPED))">
                     <svg class="iconfont " aria-hidden="true">
                         <use xlink:href="#icon-stop"></use>
                     </svg>
@@ -277,6 +278,9 @@
         },
         onDelete () {
           this.delete(this.device.id)
+        },
+        stop () {
+          this.$electron.ipcRenderer.send('@device.stop', this.device.id)
         }
       }
     }

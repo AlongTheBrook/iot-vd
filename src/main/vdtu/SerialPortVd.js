@@ -1,10 +1,11 @@
 import Vd from './Vd'
 import SerialPort from 'serialport'
-import { event } from '../event'
+import {event, state} from '../ipc'
+import { vdState } from '../../common/symbol'
 
 const SerialPortVd = class extends Vd {
   constructor (config) {
-    super(config)
+    super(true)
 
     this.serialPort = new SerialPort(config.serialPortName, {
       baudRate: config.baudRate,
@@ -36,6 +37,13 @@ const SerialPortVd = class extends Vd {
       event(config.id, '串口关闭', this.serialPort.path)
     })
 
+    this.serialPort.on('stop', () => {
+      if (this.autoRestart) {
+        event(config.id, '准备重连串口', `${this.autoRestartSeconds}秒后重连串口`)
+        state(config.id, vdState.DEVICE_RECONNECTING)
+      }
+    })
+
     // 响应父类的事件
 
     this.on('doStart', () => {
@@ -61,7 +69,11 @@ const SerialPortVd = class extends Vd {
     this.on('doDestroy', () => {
       this.setAutoRestart(false)
       if (this.serialPort.isOpen) {
-        this.serialPort.close()
+        this.serialPort.close(() => {
+          this.emit('destroy')
+        })
+      } else {
+        this.emit('destroy')
       }
     })
   }

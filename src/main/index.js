@@ -1,8 +1,9 @@
 'use strict'
 import log from './log'
 import data from './data'
-import { initSender } from './event'
+import { init, send } from './ipc'
 import { app, BrowserWindow, ipcMain, Menu, Tray } from 'electron'
+import vdtu from './vdtu'
 
 const path = require('path')
 const logger = log.getLogger()
@@ -23,11 +24,11 @@ const winURL = process.env.NODE_ENV === 'development'
   ? `http://localhost:9080`
   : `file://${__dirname}/index.html`
 
-function getRenderer () {
-  return mainWindow.webContents
+function getMainWindow () {
+  return mainWindow
 }
 
-initSender(getRenderer)
+init(getMainWindow)
 
 function activateWindow () {
   if (mainWindow) {
@@ -56,7 +57,7 @@ function initTray () {
       {
         label: '退出',
         click () {
-          getRenderer().send('@readyQuit')
+          send('@readyQuit')
         }
       }
     ])
@@ -127,7 +128,7 @@ app.on('will-quit', () => {
 })
 
 function onReady () {
-  Promise.all([data.start(getRenderer)]).then(() => {
+  Promise.all([data.start(), vdtu.start()]).then(() => {
     logger.info('App create window')
     createWindow()
   }).catch((err) => {
@@ -141,11 +142,11 @@ function onReady () {
 ipcMain.on('@readyQuitSet', () => {
   // 此处全部采用同步方式完成工作
   // TODO
-  getRenderer().send('@quit')
+  send('@quit')
 })
 
 ipcMain.on('@device.list.load', (e) => {
-  data.load().then(deviceList => e.sender.send('@device.list', deviceList))
+  data.load().then(deviceList => send('@device.list', deviceList))
 })
 
 ipcMain.on('@device.list.save', (e, deviceList) => {

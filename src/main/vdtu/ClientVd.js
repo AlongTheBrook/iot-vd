@@ -1,10 +1,11 @@
 import Vd from './Vd'
 import net from 'net'
-import { event } from '../event'
+import { vdState } from '../../common/symbol'
+import { event, state } from '../ipc'
 
 const ClientVd = class extends Vd {
   constructor (config) {
-    super()
+    super(true)
 
     this.intervalTimer = null
 
@@ -24,6 +25,12 @@ const ClientVd = class extends Vd {
         if (this.client.writable) {
           this.client.write(config.hbPackage, () => {
             event(config.id, '心跳', config.hbPackage)
+            state(config.id, vdState.HEARTBEAT)
+            setTimeout(() => {
+              if (this.client.writable && this.client.readable) {
+                state(config.id, vdState.RUNNING)
+              }
+            }, 1000 * 2)
           })
         }
       }, 1000 * 60 * config.hbMinutes)
@@ -50,12 +57,20 @@ const ClientVd = class extends Vd {
         clearInterval(this.intervalTimer)
         this.intervalTimer = null
       }
+      this.emit('stop')
+    })
+
+    this.client.on('stop', () => {
+      if (this.autoRestart) {
+        event(config.id, '准备重连服务器', `${this.autoRestartSeconds}秒后重连服务器`)
+        state(config.id, vdState.SERVER_RECONNECTING)
+      }
     })
 
     // 响应父类的事件
 
     this.on('doStart', () => {
-      if (!this.client.connecting && !this.client.readable) {
+      if (!this.client.connecting && (this.client.destroyed || (!this.client.writable && !this.client.readable))) {
         this.client.connect(config.port, config.host)
       }
     })
@@ -74,7 +89,14 @@ const ClientVd = class extends Vd {
 
     this.on('doDestroy', () => {
       this.setAutoRestart(false)
-      this.client.destroy()
+      if (this.client.destroyed || (!this.client.writable && !this.client.readable)) {
+        this.emit('destroy')
+      } else {
+        this.client.once('close', () => {
+          this.emit('destroy')
+        })
+        this.client.destroy()
+      }
     })
   }
 }

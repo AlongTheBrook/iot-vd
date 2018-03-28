@@ -1,6 +1,6 @@
 <template>
     <div class="op-and-state-icon">
-        <div v-tooltip="'启动'">
+        <div v-tooltip="'启动'" @click="start">
             <svg class="iconfont state-stoped" aria-hidden="true" v-show="device.state === state.STOPED">
                 <use xlink:href="#icon-play"></use>
             </svg>
@@ -51,6 +51,11 @@
       ...mapGetters('device', [
         'state'
       ])
+    },
+    methods: {
+      start () {
+        this.$electron.ipcRenderer.send('@device.start', this.device.id)
+      }
     }
   }
 </script>

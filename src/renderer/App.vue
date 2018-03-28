@@ -41,13 +41,15 @@
       }
       this.$electron.ipcRenderer.on('@device.list', this.onDeviceList)
       this.$electron.ipcRenderer.on('@device.list.check', this.onDeviceListCheck)
+      this.$electron.ipcRenderer.on('@device.state', this.onDeviceState)
       this.$electron.ipcRenderer.on('@readyQuit', this.onReadyQuit)
       this.$electron.ipcRenderer.send('@device.list.load')
     },
     methods: {
       ...mapMutations('device', [
         'resetListUpdateCount',
-        'replace'
+        'replace',
+        'updateState'
       ]),
       onDeviceList (e, deviceList) {
         this.replace(deviceList)
@@ -57,6 +59,9 @@
           this.$electron.ipcRenderer.send('@device.list.save', this.list)
           this.resetListUpdateCount()
         }
+      },
+      onDeviceState (e, payload) {
+        this.updateState(payload)
       },
       onReadyQuit () {
         // 此处采用同步方式处理所有工作

@@ -2,6 +2,7 @@ import { app } from 'electron'
 import path from 'path'
 import fs from 'fs'
 import log from '../log'
+import { send } from '../ipc'
 
 const logger = log.getLogger()
 const dataPath = path.join(app.getPath('userData'), 'data')
@@ -25,7 +26,7 @@ const writeFile = async function (filename, data) {
   })
 }
 
-const start = async function (getRenderer) {
+const start = async function () {
   // 检查数据目录
   try {
     fs.readdirSync(dataPath)
@@ -42,7 +43,7 @@ const start = async function (getRenderer) {
   const checkPeriodOfMinutes = 1
   logger.info(`Start data update checking job: every ${checkPeriodOfMinutes} minutes`)
   setInterval(() => {
-    getRenderer().send('@device.list.check')
+    send('@device.list.check')
   }, 1000 * 60 * checkPeriodOfMinutes)
   logger.info('Data module started')
 }
