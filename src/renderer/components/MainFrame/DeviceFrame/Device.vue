@@ -41,7 +41,7 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <input class="input is-small is-no-radius" type="text" placeholder=""/>
+                                <input class="input is-small is-no-radius" type="text" placeholder="" v-model="name"/>
                             </div>
                         </div>
                     </div>
@@ -54,7 +54,12 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <input class="input is-small is-no-radius" type="text" placeholder=""/>
+                                <!--<input class="input is-small is-no-radius" type="text" placeholder="" v-model="serialPortName"/>-->
+                                <div class="select is-small">
+                                    <select class="is-no-radius" v-model="serialPortName">
+                                        <option v-for="option in serialPortOptions.portList" :value="option">{{ option }}</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -66,7 +71,11 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <input class="input is-small is-no-radius" type="text" placeholder=""/>
+                                <div class="select is-small">
+                                    <select class="is-no-radius" v-model="baudRate">
+                                        <option v-for="option in serialPortOptions.baudRate" :value="option">{{ option }}</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -78,7 +87,11 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <input class="input is-small is-no-radius" type="text" placeholder=""/>
+                                <div class="select is-small">
+                                    <select class="is-no-radius" v-model="databits">
+                                        <option v-for="option in serialPortOptions.dataBits" :value="option">{{ option }}</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -90,7 +103,11 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <input class="input is-small is-no-radius" type="text" placeholder=""/>
+                                <div class="select is-small">
+                                    <select class="is-no-radius" v-model="parity">
+                                        <option v-for="option in serialPortOptions.parity" :value="option">{{ option }}</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -102,7 +119,11 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <input class="input is-small is-no-radius" type="text" placeholder=""/>
+                                <div class="select is-small">
+                                    <select class="is-no-radius" v-model="stopbits">
+                                        <option v-for="option in serialPortOptions.stopBits" :value="option">{{ option }}</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -115,7 +136,7 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <input class="input is-small is-no-radius" type="text" placeholder="IP地址或域名地址"/>
+                                <input class="input is-small is-no-radius" type="text" placeholder="默认：iot.thisyet.com" v-model="host"/>
                             </div>
                         </div>
                     </div>
@@ -127,7 +148,7 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <input class="input is-small is-no-radius" type="text" placeholder=""/>
+                                <input class="input is-small is-no-radius"  type="number" min="0" max="65535" placeholder="默认：50021" v-model="port"/>
                             </div>
                         </div>
                     </div>
@@ -139,7 +160,7 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <input class="input is-small is-no-radius" type="text" placeholder=""/>
+                                <input class="input is-small is-no-radius" type="text" placeholder="平台对应设备的设备接入码" v-model="regPackage"/>
                             </div>
                         </div>
                     </div>
@@ -151,7 +172,7 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <input class="input is-small is-no-radius" type="text" placeholder=""/>
+                                <input class="input is-small is-no-radius" type="text" placeholder="默认：H" v-model="hbPackage"/>
                             </div>
                         </div>
                     </div>
@@ -162,8 +183,9 @@
                     </div>
                     <div class="field-body">
                         <div class="field">
-                            <div class="control">
-                                <input class="input is-small is-no-radius" type="text" placeholder=""/>
+                            <div class="control has-icons-right">
+                                <input class="input is-small is-no-radius" type="number" min="1" placeholder="平台对应设备的心跳周期" v-model="hbMinutes"/>
+                                <span class="icon is-small is-right">分</span>
                             </div>
                         </div>
                     </div>
@@ -200,6 +222,7 @@
     import SToggleButton from '../../Common/SToggleButton'
     import OpAndStateIcon from '../../Common/OpAndStateIcon'
     import moment from 'moment'
+    import { serialPortOptions } from '../../../../common/symbol'
 
     export default {
       name: 'device',
@@ -207,13 +230,102 @@
       data () {
         return {
           isDeviceMenuShow: false,
-          isDeviceMenuLeaving: false
+          isDeviceMenuLeaving: false,
+          serialPortOptions
         }
       },
       computed: {
         ...mapGetters('device', {
           device: 'selected'
         }),
+        name: {
+          get () {
+            return this.device.name
+          },
+          set (value) {
+            this.updateDeviceProp({id: this.device.id, key: 'name', value: value})
+          }
+        },
+        serialPortName: {
+          get () {
+            return this.device.serialPortName
+          },
+          set (value) {
+            this.updateDeviceProp({id: this.device.id, key: 'serialPortName', value: value})
+          }
+        },
+        baudRate: {
+          get () {
+            return this.device.baudRate
+          },
+          set (value) {
+            this.updateDeviceProp({id: this.device.id, key: 'baudRate', value: value})
+          }
+        },
+        databits: {
+          get () {
+            return this.device.databits
+          },
+          set (value) {
+            this.updateDeviceProp({id: this.device.id, key: 'databits', value: value})
+          }
+        },
+        parity: {
+          get () {
+            return this.device.parity
+          },
+          set (value) {
+            this.updateDeviceProp({id: this.device.id, key: 'parity', value: value})
+          }
+        },
+        stopbits: {
+          get () {
+            return this.device.stopbits
+          },
+          set (value) {
+            this.updateDeviceProp({id: this.device.id, key: 'stopbits', value: value})
+          }
+        },
+        host: {
+          get () {
+            return this.device.host
+          },
+          set (value) {
+            this.updateDeviceProp({id: this.device.id, key: 'host', value: value})
+          }
+        },
+        port: {
+          get () {
+            return this.device.port
+          },
+          set (value) {
+            this.updateDeviceProp({id: this.device.id, key: 'port', value: value})
+          }
+        },
+        regPackage: {
+          get () {
+            return this.device.regPackage
+          },
+          set (value) {
+            this.updateDeviceProp({id: this.device.id, key: 'regPackage', value: value})
+          }
+        },
+        hbPackage: {
+          get () {
+            return this.device.hbPackage
+          },
+          set (value) {
+            this.updateDeviceProp({id: this.device.id, key: 'hbPackage', value: value})
+          }
+        },
+        hbMinutes: {
+          get () {
+            return this.device.hbMinutes
+          },
+          set (value) {
+            this.updateDeviceProp({id: this.device.id, key: 'hbMinutes', value: value})
+          }
+        },
         ...mapGetters('device', [
           'state',
           'iconHref',
@@ -250,6 +362,7 @@
       },
       methods: {
         ...mapMutations('device', [
+          'updateDeviceProp',
           'setEventExpand',
           'setSingleEventExpand',
           'delete',
@@ -423,6 +536,14 @@
                 .input {
                     font-size: 0.85rem;
                     height: 1.75rem;
+                }
+                .select {
+                    width: 100%;
+                }
+                select {
+                    font-size: 0.85rem;
+                    height: 1.75rem;
+                    width: 100%;
                 }
             }
             & > .device-content-monitor {

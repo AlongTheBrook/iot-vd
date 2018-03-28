@@ -6,16 +6,16 @@ const newBase = function (id) {
     name: '新建设备-' + id,
     deviceId: null,
     type: vdType.SERIAL_PORT,
-    serialPortName: '',
+    serialPortName: null,
     baudRate: 9600,
     databits: 8,
-    parity: 'NONE',
+    parity: 'none',
     stopbits: 1,
     host: 'iot.thisyet.com',
     port: 50021,
-    regPackage: '',
+    regPackage: null,
     hbPackage: 'H',
-    hbMinutes: 5
+    hbMinutes: null
   }
 }
 

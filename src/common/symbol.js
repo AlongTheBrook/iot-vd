@@ -18,3 +18,19 @@ export const vdState = {
   HEARTBEAT: 'HEARTBEAT',
   STOPPING: 'STOPPING'
 }
+
+const buildSerialPortList = function (count) {
+  const list = []
+  for (let i = 0; i < count; i++) {
+    list.push('COM' + (i + 1))
+  }
+  return list
+}
+
+export const serialPortOptions = {
+  portList: buildSerialPortList(256),
+  baudRate: [110, 300, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200],
+  dataBits: [8, 7, 6, 5],
+  parity: ['none', 'even', 'mark', 'odd', 'space'],
+  stopBits: [1, 2]
+}
