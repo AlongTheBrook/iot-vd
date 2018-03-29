@@ -1,5 +1,6 @@
 import { vdType, vdState } from '../../../common/symbol'
 import deviceDataModel from '../../../common/device-data-model'
+import { regPackageDecode } from '../../../common/codec'
 
 const state = {
   type: vdType,
@@ -44,6 +45,18 @@ const getters = {
   }
 }
 
+const _addEvent = function (state, payload) {
+  let device = state.list.find(device => device.id === payload.id)
+  if (device) {
+    if (device.eventList.length >= 128) {
+      device.eventList.shift()
+    }
+    device.eventList.push({...payload.event, isExpand: device.isEventExpand})
+    device.currMsgUptime = payload.event.time
+    device.currMsg = payload.event.title
+  }
+}
+
 const mutations = {
   replace (state, newList) {
     state.list = newList
@@ -58,8 +71,13 @@ const mutations = {
     if (device) {
       device[payload.key] = payload.value
       if (payload.key === 'regPackage') {
-        // TODO
-        // device['deviceId'] =
+        const decoded = regPackageDecode(payload.value)
+        if (decoded.err) {
+          device['deviceId'] = null
+          _addEvent(state, { id: payload.id, event: { time: Date.now(), title: '解码注册包错误', content: decoded.err } })
+        } else {
+          device['deviceId'] = decoded.id
+        }
       }
       if (deviceDataModel.baseKeySet.has(payload.key)) {
         state.listUpdateCount += 1
@@ -98,15 +116,7 @@ const mutations = {
     }
   },
   addEvent (state, payload) {
-    let device = state.list.find(device => device.id === payload.id)
-    if (device) {
-      if (device.eventList.length >= 128) {
-        device.eventList.shift()
-      }
-      device.eventList.push(Object.assign({}, payload.event, {isExpand: device.isEventExpand}))
-      device.currMsgUptime = payload.event.time
-      device.currMsg = payload.event.title
-    }
+    _addEvent(state, payload)
   },
   emptyEventList (state, id) {
     let device = state.list.find(device => device.id === id)

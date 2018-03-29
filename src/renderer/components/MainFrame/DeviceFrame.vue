@@ -67,7 +67,7 @@
                     </draggable>
                     <context-menu ref="deviceItemCtxMenu" id="context-menu" @ctx-open="onDeviceItemCtxMenuOpen">
                         <li @click="onEmptyEventList">清空通讯数据</li>
-                        <li @click="onOpenMonitorPage">打开监控页</li>
+                        <li @click="onOpenMonitorPage" :class="{'disabled': !(ctxMenuTargetDevice && ctxMenuTargetDevice.deviceId)}">服务器监控页</li>
                         <hr>
                         <li @click="onDelete" class="delete-device">删除设备</li>
                         <hr>
@@ -153,7 +153,9 @@
           this.emptyEventList(this.ctxMenuTargetDevice.id)
         },
         onOpenMonitorPage () {
-          this.$electron.shell.openExternal('http://iot.thisyet.com/monitor/' + this.ctxMenuTargetDevice.deviceId)
+          if (this.ctxMenuTargetDevice.deviceId) {
+            this.$electron.shell.openExternal('http://iot.thisyet.com/monitor/' + this.ctxMenuTargetDevice.deviceId)
+          }
         },
         onDelete () {
           this.delete(this.ctxMenuTargetDevice.id)

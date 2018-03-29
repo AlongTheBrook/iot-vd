@@ -14,9 +14,11 @@
                         </div>
                         <div class="device-content text-sle">
                             <div class="device-name">{{ device.name }}</div>
-                            <div class="device-id">ID: {{ device.deviceId }}</div>
+                            <div class="device-id">ID: {{ device.id }}</div>
                         </div>
                     </div>
+                    <hr>
+                    <div >服务器设备ID: {{ device.deviceId }}</div>
                     <hr>
                     <div>
                         <div>展开通讯数据</div>
@@ -25,7 +27,7 @@
                     <hr>
                     <div class="device-title-menu-content-op-button" @click="emptyEventList(device.id)">清空通讯数据</div>
                     <hr>
-                    <div class="device-title-menu-content-op-button" @click="onOpenMonitorPage">打开监控页</div>
+                    <div :class="{'device-title-menu-content-op-button': device.deviceId}" @click="onOpenMonitorPage">服务器监控页</div>
                     <hr>
                     <div class="device-title-menu-content-delete" @click="onDelete">删除此设备</div>
                 </div>
@@ -384,7 +386,9 @@
           this.isDeviceMenuLeaving = false
         },
         onOpenMonitorPage () {
-          this.$electron.shell.openExternal('http://iot.thisyet.com/monitor/' + this.device.deviceId)
+          if (this.device.deviceId) {
+            this.$electron.shell.openExternal('http://iot.thisyet.com/monitor/' + this.device.deviceId)
+          }
         },
         onDelete () {
           this.delete(this.device.id)
