@@ -41,10 +41,6 @@ const check = function (config) {
     event(config.id, '参数错误', 'ID必须是数字')
     return false
   }
-  if (map.has(config.id)) {
-    event(config.id, '启动实例已存在', '启动实例已存在')
-    return false
-  }
   if (!vdType.hasOwnProperty(config.type)) {
     event(config.id, '不支持的设备类型', config.type)
     return false
@@ -107,6 +103,10 @@ const check = function (config) {
 }
 
 const create = function (config) {
+  if (map.has(config.id)) {
+    // event(config.id, '启动实例已存在', '启动实例已存在')
+    return
+  }
   state(config.id, vdState.STARTING)
   if (!check(config)) {
     state(config.id, vdState.STOPED)
