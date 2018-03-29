@@ -1,6 +1,7 @@
 import { vdType, vdState } from '../../../common/symbol'
 import deviceDataModel from '../../../common/device-data-model'
 import { regPackageDecode } from '../../../common/codec'
+import { isString } from '../../../common/util'
 
 const state = {
   type: vdType,
@@ -29,6 +30,7 @@ const getters = {
   iconBgColor: (state) => (stateValue) => {
     switch (stateValue) {
       case state.state.RUNNING:
+      case state.state.HEARTBEAT:
         return 'hsl(141, 71%, 48%)'
       case state.state.DEVICE_RECONNECTING:
       case state.state.SERVER_RECONNECTING:
@@ -93,6 +95,25 @@ const mutations = {
       }
     }
   },
+  setSelectedAndMoveTop (state, id) {
+    let target
+    for (let device of state.list) {
+      if (device.id === id) {
+        device.selected = true
+        target = {...device}
+      } else {
+        device.selected = false
+      }
+    }
+    if (target) {
+      let index = state.list.findIndex(device => device.id === id)
+      if (index !== -1) {
+        state.list.splice(index, 1)
+        state.list.unshift(target)
+        state.listUpdateCount += 1
+      }
+    }
+  },
   delete (state, id) {
     let index = state.list.findIndex(device => device.id === id)
     if (index !== -1) {
@@ -138,7 +159,41 @@ const mutations = {
   updateState (state, payload) {
     let device = state.list.find(device => device.id === payload.id)
     if (device) {
+      if (payload.state === vdState.RUNNING && device.state !== vdState.RUNNING) {
+        device.hbCountdownSeconds = device.hbMinutes ? device.hbMinutes * 60 : 0
+      }
       device.state = payload.state
+      // 检查是否因删除而停止
+      if (payload.state === vdState.STOPED && device.delete === true) {
+        let index = state.list.findIndex(device => device.id === payload.id)
+        if (index !== -1) {
+          state.list.splice(index, 1)
+          state.listUpdateCount += 1
+        }
+      }
+    }
+  },
+  hbCountdown (state, intervalSeconds) {
+    for (const device of state.list) {
+      if (device.state === vdState.RUNNING) {
+        device.hbCountdownSeconds -= intervalSeconds
+      }
+    }
+  },
+  search (state, keyWord) {
+    if (isString(keyWord) && keyWord.length !== 0) {
+      const keyWordUpperCase = keyWord.toUpperCase()
+      for (const device of state.list) {
+        if (device.name && device.name.toUpperCase().includes(keyWordUpperCase)) {
+          device.show = true
+        } else {
+          device.show = false
+        }
+      }
+    } else {
+      for (const device of state.list) {
+        device.show = true
+      }
     }
   }
 }

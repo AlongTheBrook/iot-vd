@@ -43,7 +43,7 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <input class="input is-small is-no-radius" type="text" placeholder="" v-model.trim="name"/>
+                                <input class="input is-small is-no-radius" type="text" placeholder="" v-model.trim="name" :disabled="device.state !== state.STOPED"/>
                             </div>
                         </div>
                     </div>
@@ -56,9 +56,8 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <!--<input class="input is-small is-no-radius" type="text" placeholder="" v-model="serialPortName"/>-->
                                 <div class="select is-small">
-                                    <select class="is-no-radius" v-model="serialPortName">
+                                    <select class="is-no-radius" v-model="serialPortName" :disabled="device.state !== state.STOPED">
                                         <option v-for="option in serialPortOptions.portList" :value="option">{{ option }}</option>
                                     </select>
                                 </div>
@@ -74,7 +73,7 @@
                         <div class="field">
                             <div class="control">
                                 <div class="select is-small">
-                                    <select class="is-no-radius" v-model="baudRate">
+                                    <select class="is-no-radius" v-model="baudRate" :disabled="device.state !== state.STOPED">
                                         <option v-for="option in serialPortOptions.baudRate" :value="option">{{ option }}</option>
                                     </select>
                                 </div>
@@ -90,7 +89,7 @@
                         <div class="field">
                             <div class="control">
                                 <div class="select is-small">
-                                    <select class="is-no-radius" v-model="databits">
+                                    <select class="is-no-radius" v-model="databits" :disabled="device.state !== state.STOPED">
                                         <option v-for="option in serialPortOptions.dataBits" :value="option">{{ option }}</option>
                                     </select>
                                 </div>
@@ -106,7 +105,7 @@
                         <div class="field">
                             <div class="control">
                                 <div class="select is-small">
-                                    <select class="is-no-radius" v-model="parity">
+                                    <select class="is-no-radius" v-model="parity" :disabled="device.state !== state.STOPED">
                                         <option v-for="option in serialPortOptions.parity" :value="option">{{ option }}</option>
                                     </select>
                                 </div>
@@ -122,7 +121,7 @@
                         <div class="field">
                             <div class="control">
                                 <div class="select is-small">
-                                    <select class="is-no-radius" v-model="stopbits">
+                                    <select class="is-no-radius" v-model="stopbits" :disabled="device.state !== state.STOPED">
                                         <option v-for="option in serialPortOptions.stopBits" :value="option">{{ option }}</option>
                                     </select>
                                 </div>
@@ -138,7 +137,7 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <input class="input is-small is-no-radius" type="text" placeholder="默认：iot.thisyet.com" v-model.lazy.trim="host"/>
+                                <input class="input is-small is-no-radius" type="text" placeholder="默认：iot.thisyet.com" v-model.lazy.trim="host" :disabled="device.state !== state.STOPED"/>
                             </div>
                         </div>
                     </div>
@@ -150,7 +149,7 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <input class="input is-small is-no-radius"  type="number" min="0" max="65535" placeholder="默认：50021" v-model.lazy.number="port">
+                                <input class="input is-small is-no-radius"  type="number" min="0" max="65535" placeholder="默认：50021" v-model.lazy.number="port" :disabled="device.state !== state.STOPED">
                             </div>
                         </div>
                     </div>
@@ -162,7 +161,7 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <input class="input is-small is-no-radius" type="text" placeholder="平台对应设备的设备接入码" v-model.lazy.trim="regPackage"/>
+                                <input class="input is-small is-no-radius" type="text" placeholder="平台对应设备的设备接入码" v-model.lazy.trim="regPackage" :disabled="device.state !== state.STOPED"/>
                             </div>
                         </div>
                     </div>
@@ -174,7 +173,7 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <input class="input is-small is-no-radius" type="text" placeholder="默认：H" v-model.lazy.trim="hbPackage"/>
+                                <input class="input is-small is-no-radius" type="text" placeholder="默认：H" v-model.lazy.trim="hbPackage" :disabled="device.state !== state.STOPED"/>
                             </div>
                         </div>
                     </div>
@@ -186,7 +185,7 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control has-icons-right">
-                                <input class="input is-small is-no-radius" type="number" min="1" placeholder="平台对应设备的心跳周期" v-model.lazy.number="hbMinutes"/>
+                                <input class="input is-small is-no-radius" type="number" min="1" placeholder="平台对应设备的心跳周期" v-model.lazy.number="hbMinutes" :disabled="device.state !== state.STOPED"/>
                                 <span class="icon is-small is-right">分</span>
                             </div>
                         </div>
@@ -346,11 +345,14 @@
         },
         currMsgShow () {
           return (currMsgUptime, currMsg) => moment(currMsgUptime).format('YYYY-MM-DD HH:mm:ss.SSS') + ' ' + currMsg
+        },
+        currMsgUptime () {
+          return this.device.currMsgUptime
         }
       },
       watch: {
         // 观察msg会导致设备间切换后，滚动每次都会滚动到最底部，由于为每台设备记录滚动条的状态比较费时，暂且搁置
-        msg () {
+        currMsgUptime () {
           this.$nextTick(() => {
             const lastEventElement = this.$refs.eventList.lastChild
             if (lastEventElement) {
@@ -391,7 +393,12 @@
           }
         },
         onDelete () {
-          this.delete(this.device.id)
+          if (this.device.state === this.state.STOPED) {
+            this.delete(this.device.id)
+          } else {
+            this.updateDeviceProp({id: this.device.id, key: 'delete', value: true})
+            this.$electron.ipcRenderer.send('@device.stop', this.device.id)
+          }
         },
         stop () {
           this.$electron.ipcRenderer.send('@device.stop', this.device.id)

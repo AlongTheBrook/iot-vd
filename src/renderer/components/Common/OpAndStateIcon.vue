@@ -23,7 +23,7 @@
         <radial-progress-bar class="state-running" v-show="device.state === state.RUNNING"
                              :diameter="24" :stroke-width="2"
                              :start-color="'hsl(141, 71%, 48%)'" :stop-color="'hsl(141, 71%, 48%)'"
-                             :completed-steps="50">
+                             :totalSteps="totalSteps" :completedSteps="completedSteps">
         </radial-progress-bar>
         <svg class="iconfont state-heartbeat" aria-hidden="true" v-show="device.state === state.HEARTBEAT">
             <use xlink:href="#icon-heart"></use>
@@ -50,7 +50,15 @@
     computed: {
       ...mapGetters('device', [
         'state'
-      ])
+      ]),
+      totalSteps () {
+        const steps = this.device.hbMinutes ? this.device.hbMinutes * 60 : 0
+        return steps === 0 ? 100 : steps
+      },
+      completedSteps () {
+        const steps = this.totalSteps - this.device.hbCountdownSeconds
+        return steps === 0 ? 1 : steps
+      }
     },
     methods: {
       start () {

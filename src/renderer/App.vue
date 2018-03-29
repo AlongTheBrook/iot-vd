@@ -45,6 +45,7 @@
       this.$electron.ipcRenderer.on('@device.list.check', this.onDeviceListCheck)
       this.$electron.ipcRenderer.on('@device.list.saved', this.onDeviceListSaved)
       this.$electron.ipcRenderer.on('@device.state', this.onDeviceState)
+      this.$electron.ipcRenderer.on('@device.hbCountdown', this.onHbCountdown)
       this.$electron.ipcRenderer.on('@readyQuit', this.onReadyQuit)
       this.$electron.ipcRenderer.send('@device.list.load')
     },
@@ -54,7 +55,8 @@
         'resetListUpdateCount',
         'reduceListUpdateCount',
         'replace',
-        'updateState'
+        'updateState',
+        'hbCountdown'
       ]),
       onAddEvent (e, payload) {
         this.addEvent(payload)
@@ -72,6 +74,9 @@
       },
       onDeviceState (e, payload) {
         this.updateState(payload)
+      },
+      onHbCountdown (e, intervalSeconds) {
+        this.hbCountdown(intervalSeconds)
       },
       onReadyQuit () {
         // 此处采用同步方式处理所有工作

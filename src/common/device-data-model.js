@@ -23,6 +23,8 @@ const baseKeySet = new Set(Object.keys(newBase(null)))
 
 const loadRuntime = function () {
   return {
+    delete: false,
+    show: true,
     selected: false,
     state: vdState.STOPED,
     hbCountdownSeconds: 0,
@@ -40,6 +42,8 @@ const loadRuntime = function () {
 
 const newRuntime = function () {
   return {
+    delete: false,
+    show: true,
     selected: false,
     state: vdState.STOPED,
     hbCountdownSeconds: 0,

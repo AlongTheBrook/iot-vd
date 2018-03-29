@@ -1,7 +1,8 @@
 import Vdtu from './Vdtu'
-import { receive, event, state } from '../ipc'
+import { receive, event, state, hbCountdown } from '../ipc'
 import log from '../log'
 import { vdState, vdType, serialPortOptions } from '../../common/symbol'
+import { isNumber, isString } from '../../common/util'
 
 const logger = log.getLogger()
 
@@ -25,14 +26,10 @@ const init = async function () {
   receive('@device.stopBatch', (e, idArray) => {
     destroyBatch(idArray)
   })
-}
-
-const isNumber = function (value) {
-  return typeof value === 'number' || value instanceof Number
-}
-
-const isString = function (value) {
-  return typeof value === 'string' || value instanceof String
+  const intervalSeconds = 3
+  setInterval(() => {
+    hbCountdown(intervalSeconds)
+  }, 1000 * intervalSeconds)
 }
 
 const check = function (config) {
@@ -132,13 +129,14 @@ const createBatch = function (configArray) {
 const destroy = function (id) {
   state(id, vdState.STOPPING)
   if (!map.has(id)) {
-    event(id, '实例不存在', '实例不存在')
+    // event(id, '实例不存在', '实例不存在')
     state(id, vdState.STOPED)
     return
   }
   const vdtu = map.get(id)
   map.delete(id)
   vdtu.once('destroy', () => {
+    event(id, '已停止', '已停止')
     state(id, vdState.STOPED)
   })
   vdtu.destroy()

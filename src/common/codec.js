@@ -1,12 +1,5 @@
 import { Base64 } from 'js-base64'
-
-const isNumber = function (value) {
-  return (!isNaN(value) && typeof value === 'number') || value instanceof Number
-}
-
-const isString = function (value) {
-  return typeof value === 'string' || value instanceof String
-}
+import { isNumber, isString } from './util'
 
 export const regPackageDecode = function (regPackage) {
   if (!isString(regPackage)) return { err: '注册包必须是字符串' }

@@ -36,3 +36,7 @@ export const event = function (id, title, content) {
 export const state = function (id, state) {
   send('@device.state', {id, state})
 }
+
+export const hbCountdown = function (intervalSeconds) {
+  send('@device.hbCountdown', intervalSeconds)
+}

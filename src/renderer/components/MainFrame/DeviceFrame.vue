@@ -4,7 +4,8 @@
             <div class="device-list-control">
                 <div class="device-list-control-search field">
                     <p class="control has-icons-right">
-                        <input class="input is-small is-no-radius" type="text" placeholder="搜索"/>
+                        <input class="input is-small is-no-radius" type="text" placeholder="搜索"
+                               v-model="keyWord"/>
                         <span class="icon is-small is-right">
                             <i class="fas fa-search"></i>
                         </span>
@@ -42,7 +43,7 @@
                 <ul class="device-list"  ref="deviceList">
                     <draggable v-model="list">
                         <li class="device-list-item" v-for="(item, index) in list" :key="item.id" @click="onClick(item.id)"
-                            :class="{'is-active': item.selected}"
+                            :class="{'is-active': item.selected}" v-show="item.show"
                             @contextmenu.prevent="$refs.deviceItemCtxMenu.open($event, item)">
                             <div class="device-list-item-start">
                                 <svg class="iconfont device-list-item-start-icon" aria-hidden="true"
@@ -98,7 +99,9 @@
       components: { OpAndStateIcon, Device, Placeholder, Draggable, ContextMenu },
       data () {
         return {
-          ctxMenuTargetDevice: null
+          ctxMenuTargetDevice: null,
+          keyWord: '',
+          searching: false
         }
       },
       computed: {
@@ -127,12 +130,20 @@
           return (currMsgUptime, currMsg) => moment(currMsgUptime).format('HH:mm:ss') + ' ' + currMsg
         }
       },
+      watch: {
+        keyWord (newValue, oldValue) {
+          this.search(newValue)
+        }
+      },
       methods: {
         ...mapMutations('device', [
           'replace',
           'setSelected',
+          'setSelectedAndMoveTop',
           'delete',
-          'emptyEventList'
+          'emptyEventList',
+          'search',
+          'updateDeviceProp'
         ]),
         ...mapActions('device', [
           'createDevice'
@@ -147,7 +158,12 @@
           })
         },
         onClick (id) {
-          this.setSelected(id)
+          if (this.keyWord.length > 0) {
+            this.setSelectedAndMoveTop(id)
+            this.keyWord = ''
+          } else {
+            this.setSelected(id)
+          }
         },
         onEmptyEventList () {
           this.emptyEventList(this.ctxMenuTargetDevice.id)
@@ -158,7 +174,12 @@
           }
         },
         onDelete () {
-          this.delete(this.ctxMenuTargetDevice.id)
+          if (this.ctxMenuTargetDevice.state === this.state.STOPED) {
+            this.delete(this.ctxMenuTargetDevice.id)
+          } else {
+            this.updateDeviceProp({id: this.ctxMenuTargetDevice.id, key: 'delete', value: true})
+            this.$electron.ipcRenderer.send('@device.stop', this.ctxMenuTargetDevice.id)
+          }
         },
         onDeviceItemCtxMenuOpen (device) {
           this.ctxMenuTargetDevice = device

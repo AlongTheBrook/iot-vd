@@ -2,6 +2,7 @@ import Vd from './Vd'
 import net from 'net'
 import { vdState } from '../../common/symbol'
 import { event, state } from '../ipc'
+import { formatBuffer } from '../../common/util'
 
 const ClientVd = class extends Vd {
   constructor (config) {
@@ -17,6 +18,7 @@ const ClientVd = class extends Vd {
       this.client.write(config.regPackage, () => {
         event(config.id, '向服务器注册', config.regPackage)
       })
+      state(config.id, vdState.RUNNING)
       if (this.intervalTimer) {
         clearInterval(this.intervalTimer)
         this.intervalTimer = null
@@ -37,7 +39,7 @@ const ClientVd = class extends Vd {
     })
 
     this.client.on('data', (data) => {
-      event(config.id, '收到服务器数据', data.toString())
+      event(config.id, '收到服务器数据', formatBuffer(data))
       this.emit('data', data)
     })
 
@@ -60,7 +62,7 @@ const ClientVd = class extends Vd {
       this.emit('stop')
     })
 
-    this.client.on('stop', () => {
+    this.on('stop', () => {
       if (this.autoRestart) {
         event(config.id, '准备重连服务器', `${this.autoRestartSeconds}秒后重连服务器`)
         state(config.id, vdState.SERVER_RECONNECTING)
@@ -78,7 +80,7 @@ const ClientVd = class extends Vd {
     this.on('doWrite', (data) => {
       if (this.client.writable) {
         this.client.write(data, () => {
-          event(config.id, '向服务器发送数据', data.toString())
+          event(config.id, '向服务器发送数据', formatBuffer(data))
         })
       }
     })
