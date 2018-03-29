@@ -18,14 +18,14 @@
                         </div>
                     </div>
                     <hr>
-                    <div >服务器设备ID: {{ device.deviceId }}</div>
-                    <hr>
                     <div>
                         <div>展开通讯数据</div>
                         <s-toggle-button v-model="isEventExpand"></s-toggle-button>
                     </div>
                     <hr>
                     <div class="device-title-menu-content-op-button" @click="emptyEventList(device.id)">清空通讯数据</div>
+                    <hr>
+                    <div >服务器设备ID: {{ device.deviceId }}</div>
                     <hr>
                     <div :class="{'device-title-menu-content-op-button': device.deviceId}" @click="onOpenMonitorPage">服务器监控页</div>
                     <hr>
