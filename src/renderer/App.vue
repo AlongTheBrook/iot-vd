@@ -39,6 +39,8 @@
       app.ondrop = (e) => {
         e.preventDefault()
       }
+
+      this.$electron.ipcRenderer.on('@device.addEvent', this.onAddEvent)
       this.$electron.ipcRenderer.on('@device.list', this.onDeviceList)
       this.$electron.ipcRenderer.on('@device.list.check', this.onDeviceListCheck)
       this.$electron.ipcRenderer.on('@device.list.saved', this.onDeviceListSaved)
@@ -48,11 +50,15 @@
     },
     methods: {
       ...mapMutations('device', [
+        'addEvent',
         'resetListUpdateCount',
         'reduceListUpdateCount',
         'replace',
         'updateState'
       ]),
+      onAddEvent (e, payload) {
+        this.addEvent(payload)
+      },
       onDeviceList (e, deviceList) {
         this.replace(deviceList)
       },

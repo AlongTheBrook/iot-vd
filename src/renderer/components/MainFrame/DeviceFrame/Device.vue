@@ -41,7 +41,7 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <input class="input is-small is-no-radius" type="text" placeholder="" v-model="name"/>
+                                <input class="input is-small is-no-radius" type="text" placeholder="" v-model.trim="name"/>
                             </div>
                         </div>
                     </div>
@@ -136,7 +136,7 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <input class="input is-small is-no-radius" type="text" placeholder="默认：iot.thisyet.com" v-model="host"/>
+                                <input class="input is-small is-no-radius" type="text" placeholder="默认：iot.thisyet.com" v-model.lazy.trim="host"/>
                             </div>
                         </div>
                     </div>
@@ -148,7 +148,7 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <input class="input is-small is-no-radius"  type="number" min="0" max="65535" placeholder="默认：50021" v-model="port"/>
+                                <input class="input is-small is-no-radius"  type="number" min="0" max="65535" placeholder="默认：50021" v-model.lazy.number="port">
                             </div>
                         </div>
                     </div>
@@ -160,7 +160,7 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <input class="input is-small is-no-radius" type="text" placeholder="平台对应设备的设备接入码" v-model="regPackage"/>
+                                <input class="input is-small is-no-radius" type="text" placeholder="平台对应设备的设备接入码" v-model.lazy.trim="regPackage"/>
                             </div>
                         </div>
                     </div>
@@ -172,7 +172,7 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <input class="input is-small is-no-radius" type="text" placeholder="默认：H" v-model="hbPackage"/>
+                                <input class="input is-small is-no-radius" type="text" placeholder="默认：H" v-model.lazy.trim="hbPackage"/>
                             </div>
                         </div>
                     </div>
@@ -184,7 +184,7 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control has-icons-right">
-                                <input class="input is-small is-no-radius" type="number" min="1" placeholder="平台对应设备的心跳周期" v-model="hbMinutes"/>
+                                <input class="input is-small is-no-radius" type="number" min="1" placeholder="平台对应设备的心跳周期" v-model.lazy.number="hbMinutes"/>
                                 <span class="icon is-small is-right">分</span>
                             </div>
                         </div>
@@ -334,9 +334,6 @@
         eventList () {
           return this.device.eventList
         },
-        msg () {
-          return this.device.msg
-        },
         isEventExpand: {
           get () {
             return this.device.isEventExpand
@@ -424,6 +421,10 @@
             & > .device-title-text {
                 @include electron-no-drag;
                 cursor: pointer;
+                &, & > p {
+                    @include text-sle;
+                }
+                padding-right: 1.5rem;
             }
             & > .device-title-menu {
                 @include electron-no-drag;

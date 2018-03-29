@@ -54,7 +54,7 @@
                                 <p class="device-list-item-content-title">{{ item.name }}</p>
                                 <p class="device-list-item-content-subtitle">{{ currMsgShow(item.currMsgUptime, item.currMsg) }}</p>
                             </div>
-                            <div class="device-list-item-end-pre" @click="stop(item.id)"
+                            <div class="device-list-item-end-pre" @click.stop="stop(item.id)"
                                  v-tooltip="'停止'" v-show="!((item.state === state.STOPPING) || (item.state === state.STOPED))">
                                 <svg class="iconfont" aria-hidden="true">
                                     <use xlink:href="#icon-stop"></use>
@@ -266,10 +266,12 @@
                                 @include text-sle;
                             }
                             & > .device-list-item-content-title {
+                                height: 1.25rem;
                                 font-size: 0.9rem;
                                 font-weight: 600;
                             }
                             & > .device-list-item-content-subtitle {
+                                height: 1.25rem;
                                 font-size: 0.8rem;
                                 color: hsl(0, 0%, 48%);
                             }

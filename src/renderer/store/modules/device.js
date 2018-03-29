@@ -1,4 +1,5 @@
 import { vdType, vdState } from '../../../common/symbol'
+import deviceDataModel from '../../../common/device-data-model'
 
 const state = {
   type: vdType,
@@ -46,14 +47,23 @@ const getters = {
 const mutations = {
   replace (state, newList) {
     state.list = newList
+    state.listUpdateCount += 1
   },
   unshiftDevice (state, device) {
     state.list.unshift(device)
+    state.listUpdateCount += 1
   },
   updateDeviceProp (state, payload) {
     let device = state.list.find(device => device.id === payload.id)
     if (device) {
       device[payload.key] = payload.value
+      if (payload.key === 'regPackage') {
+        // TODO
+        // device['deviceId'] =
+      }
+      if (deviceDataModel.baseKeySet.has(payload.key)) {
+        state.listUpdateCount += 1
+      }
     }
   },
   setSelected (state, id) {
@@ -69,6 +79,7 @@ const mutations = {
     let index = state.list.findIndex(device => device.id === id)
     if (index !== -1) {
       state.list.splice(index, 1)
+      state.listUpdateCount += 1
     }
   },
   setEventExpand (state, payload) {

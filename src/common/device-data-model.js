@@ -19,6 +19,8 @@ const newBase = function (id) {
   }
 }
 
+const baseKeySet = new Set(Object.keys(newBase(null)))
+
 const loadRuntime = function () {
   return {
     selected: false,
@@ -66,6 +68,7 @@ const undefinedRuntime = function () {
 }
 
 export default {
+  baseKeySet,
   newBase,
   loadRuntime,
   newRuntime,
