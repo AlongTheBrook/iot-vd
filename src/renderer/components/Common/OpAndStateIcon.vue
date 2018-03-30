@@ -1,7 +1,7 @@
 <template>
     <div class="op-and-state-icon">
-        <div v-tooltip="'启动'" @click.stop="start">
-            <svg class="iconfont state-stoped" aria-hidden="true" v-show="device.state === state.STOPED">
+        <div v-tooltip="{content: '启动', show: device.state === state.STOPED ? null : false}" @click.stop="start" v-show="device.state === state.STOPED">
+            <svg class="iconfont state-stoped" aria-hidden="true">
                 <use xlink:href="#icon-play"></use>
             </svg>
         </div>

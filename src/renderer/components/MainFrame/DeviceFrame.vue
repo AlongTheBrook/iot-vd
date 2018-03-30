@@ -56,7 +56,8 @@
                                 <p class="device-list-item-content-subtitle">{{ currMsgShow(item.currMsgUptime, item.currMsg) }}</p>
                             </div>
                             <div class="device-list-item-end-pre" @click.stop="stop(item.id)"
-                                 v-tooltip="'停止'" v-show="!((item.state === state.STOPPING) || (item.state === state.STOPED))">
+                                 v-tooltip="{content: '停止', show: !((item.state === state.STOPPING) || (item.state === state.STOPED)) ? null : false}"
+                                 v-show="!((item.state === state.STOPPING) || (item.state === state.STOPED))">
                                 <svg class="iconfont" aria-hidden="true">
                                     <use xlink:href="#icon-stop"></use>
                                 </svg>
@@ -67,7 +68,7 @@
                         </li>
                     </draggable>
                     <context-menu ref="deviceItemCtxMenu" id="context-menu" @ctx-open="onDeviceItemCtxMenuOpen">
-                        <li @click="onEmptyEventList">清空通讯数据</li>
+                        <li @click="onEmptyEventList">清空消息面板</li>
                         <li @click="onOpenMonitorPage" :class="{'disabled': !(ctxMenuTargetDevice && ctxMenuTargetDevice.deviceId)}">服务器监控页</li>
                         <hr>
                         <li @click="onDelete" class="delete-device">删除设备</li>

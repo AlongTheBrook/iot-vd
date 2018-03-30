@@ -2,7 +2,6 @@ import Vd from './Vd'
 import SerialPort from 'serialport'
 import {event, state} from '../ipc'
 import { vdState } from '../../common/symbol'
-import { formatBuffer } from '../../common/util'
 
 const SerialPortVd = class extends Vd {
   constructor (config) {
@@ -22,7 +21,7 @@ const SerialPortVd = class extends Vd {
     })
 
     this.serialPort.on('data', (data) => {
-      event(config.id, '收到串口数据', formatBuffer(data))
+      // event(config.id, '收到串口数据', formatBuffer(data))
       this.emit('data', data)
     })
 
@@ -58,7 +57,7 @@ const SerialPortVd = class extends Vd {
     this.on('doWrite', (data) => {
       if (this.serialPort.isOpen) {
         this.serialPort.write(data, () => {
-          event(config.id, '向串口发送数据', formatBuffer(data))
+          // event(config.id, '向串口发送数据', formatBuffer(data))
         })
       }
     })

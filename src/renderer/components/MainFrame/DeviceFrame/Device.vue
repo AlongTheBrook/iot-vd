@@ -19,11 +19,11 @@
                     </div>
                     <hr>
                     <div>
-                        <div>展开通讯数据</div>
+                        <div>展开消息</div>
                         <s-toggle-button v-model="isEventExpand"></s-toggle-button>
                     </div>
                     <hr>
-                    <div class="device-title-menu-content-op-button" @click="emptyEventList(device.id)">清空通讯数据</div>
+                    <div class="device-title-menu-content-op-button" @click="emptyEventList(device.id)">清空消息面板</div>
                     <hr>
                     <div >服务器设备ID: {{ device.deviceId }}</div>
                     <hr>
@@ -56,7 +56,7 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <div class="select is-small">
+                                <div class="select is-small" :class="{'hide-select-after': device.state !== state.STOPED}">
                                     <select class="is-no-radius" v-model="serialPortName" :disabled="device.state !== state.STOPED">
                                         <option v-for="option in serialPortOptions.portList" :value="option">{{ option }}</option>
                                     </select>
@@ -72,7 +72,7 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <div class="select is-small">
+                                <div class="select is-small" :class="{'hide-select-after': device.state !== state.STOPED}">
                                     <select class="is-no-radius" v-model="baudRate" :disabled="device.state !== state.STOPED">
                                         <option v-for="option in serialPortOptions.baudRate" :value="option">{{ option }}</option>
                                     </select>
@@ -88,7 +88,7 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <div class="select is-small">
+                                <div class="select is-small" :class="{'hide-select-after': device.state !== state.STOPED}">
                                     <select class="is-no-radius" v-model="databits" :disabled="device.state !== state.STOPED">
                                         <option v-for="option in serialPortOptions.dataBits" :value="option">{{ option }}</option>
                                     </select>
@@ -104,7 +104,7 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <div class="select is-small">
+                                <div class="select is-small" :class="{'hide-select-after': device.state !== state.STOPED}">
                                     <select class="is-no-radius" v-model="parity" :disabled="device.state !== state.STOPED">
                                         <option v-for="option in serialPortOptions.parity" :value="option">{{ option }}</option>
                                     </select>
@@ -120,7 +120,7 @@
                     <div class="field-body">
                         <div class="field">
                             <div class="control">
-                                <div class="select is-small">
+                                <div class="select is-small" :class="{'hide-select-after': device.state !== state.STOPED}">
                                     <select class="is-no-radius" v-model="stopbits" :disabled="device.state !== state.STOPED">
                                         <option v-for="option in serialPortOptions.stopBits" :value="option">{{ option }}</option>
                                     </select>
@@ -207,7 +207,8 @@
             </div>
             <div class="device-footer-control">
                 <div class="device-footer-control-stop-button" @click="stop"
-                     v-tooltip="'停止'"  v-show="!((device.state === state.STOPPING) || (device.state === state.STOPED))">
+                     v-tooltip="{content: '停止', show: !((device.state === state.STOPPING) || (device.state === state.STOPED)) ? null : false}"
+                     v-show="!((device.state === state.STOPPING) || (device.state === state.STOPED))">
                     <svg class="iconfont " aria-hidden="true">
                         <use xlink:href="#icon-stop"></use>
                     </svg>
@@ -551,6 +552,9 @@
                 }
                 .select {
                     width: 100%;
+                    &.hide-select-after::after {
+                        display: none;
+                    }
                 }
                 select {
                     font-size: 0.85rem;

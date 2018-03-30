@@ -328,7 +328,7 @@
     &[aria-hidden='true'] {
       visibility: hidden;
       opacity: 0;
-      transition: opacity .15s, visibility .15s;
+      /*transition: opacity .15s, visibility .15s;*/  // 解决目标元素隐藏时tooltip在body左上角闪耀的问题
     }
 
     &[aria-hidden='false'] {

@@ -2,7 +2,6 @@ import Vd from './Vd'
 import net from 'net'
 import { vdState } from '../../common/symbol'
 import { event, state } from '../ipc'
-import { formatBuffer } from '../../common/util'
 
 const ClientVd = class extends Vd {
   constructor (config) {
@@ -39,7 +38,7 @@ const ClientVd = class extends Vd {
     })
 
     this.client.on('data', (data) => {
-      event(config.id, '收到服务器数据', formatBuffer(data))
+      // event(config.id, '收到服务器数据', formatBuffer(data))
       this.emit('data', data)
     })
 
@@ -80,7 +79,7 @@ const ClientVd = class extends Vd {
     this.on('doWrite', (data) => {
       if (this.client.writable) {
         this.client.write(data, () => {
-          event(config.id, '向服务器发送数据', formatBuffer(data))
+          // event(config.id, '向服务器发送数据', formatBuffer(data))
         })
       }
     })

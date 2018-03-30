@@ -15,7 +15,7 @@ Vue.config.productionTip = false
 Vue.use(Vuebar)
 Vue.use(VTooltip, {
   defaultPlacement: 'bottom-start',
-  defaultDelay: 600
+  defaultDelay: { show: 600, hide: 100 }
 })
 
 /* eslint-disable no-new */

@@ -3,7 +3,8 @@ import ClientVd from './ClientVd'
 import SerialPortVd from './SerialPortVd'
 import NetPortTcpVd from './NetPortTcpVd'
 import { vdType, vdState } from '../../common/symbol'
-import { state } from '../ipc'
+import { event, state } from '../ipc'
+import { formatBuffer } from '../../common/util'
 
 const Vdtu = class extends Vd {
   constructor (config) {
@@ -21,6 +22,7 @@ const Vdtu = class extends Vd {
     })
 
     this.deviceVd.on('data', (data) => {
+      event(config.id, '发送数据', formatBuffer(data))
       this.clientVd.write(data)
     })
 
@@ -38,6 +40,7 @@ const Vdtu = class extends Vd {
     })
 
     this.clientVd.on('data', (data) => {
+      event(config.id, '收到数据', formatBuffer(data))
       this.deviceVd.write(data)
     })
 
