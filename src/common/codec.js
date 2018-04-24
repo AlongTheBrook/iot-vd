@@ -1,8 +1,16 @@
-import { Base64 } from 'js-base64'
-import { isNumber, isString } from './util'
+import {Base64} from 'js-base64'
+import {isNumber, isString} from './util'
+import {ignore} from './symbol'
 
 export const regPackageDecode = function (regPackage) {
   if (!isString(regPackage)) return { err: '注册包必须是字符串' }
+  // 若注册包为“忽略”，则直接通过
+  if (regPackage === ignore) {
+    return {
+      id: ignore,
+      secret: ignore
+    }
+  }
   const length = regPackage.length
   if (length < 5) return { err: '注册包长至少5个字符' }
   if (!(regPackage.charAt(0) === '{' && regPackage.charAt(length - 1) === '}')) return { err: '注册包必须以"{"开头以"}"结尾' }

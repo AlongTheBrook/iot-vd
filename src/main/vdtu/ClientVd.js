@@ -1,6 +1,6 @@
 import Vd from './Vd'
 import net from 'net'
-import { vdState } from '../../common/symbol'
+import { vdState, ignore } from '../../common/symbol'
 import { event, state } from '../ipc'
 
 const ClientVd = class extends Vd {
@@ -13,28 +13,33 @@ const ClientVd = class extends Vd {
 
     this.client.on('connect', () => {
       event(config.id, '已连接服务器', `${this.client.localAddress} : ${this.client.localPort}`)
-      // 向服务器注册
-      this.client.write(config.regPackage, () => {
-        event(config.id, '向服务器注册', config.regPackage)
-      })
+      // 若注册包配置不是“忽略”，则向服务器注册
+      if (config.regPackage !== ignore) {
+        this.client.write(config.regPackage, () => {
+          event(config.id, '向服务器注册', config.regPackage)
+        })
+      }
       state(config.id, vdState.RUNNING)
       if (this.intervalTimer) {
         clearInterval(this.intervalTimer)
         this.intervalTimer = null
       }
-      this.intervalTimer = setInterval(() => {
-        if (this.client.writable) {
-          this.client.write(config.hbPackage, () => {
-            event(config.id, '心跳', config.hbPackage)
-            state(config.id, vdState.HEARTBEAT)
-            setTimeout(() => {
-              if (this.client.writable && this.client.readable) {
-                state(config.id, vdState.RUNNING)
-              }
-            }, 1000 * 2)
-          })
-        }
-      }, 1000 * 60 * config.hbMinutes)
+      // 若心跳包配置不是“忽略”，才设置定时器，执行心跳流程
+      if (config.hbPackage !== ignore) {
+        this.intervalTimer = setInterval(() => {
+          if (this.client.writable) {
+            this.client.write(config.hbPackage, () => {
+              event(config.id, '心跳', config.hbPackage)
+              state(config.id, vdState.HEARTBEAT)
+              setTimeout(() => {
+                if (this.client.writable && this.client.readable) {
+                  state(config.id, vdState.RUNNING)
+                }
+              }, 1000 * 2)
+            })
+          }
+        }, 1000 * 60 * config.hbMinutes)
+      }
     })
 
     this.client.on('data', (data) => {

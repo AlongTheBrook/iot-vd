@@ -50,7 +50,15 @@
       "icon": "build/icons/icon.icns"
     },
     "win": {
-      "icon": "build/icons/icon.ico"
+      "icon": "build/icons/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "ia32"
+          ]
+        }
+      ]
     },
     "linux": {
       "icon": "build/icons"
@@ -63,7 +71,7 @@
     "log4js": "^2.5.3",
     "mdi": "^2.1.19",
     "moment": "^2.21.0",
-    "serialport": "^6.1.1",
+    "serialport": "^6.2.0",
     "v-tooltip": "^2.0.0-rc.31",
     "vue": "^2.3.3",
     "vue-context-menu": "^2.0.6",

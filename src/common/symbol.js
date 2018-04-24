@@ -34,3 +34,5 @@ export const serialPortOptions = {
   parity: ['none', 'even', 'mark', 'odd', 'space'],
   stopBits: [1, 2]
 }
+
+export const ignore = '<ignore>'

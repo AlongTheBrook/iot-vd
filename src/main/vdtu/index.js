@@ -1,7 +1,7 @@
 import Vdtu from './Vdtu'
 import { receive, event, state, hbCountdown } from '../ipc'
 import log from '../log'
-import { vdState, vdType, serialPortOptions } from '../../common/symbol'
+import { vdState, vdType, serialPortOptions, ignore } from '../../common/symbol'
 import { isNumber, isString } from '../../common/util'
 
 const logger = log.getLogger()
@@ -95,7 +95,9 @@ const check = function (config) {
     event(config.id, '服务器配置错误', `心跳周期配置错误：${config.hbMinutes} （数值，不能小于1分钟）`)
     return false
   }
-  if (!isNumber(config.deviceId)) {
+  if (config.deviceId === ignore) {
+    // 设备ID是“忽略”，则不进行验证
+  } else if (!isNumber(config.deviceId)) {
     event(config.id, '远程设备ID错误', '远程设备ID错误，可能是因为注册包错误导致')
     return false
   }
